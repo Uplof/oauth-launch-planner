@@ -4,27 +4,27 @@
   "category": "Developer tools",
   "sample": false,
   "difficulty": "easy",
-  "headline": "Easy: no review gate on either path. Pick a GitHub App for a new agent. The thing that decides your timeline is whether each customer's org owner installs it or approves it.",
+  "headline": "Easy: no review on either path. Waits depend on each customer's org owner installing or approving it.",
   "firstTest": {
-    "text": "About 2 minutes of clicks to a working sign-in with our own OAuth app: register, generate a secret, sign in.",
+    "text": "About 2 minutes: register our own OAuth app, generate a secret, and sign in.",
     "proof": "tested"
   },
   "production": {
-    "text": "Same day for GitHub Apps and OAuth apps. Neither needs a GitHub review. A Marketplace listing is optional. Your users' orgs may add a wait: owners must install a GitHub App, or approve an OAuth app if app restrictions are on.",
+    "text": "Same day, no GitHub review. Your users' org owners must install a GitHub App, or approve an OAuth app if restrictions are on.",
     "proof": "docs",
     "source": "https://docs.github.com/en/apps/publishing-apps-to-github-marketplace/github-marketplace-overview/about-github-marketplace-for-apps"
   },
   "approvalWait": {
-    "text": "None. Registering showed 'Application created successfully' and the client ID at once. A Marketplace listing is optional and is the only review step.",
+    "text": "None. Registering showed 'Application created successfully' and the client ID at once. Only an optional Marketplace listing gets reviewed.",
     "proof": "tested"
   },
   "whoCanRegister": {
-    "text": "Any GitHub account can register an app. Choose 'Any account' under where the GitHub App can be installed so other users and orgs can add it. Org-owned apps are needed for paid Marketplace plans, and the org must be verified.",
+    "text": "Any GitHub account can register an app. Pick 'Any account' as the install option. Paid plans need an org-owned app from a verified org.",
     "proof": "docs",
     "source": "https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app"
   },
   "testMode": {
-    "text": "No sandbox and no user caps. OAuth apps now expire tokens by default too: the form ticks 'Expire user access tokens', and our test got an 8-hour access token and a 182-day refresh token. GitHub Apps work the same way.",
+    "text": "No sandbox, no user caps. Both app types expire tokens by default: our test got an 8-hour access token and a 182-day refresh token.",
     "proof": "tested"
   },
   "actions": [
@@ -44,7 +44,7 @@
       "level": "basic",
       "review": "None from GitHub. In an org with app restrictions, an owner must approve an OAuth app. A GitHub App needs an owner install.",
       "proof": "docs",
-      "timeToLive": "same day, plus org owner wait"
+      "timeToLive": "same day, plus the org owner's wait"
     },
     {
       "id": "write-issues",
@@ -53,7 +53,7 @@
       "level": "basic",
       "review": "None from GitHub. Same org rules as above.",
       "proof": "docs",
-      "timeToLive": "same day, plus org owner wait"
+      "timeToLive": "same day, plus the org owner's wait"
     },
     {
       "id": "read-org",
@@ -62,22 +62,22 @@
       "level": "basic",
       "review": "None. Org approval rules apply.",
       "proof": "docs",
-      "timeToLive": "same day, plus org owner wait"
+      "timeToLive": "same day, plus the org owner's wait"
     },
     {
       "id": "workflows",
       "label": "Edit GitHub Actions workflow files",
       "scope": "workflow (OAuth app) or Workflows: read & write (GitHub App)",
       "level": "basic",
-      "review": "None from GitHub. Ask for it only if the agent truly edits workflows.",
+      "review": "None from GitHub. Ask for it only if your agent really edits workflows.",
       "proof": "docs",
       "timeToLive": "same day"
     }
   ],
   "steps": [
     {
-      "title": "Choose GitHub App",
-      "detail": "Pick a GitHub App unless you need enterprise-level resources. GitHub says apps are generally preferred. They use fine-grained permissions, short-lived tokens, and are not blocked by org OAuth restrictions. The docs say a GitHub App can't yet get permissions against an enterprise; use an OAuth app for that.",
+      "title": "Choose a GitHub App",
+      "detail": "Pick a GitHub App unless you need enterprise-level resources, which apps can't yet access. GitHub prefers apps for their fine-grained permissions, short-lived tokens and freedom from org OAuth restrictions.",
       "owner": "you",
       "time": "10 min",
       "proof": "docs",
@@ -85,7 +85,7 @@
     },
     {
       "title": "Register the app",
-      "detail": "Settings > Developer settings > GitHub Apps > New GitHub App. Fill name and homepage URL (a repo URL works). Add up to 10 callback URLs.",
+      "detail": "Go to Settings > Developer settings > GitHub Apps > New GitHub App. Fill in the name and homepage URL (a repo URL works), and add up to 10 callback URLs.",
       "owner": "you",
       "time": "5 min",
       "proof": "docs",
@@ -101,23 +101,23 @@
     },
     {
       "title": "Keep token expiry on",
-      "detail": "Leave 'Expire user authorization tokens' selected. GitHub strongly recommends it. User tokens then last 8 hours and come with a refresh token valid for 6 months.",
+      "detail": "Leave 'Expire user authorization tokens' selected, as GitHub strongly recommends. User tokens then last 8 hours, with a refresh token valid for 6 months.",
       "owner": "you",
       "time": "1 min",
       "proof": "docs",
       "link": "https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app"
     },
     {
-      "title": "Set 'Where can this be installed' to Any account",
-      "detail": "Needed so your users' accounts and orgs can install it. Optionally tick 'Request user authorization (OAuth) during installation' to merge install and sign-in.",
+      "title": "Allow installs from any account",
+      "detail": "Set 'Where can this be installed' to 'Any account' so your users' accounts and orgs can install it. Optionally tick 'Request user authorization (OAuth) during installation' to merge install and sign-in.",
       "owner": "you",
       "time": "1 min",
       "proof": "docs",
       "link": "https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app"
     },
     {
-      "title": "Build the web flow",
-      "detail": "Send users to github.com/login/oauth/authorize with state and PKCE (S256). Exchange the code at /login/oauth/access_token. Store both tokens. Refresh with grant_type=refresh_token before the 8 hours end.",
+      "title": "Build the sign-in flow",
+      "detail": "Send users to GitHub's authorize page with a state value and the usual extra security check. Swap the code for tokens, store both, and refresh before the 8 hours end.",
       "owner": "agent",
       "time": "1-2 hours",
       "proof": "docs",
@@ -125,15 +125,15 @@
     },
     {
       "title": "Test with a real org",
-      "detail": "Install on an org you own with a non-owner member account. Confirm the request-to-owner message appears and the owner can approve it.",
+      "detail": "Install the app on an org you own, using a member account that isn't an owner. Check that the request to the owner appears and the owner can approve it.",
       "owner": "you",
       "time": "30 min",
       "proof": "docs",
       "link": "https://docs.github.com/en/apps/using-github-apps/installing-a-github-app-from-a-third-party"
     },
     {
-      "title": "Tell customers what the org owner does",
-      "detail": "Org owners install the app. Repo admins can install only if the app asks for no org permissions and no Repository administration. Non-owners trigger a request to the owner.",
+      "title": "Tell customers what owners do",
+      "detail": "Org owners install the app. Repo admins can install it only if it asks for no org permissions and no Repository administration. Non-owners send a request to the owner.",
       "owner": "you",
       "time": "30 min",
       "proof": "docs",
@@ -141,8 +141,8 @@
       "slow": true
     },
     {
-      "title": "Optional: list on Marketplace",
-      "detail": "Not required. Needed only for discovery or paid plans. Paid plans need a verified org and financial onboarding.",
+      "title": "List on Marketplace (optional)",
+      "detail": "Not required. Do it only for discovery or paid plans, which need a verified org and financial onboarding.",
       "owner": "you",
       "time": "varies",
       "proof": "docs",
@@ -151,48 +151,48 @@
   ],
   "blockers": [
     {
-      "title": "Org owner has not installed or approved the app",
-      "fix": "For a GitHub App, a non-owner who picks the org sends a request to the owner. For an OAuth app, the owner approves it under third-party application access. Add a 'send this link to your admin' screen in your product.",
+      "title": "Your customer's org owner hasn't installed or approved the app",
+      "fix": "For a GitHub App, a non-owner who picks the org sends the owner a request. For an OAuth app, the owner approves it under third-party application access; add a 'send this link to your admin' screen.",
       "proof": "docs"
     },
     {
-      "title": "OAuth app restrictions are on by default for new orgs",
-      "fix": "Restrictions turn on automatically for new orgs. Members can't authorize an OAuth app for org data until an owner approves it. A GitHub App avoids this policy, per GitHub's comparison page.",
+      "title": "New orgs block OAuth apps by default",
+      "fix": "Restrictions turn on automatically for new orgs, so members can't authorize an OAuth app for org data until an owner approves it. A GitHub App avoids this policy, per GitHub's comparison page.",
       "proof": "docs"
     },
     {
-      "title": "Expired user token after 8 hours",
-      "fix": "Refresh with the refresh token and save the new one each time. Re-run sign-in when the 182-day (about 6-month) refresh token expires.",
+      "title": "Your users' tokens expire after 8 hours",
+      "fix": "Refresh with the refresh token and save the new one each time. When the 182-day (about 6-month) refresh token expires, run sign-in again.",
       "proof": "tested"
     },
     {
-      "title": "Need enterprise-level resources",
+      "title": "You need enterprise-level resources",
       "fix": "A GitHub App can't yet get permissions against an enterprise. Use an OAuth app for those calls.",
       "proof": "docs"
     },
     {
-      "title": "Users trim scopes after sign-in (OAuth app)",
-      "fix": "Users can edit granted scopes after the flow. Check what was actually granted on every call and handle reduced access.",
+      "title": "Users trim permissions after signing in (OAuth app)",
+      "fix": "Users can edit granted scopes after the flow. Check what was actually granted on every call, and handle reduced access.",
       "proof": "docs"
     },
     {
-      "title": "Users judge a brand-new app",
-      "fix": "GitHub's consent screen shows 'Created less than a day ago' and 'Fewer than 10 GitHub users'. Create the app well before launch and add a logo and description.",
+      "title": "Users hesitate at a brand-new app",
+      "fix": "GitHub's consent screen shows 'Created less than a day ago' and 'Fewer than 10 GitHub users'. Create the app well before launch, and add a logo and description.",
       "proof": "tested"
     }
   ],
   "agentCan": [
-    "Write the web-flow and device-flow code, with state and PKCE",
+    "Write the web and device sign-in code, with state and the extra security checks",
     "Map each agent action to the smallest permission or scope",
     "Add token refresh and secure storage",
     "Draft the 'ask your org owner' screen and copy",
-    "Check granted scopes on each call and degrade cleanly"
+    "Check granted permissions on each call and fall back gracefully"
   ],
   "youDo": [
     "Sign in to GitHub and register the app",
     "Keep the client secret and private key safe",
     "Test with a real org where you are not an owner",
-    "Org owners at your customers install or approve the app",
+    "Your customers' org owners install or approve the app",
     "Accept the Marketplace Developer Agreement if you list"
   ],
   "drafts": [
@@ -269,5 +269,43 @@
       "caption": "Our test: 8-hour access token, 182-day refresh token"
     }
   ],
-  "checked": "20 Oct 2026"
+  "checked": "20 Oct 2026",
+  "timeline": [
+    {
+      "label": "Register the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "1-2 hours"
+    },
+    {
+      "label": "Test and brief customer owners",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      3,
+      4
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
 }

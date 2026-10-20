@@ -1,0 +1,309 @@
+{
+  "slug": "asana",
+  "name": "Asana",
+  "category": "Project management",
+  "sample": false,
+  "difficulty": "easy",
+  "headline": "Easy: share an app with any workspace the same day, no review; admins can require approval or block it.",
+  "firstTest": {
+    "text": "Under an hour to sign in with your own account. The console gives you a client ID and secret when you create the app.",
+    "proof": "unconfirmed",
+    "source": "https://developers.asana.com/docs/oauth"
+  },
+  "production": {
+    "text": "Set distribution to Any workspace and share the authorization URL; users connect with no review. The App Directory is a separate, optional submission.",
+    "proof": "docs",
+    "source": "https://developers.asana.com/docs/manage-distribution"
+  },
+  "approvalWait": {
+    "text": "None for sharing. For the optional App Directory, Asana aims to respond within one week, and apps with app components may take longer.",
+    "proof": "docs",
+    "source": "https://developers.asana.com/docs/publish-your-app"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with an Asana account can create an app in the developer console. A Directory listing also needs an icon, descriptions, support and privacy pages, and test credentials.",
+    "proof": "docs",
+    "source": "https://developers.asana.com/docs/app-listing-guidelines"
+  },
+  "testMode": {
+    "text": "Works at once in your own workspace. Limits are 150 requests a minute on free domains and 1,500 on paid ones, per token. Access tokens last about one hour; a long-lived refresh token renews them.",
+    "proof": "docs",
+    "source": "https://developers.asana.com/docs/rate-limits"
+  },
+  "actions": [
+    {
+      "id": "read-tasks",
+      "label": "Read tasks",
+      "scope": "tasks:read",
+      "level": "basic",
+      "review": "None for sharing. You choose granular permissions when you register the app.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "write-tasks",
+      "label": "Create and update tasks, with comments",
+      "scope": "tasks:write, stories:write",
+      "level": "basic",
+      "review": "None for sharing. Write does not include read, so request both.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "read-projects",
+      "label": "Read projects, teams and workspaces so users can choose where to act",
+      "scope": "projects:read, workspaces:read, teams:read",
+      "level": "basic",
+      "review": "None for sharing.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "sign-in",
+      "label": "Identify the user (name, email, photo)",
+      "scope": "openid, email, profile",
+      "level": "basic",
+      "review": "None for sharing. These are the standard OpenID Connect permissions.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "webhooks",
+      "label": "Get notified when tasks change",
+      "scope": "webhooks:read, webhooks:write",
+      "level": "basic",
+      "review": "None for sharing.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "full-access",
+      "label": "Everything the user can do, on every endpoint",
+      "scope": "default",
+      "level": "basic",
+      "review": "None for sharing. Register the app with Full permissions; you cannot mix it with individual ones. Admins who review permissions may hesitate.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create the app",
+      "detail": "Go to app.asana.com/0/my-apps, click 'Create new app' and name it, leaving 'Asana' out of the name. Add a redirect URL and permission scopes; you can change both later.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "Choose the permission type",
+      "detail": "On the 'OAuth' tab, under 'Permission Scopes', pick Full permissions or granular ones; you cannot mix them in one request. With granular ones, register every permission you may need now, or Asana returns a forbidden error.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "Use an HTTPS redirect URL",
+      "detail": "Non-native apps need an https redirect URL, and it must match the one you send exactly. Copy the client ID and secret from the 'OAuth' tab into your server secrets.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "Share to Any workspace",
+      "detail": "Open 'Manage distribution' and pick Any workspace, so users from any workspace can authorize. Specific workspaces blocks new authorizations from outside them, and the app must be available in a user's workspace first.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/manage-distribution"
+    },
+    {
+      "title": "Build the sign-in redirect",
+      "detail": "Send users to Asana's authorize page with your client ID, redirect address and a random state value, and check the state on return. Swap the code for tokens from your server, never the browser.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "Refresh tokens before expiry",
+      "detail": "Access tokens usually expire after 3600 seconds. Save the refresh token from the first swap and use it for a new access token; read the expiry time in the response, and expect users to reauthorize if granted permissions change.",
+      "owner": "agent",
+      "time": "45 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "Handle rate limits",
+      "detail": "On a 429, wait as the Retry-After header says. Rejected requests still count against your quota, so retrying early prolongs recovery; task search has its own limit of 60 per minute.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/rate-limits"
+    },
+    {
+      "title": "Test from another workspace",
+      "detail": "Authorize as a user outside your workspace. Also test a workspace where an admin requires app approval, and check you handle the block screen and approval request.",
+      "owner": "you",
+      "time": "30 min",
+      "proof": "unconfirmed"
+    },
+    {
+      "title": "Submit to the App Directory",
+      "detail": "Optional. Click 'Submit for review' and work through the checklist: icon, redirect URL, images, a long description of at least 250 characters, company info, support page, privacy policy URL and test credentials. You cannot edit after submitting; you get an email to publish or a list of changes.",
+      "owner": "you",
+      "time": "half a day to prepare, then about a week for a first response",
+      "proof": "docs",
+      "link": "https://developers.asana.com/docs/publish-your-app",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Users cannot authorize because the app isn't shared to their workspace",
+      "fix": "Set distribution to Any workspace in 'Manage distribution'. With Specific workspaces, new authorizations from outside those workspaces are blocked.",
+      "proof": "docs"
+    },
+    {
+      "title": "An organization admin requires approval or blocks the app",
+      "fix": "Admins can require Super Admin approval for new connections and can block apps. Users see a block screen or approval request, so send the admin your listing details and the permissions you ask for. Which plans get these controls is not stated in the pages we opened.",
+      "proof": "docs"
+    },
+    {
+      "title": "The app works in some workspaces but not others",
+      "fix": "Since April 2024, users can authorize an app in workspaces where it is not blocked, and the consent screen shows where it is. Do not assume the token reaches every workspace; list the workspaces to see what it can access.",
+      "proof": "community"
+    },
+    {
+      "title": "Requests fail with 403 after moving to granular permissions",
+      "fix": "A missing permission returns 403, and optional fields you request need their own. Reauthorize with the full set, because permission requests are not additive; custom field read and write were reported missing in July 2025.",
+      "proof": "community"
+    },
+    {
+      "title": "Full permissions clash with individual ones",
+      "fix": "If the app is registered with Full permissions, ask for no individual permissions. To use granular ones, register them on the app instead.",
+      "proof": "docs"
+    },
+    {
+      "title": "Busy agents hit 429 rate limits",
+      "fix": "Limits are 150 requests a minute on free domains and 1,500 on paid ones, per token, plus 50 concurrent reads and 15 concurrent writes. Queue calls and honor Retry-After.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the authorize redirect, state check and code swap",
+    "Store refresh tokens and renew access tokens before the one hour expiry",
+    "Pick the smallest set of granular permissions and match each 403 to the missing one",
+    "Queue and retry calls within the rate limits using Retry-After",
+    "Draft the App Directory listing text and setup instructions"
+  ],
+  "youDo": [
+    "Create the app in the Asana developer console and copy the client secret",
+    "Choose Any workspace in Manage distribution",
+    "Test from an account in a different workspace",
+    "Ask customer admins to approve the app where approval mode is on",
+    "Prepare the icon, screenshots, privacy policy and test account, and submit if you want the App Directory"
+  ],
+  "drafts": [
+    {
+      "title": "App Directory short and long description",
+      "body": "Short (about 100 characters): Create and update Asana tasks from [Product name] using plain-language requests. Long: [Product name] connects to your Asana workspace through Asana's standard permission screen. Your team can ask the assistant to create tasks, add comments and check what is due. It acts only with the permissions you grant, and you can disconnect it any time from Asana settings. It never shares your Asana data with other customers."
+    },
+    {
+      "title": "Note to a customer's Asana admin",
+      "body": "[Product name] uses OAuth to connect to Asana on behalf of each person who signs in. Requested permissions: [list scopes, for example tasks:read, tasks:write, projects:read, stories:write, workspaces:read]. Data is used only to answer that person's requests. Privacy policy: [URL]. Support: [email]. If your organization requires app approval, please approve [Product name] from the app listing details page in the Asana admin console."
+    },
+    {
+      "title": "Consent explainer shown before the Asana screen",
+      "body": "[Product name] will ask Asana for permission to read and update tasks in the workspace you choose. We only act when you ask us to. Asana may ask your admin to approve this app first. You can remove access at any time in your Asana apps settings."
+    }
+  ],
+  "sources": [
+    {
+      "title": "OAuth (Asana developers)",
+      "url": "https://developers.asana.com/docs/oauth"
+    },
+    {
+      "title": "OAuth scopes (Asana developers)",
+      "url": "https://developers.asana.com/docs/oauth-scopes"
+    },
+    {
+      "title": "Manage distribution (Asana developers)",
+      "url": "https://developers.asana.com/docs/manage-distribution"
+    },
+    {
+      "title": "Rate limits (Asana developers)",
+      "url": "https://developers.asana.com/docs/rate-limits"
+    },
+    {
+      "title": "Publish your app (Asana developers)",
+      "url": "https://developers.asana.com/docs/publish-your-app"
+    },
+    {
+      "title": "App listing guidelines (Asana developers)",
+      "url": "https://developers.asana.com/docs/app-listing-guidelines"
+    },
+    {
+      "title": "New OAuth permission scopes (Asana forum, 9 Apr 2025)",
+      "url": "https://forum.asana.com/t/new-oauth-permission-scopes/1048556"
+    },
+    {
+      "title": "Upcoming: workspace-specific app and API blocking (Asana forum)",
+      "url": "https://forum.asana.com/t/upcoming-workspace-specific-app-and-api-blocking/754962"
+    },
+    {
+      "title": "Manage app integrations (Asana Help Center)",
+      "url": "https://help.asana.com/s/article/manage-app-integrations"
+    }
+  ],
+  "unconfirmed": [
+    "Whether granular scopes reached general availability. The April 2025 forum post said July 2025, but the thread does not confirm it. The OAuth docs still describe Full permissions (the default scope) as supported, and we found no page announcing it is being retired.",
+    "Which Asana plans give organization admins the approve and block controls. The help page lists several plans without saying who gets what.",
+    "Admin approval wording, such as the exact screens and where requests go. The help page we opened is a video summary. Detail came only from search summaries, which we did not open.",
+    "Whether Asana does any review or abuse check when you choose Any workspace. The distribution page describes none, but it does not rule one out.",
+    "Time to a first working sign-in. No source states it.",
+    "Whether the refresh token ever expires without use. The docs say it works for as long as the user has authorized the app."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 25 minutes"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 2 hours"
+    },
+    {
+      "label": "Test from another workspace",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Any workspace can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      1,
+      1
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
+}

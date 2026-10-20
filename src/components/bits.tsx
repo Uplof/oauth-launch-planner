@@ -1,10 +1,10 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import { DemoGuide } from "@/components/DemoGuide"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { type Difficulty, type Owner, type Proof } from "@/data/apps"
-import { Bot, CircleDashed, FlaskConical, BookOpen, Users, User, Building2 } from "lucide-react"
+import { APPS, isTested, type Difficulty, type Owner, type Proof } from "@/data/apps"
+import { Bot, CircleDashed, FlaskConical, BookOpen, Users, User, Building2, BadgeCheck } from "lucide-react"
 
 const PROOF: Record<Proof, { label: string; tip: string; cls: string; Icon: typeof FlaskConical }> = {
   tested: { label: "Tested", tip: "We did this ourselves and recorded it", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", Icon: FlaskConical },
@@ -106,13 +106,26 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </NavLink>
             ))}
           </nav>
-          <Badge variant="outline" className="ml-auto border-dashed font-normal text-zinc-500">Preview · sample data</Badge>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8"><DemoGuide />{children}</main>
+      <ProofButton />
       <footer className="mx-auto max-w-6xl px-4 pb-10 text-xs text-zinc-500">
         Every fact carries a proof label. Checked dates shown per guide.
       </footer>
     </div>
+  )
+}
+
+// Always on screen: reviewers can see at any point that the guides rest on real tests.
+function ProofButton() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith("/evidence")) return null
+  const tested = APPS.filter(isTested).length
+  return (
+    <Link to="/evidence" className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm shadow-lg hover:bg-emerald-50" style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <BadgeCheck className="size-4 text-emerald-600" />
+      <span><b>{tested} apps tested by hand</b> · See the proof</span>
+    </Link>
   )
 }

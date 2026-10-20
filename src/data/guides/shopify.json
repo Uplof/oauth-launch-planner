@@ -1,0 +1,326 @@
+{
+  "slug": "shopify",
+  "name": "Shopify",
+  "category": "E-commerce",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: one store or Plus organization needs no review, but App Store apps and customer details need Shopify approval.",
+  "firstTest": {
+    "text": "Same day on a dev store: create an app, pick a distribution method, install it, get a token. Customer data is open there once selected.",
+    "proof": "docs",
+    "source": "https://shopify.dev/docs/apps/launch/protected-customer-data"
+  },
+  "production": {
+    "text": "Custom: an install link works for one store, or several in one Plus organization, with no approval. Public (App Store, any merchant) needs review.",
+    "proof": "docs",
+    "source": "https://shopify.dev/docs/apps/launch/distribution"
+  },
+  "approvalWait": {
+    "text": "None for custom. App Store: no published wait. Shopify staff said 5 to 10 business days (31 Oct 2023); developers report 3 weeks or more.",
+    "proof": "community",
+    "source": "https://community.shopify.com/t/how-long-does-it-take-for-an-app-review-to-be-completed/264027"
+  },
+  "whoCanRegister": {
+    "text": "You need a Partner account or a store with developer permissions. Choose public or custom first; it is permanent. Public apps also need a screencast.",
+    "proof": "docs",
+    "source": "https://shopify.dev/docs/apps/tools/development-stores"
+  },
+  "testMode": {
+    "text": "Dev stores are free, with up to 250 per organization and no real payments. Offline tokens last 1 hour, with a 90-day refresh token; online tokens last 24 hours. Public apps must use expiring tokens by 1 Jan 2027. Rate limit: 100 points a second, up to 1,000 on Plus.",
+    "proof": "docs",
+    "source": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens"
+  },
+  "actions": [
+    {
+      "id": "read-products",
+      "label": "Read the store's products, variants and collections",
+      "scope": "read_products",
+      "level": "basic",
+      "review": "No special approval. Public apps should request only the permissions they need.",
+      "proof": "docs",
+      "timeToLive": "same day on a dev store"
+    },
+    {
+      "id": "read-orders",
+      "label": "Read recent orders, fulfillments and abandoned checkouts",
+      "scope": "read_orders",
+      "level": "sensitive",
+      "review": "Covers only the last 60 days of orders. Order fields that identify the customer count as protected customer data.",
+      "proof": "docs",
+      "timeToLive": "same day on a dev store; public apps wait for App Store review"
+    },
+    {
+      "id": "read-all-orders",
+      "label": "Read orders older than 60 days",
+      "scope": "read_all_orders",
+      "level": "restricted",
+      "review": "Needs Shopify approval. Ask in the Partner Dashboard under 'API access requests' and explain why. App Store review asks for a reason too.",
+      "proof": "docs",
+      "timeToLive": "unknown; Shopify publishes no wait time"
+    },
+    {
+      "id": "read-customers",
+      "label": "Read customer records and segments",
+      "scope": "read_customers",
+      "level": "sensitive",
+      "review": "Apps get no protected customer data by default. Non-development stores return none until Shopify approves your app.",
+      "proof": "docs",
+      "timeToLive": "unknown; Shopify publishes no wait time"
+    },
+    {
+      "id": "customer-identity-fields",
+      "label": "See a customer's name, email, phone or address",
+      "scope": "Protected customer data level 2, with each field requested separately",
+      "level": "restricted",
+      "review": "Level 2 means meeting the Level 1 and Level 2 requirements and taking part in data protection reviews. You request name, address, email and phone one by one.",
+      "proof": "docs",
+      "timeToLive": "unknown; Shopify publishes no wait time"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Open the Dev Dashboard",
+      "detail": "Sign in with a Shopify Partner account. Apps and dev stores live in the Dev Dashboard; Shopify CLI also creates apps.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/build/dev-dashboard"
+    },
+    {
+      "title": "Create a development store",
+      "detail": "In the Dev Dashboard, click 'Stores', then 'Create store', choose Dev and pick a plan. Tick demo data (or use the CLI flag) so the store is not empty; Shopify's Test payment gateway places orders.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/tools/development-stores"
+    },
+    {
+      "title": "Create the app",
+      "detail": "Click 'Select distribution method' on the Distribution card on Home. Choose Custom (one store or Plus organization) or Public (App Store) on your production app; you cannot change it later.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/distribution/select-distribution-method"
+    },
+    {
+      "title": "Set permissions and redirect addresses",
+      "detail": "Add the permissions your agent needs, and no more, in the app configuration. Add the App URL and redirect addresses so merchants land on the grant screen after install.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements"
+    },
+    {
+      "title": "Build the install flow",
+      "detail": "Embedded apps use token exchange and App Bridge; other apps use the standard code flow. Ask for expiring offline tokens, and save the new refresh token each time you refresh.",
+      "owner": "agent",
+      "time": "2 to 4 hrs",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens"
+    },
+    {
+      "title": "Request customer data access",
+      "detail": "Only needed if you read customer fields. In the Partner Dashboard, go to Apps, your app, 'API access requests', then 'Request access'. Give reasons for each field (name, address, email, phone) and complete the data protection details.",
+      "owner": "you",
+      "time": "1 hr to fill in, then review wait",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/protected-customer-data",
+      "slow": true
+    },
+    {
+      "title": "Test install and uninstall",
+      "detail": "Merchants must go straight to the grant screen with no store-URL typing, then into the app. Re-test for a merchant who uninstalled and came back, and fix any 404, 500 or redirect errors.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/app-store-review/pass-app-review"
+    },
+    {
+      "title": "Generate the custom install link",
+      "detail": "For Custom distribution, enter the store's myshopify.com or admin.shopify.com domain and click 'Generate link'. Optionally allow multi-store installs for one Plus organization, then send the link to the store owner.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/distribution/select-distribution-method"
+    },
+    {
+      "title": "Submit for App Store review",
+      "detail": "For the public path, fix every issue the review page flags, then add test instructions, test credentials and a short screencast. Statuses run Draft, Submitted, Paused if blocked, Reviewed, Published; reply to reviewer emails.",
+      "owner": "you",
+      "time": "half a day to prepare, then review wait",
+      "proof": "docs",
+      "link": "https://shopify.dev/docs/apps/launch/app-store-review/review-process",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Other merchants cannot install your app",
+      "fix": "Custom apps install on one store, or several in the same Plus organization. For any other merchant you need Public distribution and App Store review. Decide first, because the choice is permanent.",
+      "proof": "docs"
+    },
+    {
+      "title": "Customer fields come back empty or redacted",
+      "fix": "Apps get no protected customer data by default. Request access, then each field separately. Shopify approves only the minimum, so build your agent to cope with redacted data.",
+      "proof": "docs"
+    },
+    {
+      "title": "Order history stops at 60 days",
+      "fix": "The basic orders permission covers only the last 60 days. Add the all-orders permission and request approval in the Partner Dashboard, with a clear reason.",
+      "proof": "docs"
+    },
+    {
+      "title": "Install asks merchants to type their store URL, or skips sign-in",
+      "fix": "App Store rules ban asking for a myshopify.com URL. Authenticate with OAuth before any other step, every time, even on reinstall.",
+      "proof": "docs"
+    },
+    {
+      "title": "Tokens that never expire stop working",
+      "fix": "New public apps must use expiring offline tokens for GraphQL Admin API requests. Existing public apps lose non-expiring tokens after 1 Jan 2027, so refresh them and save the new refresh token each time.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review stalls or is paused",
+      "fix": "Paused means a core requirement blocks the reviewer: fix the listed items and click 'Submit fixes'. Resubmitting slows review, and Shopify reviews only production-ready apps, so send a finished, tested app.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the install redirect, token swap and refresh code, including saving the new refresh token",
+    "Pick the smallest set of permissions for the features you describe",
+    "Handle redacted customer data, and retry rate-limited calls after a one second wait",
+    "Run install, reinstall and uninstall checks on a dev store",
+    "Draft the customer data reasons, test instructions and screencast script"
+  ],
+  "youDo": [
+    "Create the Partner account and accept Shopify's terms",
+    "Create the dev store and the app, and pick the distribution method",
+    "Submit the customer data request and the data protection details",
+    "Record the screencast and submit the app for review",
+    "Send the custom install link to the store owner, or install as the merchant yourself",
+    "Reply to Shopify reviewer emails"
+  ],
+  "drafts": [
+    {
+      "title": "Reason for customer data access",
+      "body": "[Product name] is an AI assistant for store teams. After a merchant installs the app, it reads orders and customer records to answer questions such as 'which customers ordered twice this month?' and to draft replies. We request only the fields needed for these tasks: [name / email / phone / address, one line each on why]. Data is used only to answer the merchant's own requests, is not sold or combined with other stores' data, and is deleted when the app is uninstalled."
+    },
+    {
+      "title": "Test instructions for App Store review",
+      "body": "1. Install the app on the test store [store].myshopify.com using the credentials below. 2. Approve the permissions on the Shopify grant screen. 3. You land in the app. Click 'Ask the assistant' and type 'show my best selling products'. 4. Open Settings and click Disconnect to see what data is removed. 5. Reinstall to confirm OAuth runs again. Test login: [email] / [password]. The store has demo orders and customers."
+    },
+    {
+      "title": "Explainer shown before Shopify's grant screen",
+      "body": "[Product name] will ask Shopify for permission to read your products and orders [and customer details]. We use them to answer your questions. We never change your store without asking. You can remove access any time from Shopify admin, Settings, Apps."
+    }
+  ],
+  "sources": [
+    {
+      "title": "App distribution",
+      "url": "https://shopify.dev/docs/apps/launch/distribution"
+    },
+    {
+      "title": "Select a distribution method",
+      "url": "https://shopify.dev/docs/apps/launch/distribution/select-distribution-method"
+    },
+    {
+      "title": "App Store review process",
+      "url": "https://shopify.dev/docs/apps/launch/app-store-review/review-process"
+    },
+    {
+      "title": "Pass app review",
+      "url": "https://shopify.dev/docs/apps/launch/app-store-review/pass-app-review"
+    },
+    {
+      "title": "App Store requirements",
+      "url": "https://shopify.dev/docs/apps/launch/shopify-app-store/app-store-requirements"
+    },
+    {
+      "title": "Protected customer data",
+      "url": "https://shopify.dev/docs/apps/launch/protected-customer-data"
+    },
+    {
+      "title": "Access scopes",
+      "url": "https://shopify.dev/docs/api/usage/access-scopes"
+    },
+    {
+      "title": "Offline access tokens",
+      "url": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens"
+    },
+    {
+      "title": "Set up embedded app authorization (token exchange)",
+      "url": "https://shopify.dev/docs/apps/build/authentication-authorization/set-embedded-app-authorization"
+    },
+    {
+      "title": "Dev Dashboard",
+      "url": "https://shopify.dev/docs/apps/build/dev-dashboard"
+    },
+    {
+      "title": "Development stores",
+      "url": "https://shopify.dev/docs/apps/tools/development-stores"
+    },
+    {
+      "title": "GraphQL Admin API rate limits",
+      "url": "https://shopify.dev/docs/apps/build/apis/graphql-admin/rate-limits"
+    },
+    {
+      "title": "How long does it take for an app review to be completed? (Partner forum)",
+      "url": "https://community.shopify.com/t/how-long-does-it-take-for-an-app-review-to-be-completed/264027"
+    }
+  ],
+  "unconfirmed": [
+    "How long App Store review and protected customer data review take today. Shopify's docs publish no wait time. The only figure, 5 to 10 business days, is a staff forum reply from Oct 2023, and developers on the thread report longer.",
+    "Whether read_orders and read_customers are formally listed as protected customer data scopes. The scopes page does not say so. It only states the general rule that protected data is withheld from non-development stores until approved.",
+    "Whether a custom distribution app still needs protected customer data approval before it can read customer names and emails on a real merchant store. The docs say the data is returned only once approved, but do not spell out the custom case.",
+    "Whether custom install links are single use or expire. The page we opened does not say.",
+    "Whether you need a paid or verified Partner account at sign-up. The pages we opened say only that dev stores need a Partner account or a merchant store with developer permissions.",
+    "Exact bucket sizes for GraphQL rate limits. The page gives points per second per plan only."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Build the install flow",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about half a day"
+    },
+    {
+      "label": "Request data and submit",
+      "owner": "you",
+      "when": "Day 2",
+      "duration": "about 5 hours"
+    },
+    {
+      "label": "Shopify's App Store review",
+      "owner": "provider",
+      "when": "Days 3-23",
+      "duration": "5-10 business days, reports of 3+ weeks",
+      "wait": true
+    },
+    {
+      "label": "Any merchant can install",
+      "owner": "you",
+      "when": "Days 9-23",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      5,
+      6
+    ],
+    "waitDays": [
+      7,
+      21
+    ],
+    "toRealUsers": "1-3 weeks"
+  }
+}

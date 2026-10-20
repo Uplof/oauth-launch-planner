@@ -1,0 +1,320 @@
+{
+  "slug": "canva",
+  "name": "Canva",
+  "category": "Design",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: test on your team in an afternoon; other users connect only after a Canva review with no published wait.",
+  "firstTest": {
+    "text": "A few hours to a working sign-in on your team using Canva's starter kit. New integrations start in draft and work only for your team.",
+    "proof": "community",
+    "source": "https://docs.scalekit.com/agentkit/connectors/canva/"
+  },
+  "production": {
+    "text": "Public: users outside your team can connect only after Canva approves it. Private: your own team only, and it needs a Canva Enterprise plan.",
+    "proof": "docs",
+    "source": "https://www.canva.dev/docs/connect/creating-integrations/"
+  },
+  "approvalWait": {
+    "text": "No published number: Canva says it depends on complexity and feedback. Updates come by support ticket. You can submit up to 5 times a day.",
+    "proof": "docs",
+    "source": "https://www.canva.dev/docs/connect/submission-checklist/"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with a Canva account can build a public integration. Private needs Canva Enterprise. You can't switch later, and public ones can't use preview APIs.",
+    "proof": "docs",
+    "source": "https://www.canva.dev/docs/connect/quickstart/"
+  },
+  "testMode": {
+    "text": "Drafts work for your team only. Access lasts four hours (per a vendor article). Refresh tokens work once. Remove local redirect addresses before review.",
+    "proof": "community",
+    "source": "https://www.scalekit.com/blog/canva-mcp-vs-api"
+  },
+  "actions": [
+    {
+      "id": "read-designs",
+      "label": "List and read a user's designs",
+      "scope": "design:meta:read, design:content:read",
+      "level": "sensitive",
+      "review": "Set scopes in the Developer Portal. Canva asks you to justify each one when you submit a public integration.",
+      "proof": "docs",
+      "timeToLive": "your team: same day. Other users: after Canva review"
+    },
+    {
+      "id": "create-designs",
+      "label": "Create a new design for the user",
+      "scope": "design:content:write",
+      "level": "sensitive",
+      "review": "Same public review. Read and write are separate scopes, so ask for each one you need.",
+      "proof": "docs",
+      "timeToLive": "your team: same day. Other users: after Canva review"
+    },
+    {
+      "id": "upload-assets",
+      "label": "Upload, update or read images and other assets",
+      "scope": "asset:read, asset:write",
+      "level": "sensitive",
+      "review": "Same public review. Write access doesn't include read access.",
+      "proof": "docs",
+      "timeToLive": "your team: same day. Other users: after Canva review"
+    },
+    {
+      "id": "folders",
+      "label": "Read and organise the user's folders",
+      "scope": "folder:read, folder:write",
+      "level": "sensitive",
+      "review": "Same public review.",
+      "proof": "docs",
+      "timeToLive": "your team: same day. Other users: after Canva review"
+    },
+    {
+      "id": "brand-templates",
+      "label": "Read brand templates",
+      "scope": "brandtemplate:meta:read, brandtemplate:content:read",
+      "level": "sensitive",
+      "review": "Same public review. A vendor article says users need a paid Canva plan for brand templates.",
+      "proof": "community",
+      "timeToLive": "your team: same day. Other users: after Canva review"
+    },
+    {
+      "id": "enterprise-only",
+      "label": "Autofill brand templates and read design analytics",
+      "scope": "see Canva API reference",
+      "level": "restricted",
+      "review": "A vendor connector page says Canva limits analytics and autofill to Canva Enterprise organizations. Other users get a permission error.",
+      "proof": "community",
+      "timeToLive": "depends on the user's plan"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Open the Developer Portal",
+      "detail": "Sign up for a Canva account, then open the Developer Portal from the Canva developer docs.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/quickstart/"
+    },
+    {
+      "title": "Create a public integration",
+      "detail": "Pick 'Public' so outside users can connect later. You can't change this after creating it. Choose 'Private' only if every user is on your own Enterprise team.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/creating-integrations/"
+    },
+    {
+      "title": "Set scopes and redirect address",
+      "detail": "On the 'Configuration' page, pick the fewest scopes you need and add your HTTPS redirect address. For local tests, Canva uses http://127.0.0.1:3001/oauth/redirect, not localhost.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/quickstart/"
+    },
+    {
+      "title": "Generate a client secret",
+      "detail": "Copy the Client ID, then click 'Generate secret'. It shows once, so keep it on your backend, never in client code or agent prompts.",
+      "owner": "you",
+      "time": "2 min",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/creating-integrations/"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Use the extra security check most libraries do for you, with a 43 to 128 character verifier. Check the state on return, then swap the code from your backend using your client ID and secret.",
+      "owner": "agent",
+      "time": "2 hr",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/authentication/"
+    },
+    {
+      "title": "Store and refresh tokens",
+      "detail": "Each refresh token works once. Every refresh returns a new access token and a new refresh token, so save both. Refresh before the access token expires (a vendor article says four hours).",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/authentication/"
+    },
+    {
+      "title": "Test on your own team",
+      "detail": "Connect with team accounts and try the key actions: list designs, upload an asset, create a design. Handle permission errors for features the user's plan lacks. Exports are async jobs, so poll until they finish.",
+      "owner": "agent",
+      "time": "half a day",
+      "proof": "community",
+      "link": "https://docs.scalekit.com/agentkit/connectors/canva/"
+    },
+    {
+      "title": "Clear the submission checklist",
+      "detail": "Remove local redirect addresses, keep one HTTPS address, skip preview APIs and host on reliable infrastructure, not a free service. Follow Canva's brand guidelines, proofread the listing with no external links, and give reviewers a test login and docs.",
+      "owner": "you",
+      "time": "1 to 2 days",
+      "proof": "docs",
+      "link": "https://www.canva.dev/docs/connect/submission-checklist/"
+    },
+    {
+      "title": "Submit for review",
+      "detail": "In the Developer Portal, open 'Submit for review', agree to the Canva Developer Terms and submit. Canva opens a support ticket; reply there. A submitted integration can't be edited, so cancel the submission before changing anything.",
+      "owner": "you",
+      "time": "1 hr to submit, then Canva sets the wait",
+      "proof": "docs",
+      "link": "https://canva.dev/docs/connect/submitting-integrations",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Only your team can connect",
+      "fix": "A new integration starts in draft and works only for accounts on your own team. Outside users can connect only after Canva approves a public integration.",
+      "proof": "community"
+    },
+    {
+      "title": "You chose Private by mistake",
+      "fix": "Private means one team and needs a Canva Enterprise plan. You can't switch later, so create a new public integration.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review rejects preview APIs",
+      "fix": "Public integrations that use preview APIs can't pass review, because Canva says they aren't finalized. Build the review version on stable APIs only.",
+      "proof": "docs"
+    },
+    {
+      "title": "Submission blocked by a local redirect address",
+      "fix": "You can't submit a public integration while a local address such as 127.0.0.1 is set. Add your production HTTPS address and remove the local one first.",
+      "proof": "docs"
+    },
+    {
+      "title": "Analytics and autofill give permission errors",
+      "fix": "A vendor connector page says these are limited to users in a Canva Enterprise organization. Catch the error, tell the user which plan is needed, and hide those actions for others.",
+      "proof": "community"
+    },
+    {
+      "title": "A refresh token is rejected",
+      "fix": "Each refresh token works once. Save the new one from every refresh, and lock the refresh so two workers don't use the same token.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the sign-in flow with the extra security check, state check and token swap",
+    "Rotate and store refresh tokens safely on the backend",
+    "Poll export and upload jobs until they finish",
+    "Draft the listing text, scope justifications and reviewer instructions",
+    "Check your setup against the submission checklist"
+  ],
+  "youDo": [
+    "Create the Canva account and the Developer Portal integration",
+    "Choose Public and generate the client secret",
+    "Create a test Canva account and share its login with reviewers",
+    "Agree to the Canva Developer Terms and submit for review",
+    "Answer reviewer questions in the support ticket"
+  ],
+  "drafts": [
+    {
+      "title": "Scope justification for the review",
+      "body": "[Product name] is an AI assistant that helps [user type] create and manage Canva designs. design:meta:read lets the user pick an existing design. design:content:write creates a new design from the user's request. asset:write uploads images the user asks for. We do not request any scope we do not use. Tokens are kept on our server and users can disconnect at any time from Settings."
+    },
+    {
+      "title": "Reviewer testing instructions",
+      "body": "1. Sign in to [Product name] at [URL] with the test account [email]. 2. Click Connect Canva and approve the Canva consent screen. 3. In chat, type: Create a new Instagram post about a coffee shop. 4. Open the link we return and confirm the new design appears in your Canva home. 5. Click Disconnect in Settings and confirm tokens are removed. Documentation: [URL]."
+    },
+    {
+      "title": "Consent explainer before the Canva screen",
+      "body": "[Product name] will ask Canva for permission to see your designs and to create new ones on your behalf. We only create or upload when you ask. You can disconnect at any time in our Settings, and remove access from your Canva account."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Canva Connect: Creating integrations",
+      "url": "https://www.canva.dev/docs/connect/creating-integrations/"
+    },
+    {
+      "title": "Canva Connect: Submitting integrations for review",
+      "url": "https://canva.dev/docs/connect/submitting-integrations"
+    },
+    {
+      "title": "Canva Connect: Submission checklist",
+      "url": "https://www.canva.dev/docs/connect/submission-checklist/"
+    },
+    {
+      "title": "Canva Connect: Authentication",
+      "url": "https://www.canva.dev/docs/connect/authentication/"
+    },
+    {
+      "title": "Canva Connect: Scopes",
+      "url": "https://www.canva.dev/docs/connect/appendix/scopes/"
+    },
+    {
+      "title": "Canva Connect: Quickstart",
+      "url": "https://www.canva.dev/docs/connect/quickstart/"
+    },
+    {
+      "title": "Canva Connect APIs overview",
+      "url": "https://www.canva.dev/docs/connect/"
+    },
+    {
+      "title": "Canva developers blog: Using Canva with your coding agent",
+      "url": "https://www.canva.dev/blog/developers/canva-and-coding-agents-platforms/"
+    },
+    {
+      "title": "Scalekit: Canva MCP vs Connect API",
+      "url": "https://www.scalekit.com/blog/canva-mcp-vs-api"
+    },
+    {
+      "title": "Scalekit: Canva connector docs",
+      "url": "https://docs.scalekit.com/agentkit/connectors/canva/"
+    }
+  ],
+  "unconfirmed": [
+    "How long Canva review takes. Canva gives no number, only that it depends on complexity and feedback.",
+    "The access token lifetime. Canva's docs say 'a short period'. The four hour figure is from a vendor article.",
+    "Whether draft integrations have a user or call cap. 'Own team only' comes from vendor pages, not Canva docs.",
+    "How long a refresh token lasts. Canva docs only say each one is single use.",
+    "The exact Developer Portal menu label for submitting. The Canva submission page we opened is written around apps inside Canva. The 'Submit for review' wording for Connect integrations comes from a search summary, so check the Portal.",
+    "Which plans can use which Connect endpoints. Only a vendor page says analytics and autofill are Enterprise-limited. No official plan table was found.",
+    "Rate limits for the Connect APIs. None are published on the pages we opened. One vendor page says exports are 75 per user per 5 minutes.",
+    "Whether MFA is needed for the Developer Portal. The pages we opened do not mention it."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the integration",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Build and test the sign-in",
+      "owner": "agent",
+      "when": "Day 1-2",
+      "duration": "about 7 hours"
+    },
+    {
+      "label": "Clear checklist and submit",
+      "owner": "you",
+      "when": "Days 2-4",
+      "duration": "1-2 days plus 1 hour"
+    },
+    {
+      "label": "Canva's review",
+      "owner": "provider",
+      "when": "After day 4",
+      "duration": "not published",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "After approval",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      16,
+      25
+    ],
+    "waitDays": null,
+    "toRealUsers": "unknown"
+  }
+}

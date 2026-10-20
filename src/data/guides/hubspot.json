@@ -1,0 +1,316 @@
+{
+  "slug": "hubspot",
+  "name": "HubSpot",
+  "category": "CRM",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: install needs no review, but an unlisted Marketplace app stops at 25 installs until HubSpot approves a listing.",
+  "firstTest": {
+    "text": "No time in the docs. Install the CLI, upload an app, copy the client ID and secret, then install into a test account.",
+    "proof": "unconfirmed",
+    "source": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+  },
+  "production": {
+    "text": "Three paths: unlisted Marketplace app (25 installs max), private OAuth (10 accounts, 100 for Solution Partners), or listed (no cap, after three unaffiliated installs).",
+    "proof": "docs",
+    "source": "https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits"
+  },
+  "approvalWait": {
+    "text": "None to install under the cap. Marketplace listing: initial review within 10 business days, full review within 60 days from when feedback is shared.",
+    "proof": "docs",
+    "source": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/app-marketplace-listing-requirements"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with a developer account. Installers need every required permission. Listing adds manual review, OAuth only, public docs, support contact, Terms and Privacy URLs.",
+    "proof": "docs",
+    "source": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/app-marketplace-listing-requirements"
+  },
+  "testMode": {
+    "text": "Install into a test account from the Distribution tab. Customers can install unreviewed apps after ticking an unverified-app box. Access lasts 30 minutes.",
+    "proof": "docs",
+    "source": "https://developers.hubspot.com/docs/guides/api/app-management/oauth-tokens"
+  },
+  "actions": [
+    {
+      "id": "read-contacts",
+      "label": "Read contacts and their properties",
+      "scope": "crm.objects.contacts.read",
+      "level": "basic",
+      "review": "No review to install. Listing review checks you only ask for permissions you use.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "write-contacts",
+      "label": "Create, update and delete contacts",
+      "scope": "crm.objects.contacts.write",
+      "level": "basic",
+      "review": "No review to install. Listing review checks you only ask for permissions you use.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "read-companies-deals",
+      "label": "Read and write companies and deals",
+      "scope": "crm.objects.companies.read, crm.objects.companies.write, crm.objects.deals.read, crm.objects.deals.write",
+      "level": "basic",
+      "review": "No review to install. Some permissions only work on certain HubSpot plans.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "property-settings",
+      "label": "Manage contact property definitions",
+      "scope": "crm.schemas.contacts.read, crm.schemas.contacts.write",
+      "level": "basic",
+      "review": "No review to install.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "sensitive-data",
+      "label": "Read sensitive contact data, or work with custom objects",
+      "scope": "crm.objects.contacts.sensitive.read, crm.objects.custom.read, crm.objects.custom.write",
+      "level": "sensitive",
+      "review": "No approval step documented. These are Enterprise-only, so the customer's HubSpot plan decides whether install works.",
+      "proof": "docs",
+      "timeToLive": "same day if the customer is on Enterprise"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create a developer account",
+      "detail": "Your app lives in your primary developer account. Optionally add a developer test account under \"Test accounts\" in the Development menu, so you never touch a real customer account.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+    },
+    {
+      "title": "Install the HubSpot CLI",
+      "detail": "Install the CLI (the page names v7.6.0), then run hs account auth to link it to your developer account.",
+      "owner": "agent",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+    },
+    {
+      "title": "Scaffold the app project",
+      "detail": "Run hs project create, pick App, then choose distribution (Marketplace, or private to allowlisted accounts) and OAuth as the auth type. Legacy public apps cannot be created since 23 June 2026, so use this path.",
+      "owner": "agent",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/legacy-apps/public-apps/overview"
+    },
+    {
+      "title": "Configure redirects and scopes",
+      "detail": "In app-hsmeta.json, add one HTTPS redirect address (http://localhost works for testing) and one required scope. Move non-essential scopes to the optional list and tier-specific ones to conditionally required. Request only what the agent uses.",
+      "owner": "agent",
+      "time": "20 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration"
+    },
+    {
+      "title": "Upload and copy credentials",
+      "detail": "Run hs project upload, then hs project open. In your app's \"Auth\" tab, copy the client ID and client secret into your OAuth server, then restart it.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to HubSpot's authorize page with your client ID, redirect address, required scopes (spaces as %20) and optional scopes. When they return, swap the one-time code for an access token and refresh token, and store both.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/legacy-apps/authentication/oauth-quickstart-guide"
+    },
+    {
+      "title": "Refresh tokens before expiry",
+      "detail": "Access lasts 30 minutes (1800 seconds). Refresh at the same token address, and if HubSpot says the grant is invalid, send the user through consent again.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/guides/api/app-management/oauth-tokens"
+    },
+    {
+      "title": "Test the install",
+      "detail": "In the project's \"Distribution\" tab, click \"Add test install(s)\", then \"Install\" next to the test account. Tick the unverified-app box, click \"Connect app\", and try each action.",
+      "owner": "you",
+      "time": "15 min",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+    },
+    {
+      "title": "Get three real installs",
+      "detail": "Listing needs three active, unique installs. Each must be a production account not tied to your organisation, with successful app activity in the past 30 days. Stay under the 25-install cap meanwhile.",
+      "owner": "you",
+      "time": "unknown, depends on customers",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/app-marketplace-listing-requirements",
+      "slow": true
+    },
+    {
+      "title": "Submit the Marketplace listing",
+      "detail": "Prepare setup docs, a support contact, Terms and Privacy URLs, an accurate Shared data table, pricing that matches your site, and an install button URL. Submit one app at a time; initial review takes up to 10 business days.",
+      "owner": "you",
+      "time": "half a day to prepare, then review wait",
+      "proof": "docs",
+      "link": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/app-marketplace-listing-requirements"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "You hit the 25-install cap",
+      "fix": "Marketplace apps on platform version 2025.2 stop at 25 installs until listed, and migrated legacy apps with over 25 installs get the cap at once. Submit the listing, or switch to private OAuth distribution (10 customers, or 100 for Solution Partners).",
+      "proof": "docs"
+    },
+    {
+      "title": "Install fails for lower-tier accounts",
+      "fix": "Install fails if the installer cannot grant every required scope. Move non-essential scopes to optional, which HubSpot drops if the account lacks that product.",
+      "proof": "docs"
+    },
+    {
+      "title": "Customers see an unverified-app warning",
+      "fix": "Unlisted apps show a warning that HubSpot has not reviewed them; apps that pass review do not. Tell users to expect it, or list the app.",
+      "proof": "docs"
+    },
+    {
+      "title": "Listing is rejected or stuck in Draft",
+      "fix": "Common causes: unused scopes, OAuth not the only sign-in method, dead or private support or docs URLs, an inaccurate Shared data table, or incomplete fields. Submitting while another app is in review also auto-rejects it, so fix and resubmit.",
+      "proof": "docs"
+    },
+    {
+      "title": "Users get disconnected after a refresh fails",
+      "fix": "Access lasts 30 minutes, and the docs give no refresh token lifetime. An invalid-grant error means the token may be invalid, expired or revoked, so catch it and ask the user to reconnect.",
+      "proof": "docs"
+    },
+    {
+      "title": "Sensitive or custom data fails for one customer",
+      "fix": "Sensitive and custom object scopes are Enterprise-only. Make them conditionally required or optional so Professional customers can still install.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Scaffold the project and write the app config with a minimal scope list",
+    "Build the authorize redirect, code swap and token refresh, with a reconnect path when a refresh fails",
+    "Store tokens per portal and refresh them before the 30 minute expiry",
+    "Work with contacts, companies and deals within the granted scopes",
+    "Draft the listing text, setup documentation and Shared data table"
+  ],
+  "youDo": [
+    "Create the HubSpot developer account and any test account",
+    "Run the CLI sign-in and click \"Install\" in the Distribution tab",
+    "Tick the unverified-app box on the first test install",
+    "Find the first three unaffiliated customers who will install",
+    "Provide public Terms of Service, Privacy Policy, support and setup documentation URLs",
+    "Submit the Marketplace listing and answer reviewer feedback"
+  ],
+  "drafts": [
+    {
+      "title": "Marketplace listing description",
+      "body": "[Product name] lets your team ask an AI assistant questions about your HubSpot CRM and update records by chat. Connect with HubSpot OAuth. The assistant reads contacts, companies and deals, and can create or update contacts when you ask it to. It only sees data your connection allows. You can disconnect at any time from HubSpot's Connected Apps page. Setup guide: [URL]. Support: [email or URL]."
+    },
+    {
+      "title": "Consent note shown before the HubSpot screen",
+      "body": "[Product name] will ask HubSpot for permission to view and edit your contacts, companies and deals. We only change a record when you ask us to. HubSpot may show a notice that the app has not been reviewed yet. You can remove access any time in HubSpot under Connected Apps."
+    },
+    {
+      "title": "Why you need each scope (for reviewers)",
+      "body": "crm.objects.contacts.read: lets the assistant look up a contact when the user asks. crm.objects.contacts.write: lets the assistant create or update a contact only on a user request. crm.objects.companies.read and crm.objects.deals.read: used to answer questions about accounts and pipeline. We do not request any scope we do not use. Optional scopes are marked optional in our app configuration."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Working with OAuth (legacy apps guide)",
+      "url": "https://developers.hubspot.com/docs/apps/legacy-apps/authentication/oauth-quickstart-guide"
+    },
+    {
+      "title": "New marketplace distribution app install limits (changelog)",
+      "url": "https://developers.hubspot.com/changelog/new-marketplace-distribution-app-install-limits"
+    },
+    {
+      "title": "App Marketplace listing requirements",
+      "url": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/listing-your-app/app-marketplace-listing-requirements"
+    },
+    {
+      "title": "Create a new app using the CLI",
+      "url": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/create-an-app"
+    },
+    {
+      "title": "Scopes",
+      "url": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/scopes"
+    },
+    {
+      "title": "Legacy public apps",
+      "url": "https://developers.hubspot.com/docs/apps/legacy-apps/public-apps/overview"
+    },
+    {
+      "title": "App configuration",
+      "url": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/app-configuration"
+    },
+    {
+      "title": "Manage OAuth access tokens using the v1 APIs",
+      "url": "https://developers.hubspot.com/docs/guides/api/app-management/oauth-tokens"
+    },
+    {
+      "title": "Understand the app installation flow",
+      "url": "https://developers.hubspot.com/docs/apps/developer-platform/list-apps/understand-app-install-flow"
+    },
+    {
+      "title": "Listing a SaaS product on the HubSpot App Marketplace (community blog)",
+      "url": "https://www.spotdev.co.uk/blog/how-to-list-a-saas-product-on-hubspot-app-marketplace"
+    }
+  ],
+  "unconfirmed": [
+    "How long it takes to a first working sign-in. No source states a time, so the first test estimate is ours.",
+    "Whether the 25-install cap counts uninstalled or test installs. The changelog does not say.",
+    "How long a refresh token lasts. The docs give no lifetime.",
+    "Whether a free developer account is enough to build and test. The pages we opened do not state a cost.",
+    "Whether the private OAuth allowlist (10 or 100 customers) is a separate path from the 25-install cap in practice. The changelog lists both but does not explain how an app chooses.",
+    "Who exactly may install. The older OAuth guide says a Super Admin, while the current pages say users with the required permissions. We could not reconcile them.",
+    "The 60-install certification threshold and 6-month wait come only from a community blog. We could not open HubSpot's own changelog page for it."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 2 hours"
+    },
+    {
+      "label": "Real users can connect, up to 25 installs",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    },
+    {
+      "label": "Listing review, to go past 25",
+      "owner": "provider",
+      "when": "After 3 real installs",
+      "duration": "first reply within 10 business days, full review up to 60 days",
+      "wait": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      3,
+      4
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
+}

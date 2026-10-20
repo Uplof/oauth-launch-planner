@@ -1,0 +1,339 @@
+{
+  "slug": "googlesuper",
+  "name": "Google Workspace (all apps)",
+  "category": "Productivity suite",
+  "sample": false,
+  "difficulty": "hard",
+  "headline": "Hard: reading Gmail or full Drive triggers a yearly security assessment; stick to narrower scopes and review takes days.",
+  "firstTest": {
+    "text": "Testing status needs no verification. Add up to 100 test users on the consent screen and they connect right away, with a warning screen.",
+    "proof": "docs",
+    "source": "https://support.google.com/cloud/answer/15549945"
+  },
+  "production": {
+    "text": "Non-sensitive: no check. Sensitive (send mail, calendar, Sheets, Docs): brand and scope verification. Restricted (read Gmail, full Drive): plus a security assessment every 12 months.",
+    "proof": "docs",
+    "source": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification"
+  },
+  "approvalWait": {
+    "text": "Sensitive: 3-5 business days. Restricted: several weeks, plus an assessment (no price or wait given). Brand check: minutes if automated, 2-3 business days if manual.",
+    "proof": "docs",
+    "source": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+  },
+  "whoCanRegister": {
+    "text": "Owners and editors get every review email. Going live needs a domain verified in Search Console, a public home page, and a same-domain privacy policy.",
+    "proof": "docs",
+    "source": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
+  },
+  "testMode": {
+    "text": "Testing: up to 100 test users; access and refresh token expire 7 days after consent. Unverified production: 100 new users ever, no reset.",
+    "proof": "docs",
+    "source": "https://support.google.com/cloud/answer/15549945"
+  },
+  "actions": [
+    {
+      "id": "gmail-send",
+      "label": "Send email as the user",
+      "scope": "https://www.googleapis.com/auth/gmail.send",
+      "level": "sensitive",
+      "review": "Brand verification, then scope justification and demo video. No security assessment.",
+      "proof": "docs",
+      "timeToLive": "typically 3-5 business days after the brand check"
+    },
+    {
+      "id": "gmail-read",
+      "label": "Read the user's email",
+      "scope": "https://www.googleapis.com/auth/gmail.readonly",
+      "level": "restricted",
+      "review": "Full restricted verification plus a yearly security assessment (CASA). The Gmail modify, compose and metadata permissions are restricted too.",
+      "proof": "docs",
+      "timeToLive": "several weeks or longer"
+    },
+    {
+      "id": "calendar-events",
+      "label": "View and edit events on the user's calendars",
+      "scope": "https://www.googleapis.com/auth/calendar.events",
+      "level": "sensitive",
+      "review": "Sensitive scope verification. Calendar scopes are not restricted.",
+      "proof": "community",
+      "timeToLive": "typically 3-5 business days after the brand check"
+    },
+    {
+      "id": "drive-file",
+      "label": "Create files, and open only the Drive files the user picks or shares with the app",
+      "scope": "https://www.googleapis.com/auth/drive.file",
+      "level": "basic",
+      "review": "Non-sensitive. No scope verification needed. Google recommends pairing it with the Google Picker.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "sheets-docs",
+      "label": "Read and edit Google Sheets and Google Docs",
+      "scope": "https://www.googleapis.com/auth/spreadsheets, https://www.googleapis.com/auth/documents",
+      "level": "sensitive",
+      "review": "Sensitive scope verification. The read-only versions are sensitive as well.",
+      "proof": "docs",
+      "timeToLive": "typically 3-5 business days after the brand check"
+    },
+    {
+      "id": "drive-all",
+      "label": "See and download every file in the user's Drive",
+      "scope": "https://www.googleapis.com/auth/drive.readonly (or drive for read and write)",
+      "level": "restricted",
+      "review": "Restricted: full verification plus a yearly security assessment.",
+      "proof": "docs",
+      "timeToLive": "several weeks or longer"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Pick the narrowest scopes",
+      "detail": "Pick per product: send-only for Gmail, events for Calendar, the Sheets and Docs scopes, and per-file access with the Picker for Drive. Add read-Gmail or full Drive only if the product cannot work without them.",
+      "owner": "agent",
+      "time": "Under an hour",
+      "proof": "docs",
+      "link": "https://developers.google.com/workspace/drive/api/guides/api-specific-auth"
+    },
+    {
+      "title": "Create the project, enable APIs",
+      "detail": "Create a Google Cloud project, then enable the Gmail, Calendar, Drive, Sheets and Docs APIs in the API Library. Keep this production project separate from any development project.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://support.google.com/cloud/answer/13461325"
+    },
+    {
+      "title": "Set up the consent screen",
+      "detail": "Enter your app name, support email, logo, home page, privacy policy, authorized domains and developer contact. Choose an \"External\" audience so users outside your organization can connect.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://support.google.com/cloud/answer/13461325"
+    },
+    {
+      "title": "Declare the scopes",
+      "detail": "Click \"Add or remove scopes\" and add only the scopes from step 1. The console labels each one non-sensitive, sensitive or restricted, so check that no restricted scope slipped in.",
+      "owner": "agent",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+    },
+    {
+      "title": "Create the OAuth client",
+      "detail": "Create a web client with your callback URL and add pilot users as test users (up to 100). Build the sign-in redirect and code swap, and request offline access for a refresh token, which expires after 7 days in Testing.",
+      "owner": "agent",
+      "time": "A few hours",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2"
+    },
+    {
+      "title": "Verify your brand",
+      "detail": "Verify your domain in Search Console, publish a public home page and a privacy policy on it, and make authorized domains cover every redirect address. Then click \"Verify Branding\" and publish within 7 days, the length of a compliant result.",
+      "owner": "you",
+      "time": "Minutes if automated, 2-3 business days if manual",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
+    },
+    {
+      "title": "Publish to production",
+      "detail": "Move the app from Testing to In production, then open the Verification Center and prepare for verification. Give up to three documentation links, a one-line justification per sensitive or restricted scope, and why a narrower scope is not enough.",
+      "owner": "you",
+      "time": "About an hour",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+    },
+    {
+      "title": "Record the demo video",
+      "detail": "In English, show the full grant flow, the app name on the consent screen, the client ID in the browser address bar, and every sensitive or restricted scope in use. Upload it to YouTube as Unlisted.",
+      "owner": "you",
+      "time": "Half a day",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+    },
+    {
+      "title": "Submit and answer emails",
+      "detail": "Submit for verification. Google emails project owners and editors about everything, so keep those contacts current and reply fast.",
+      "owner": "provider",
+      "time": "Typically 3-5 business days for sensitive scopes",
+      "proof": "docs",
+      "link": "https://support.google.com/cloud/answer/13461325"
+    },
+    {
+      "title": "Pass the security assessment",
+      "detail": "Only for restricted scopes that touch your servers: Google emails you when to start, and a Google-empanelled assessor tests the app and issues a Letter of Assessment. Repeat at least every 12 months after approval.",
+      "owner": "you",
+      "time": "Several weeks or longer",
+      "proof": "docs",
+      "link": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Reading email pulls the whole app into restricted review",
+      "fix": "All Gmail read, modify, compose and metadata permissions are restricted, so metadata-only is no way out. If send-only works, use the send permission (sensitive); otherwise start the yearly assessment on day one.",
+      "proof": "docs"
+    },
+    {
+      "title": "Full Drive access is restricted",
+      "fix": "Full and read-only Drive access are restricted. Per-file access is non-sensitive and covers files the user opens with your app, picks in the Google Picker, or shares with it; Google says many apps can switch without changes.",
+      "proof": "docs"
+    },
+    {
+      "title": "Pilot users lose access after a week",
+      "fix": "In Testing status a test user's authorization and refresh token expire 7 days after consent. Plan reconnect prompts or finish verification first; test users are capped at 100.",
+      "proof": "docs"
+    },
+    {
+      "title": "Users hit the unverified-app screen and the 100-user cap",
+      "fix": "While verification is pending, Google shows an unverified-app warning and lets in only 100 new users over the project's life; only verification lifts the cap. A production project that burns it during testing cannot get it back, so test in a separate project.",
+      "proof": "docs"
+    },
+    {
+      "title": "Brand verification fails or expires",
+      "fix": "The home page must be public and describe the app, and the privacy policy must be on the same domain and say how Google user data is used. Authorized domains must cover redirect addresses and JavaScript origins; Play Store and Facebook pages do not count as home pages, and results last 7 days.",
+      "proof": "docs"
+    },
+    {
+      "title": "Verification is rejected for vague reasons or an incomplete video",
+      "fix": "Name the product feature behind each scope and say why a narrower scope fails. Your video must show each sensitive scope in use, with the client ID in the address bar.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Choose the narrowest scope for each feature and flag any restricted scope before you commit",
+    "Write the consent redirect, state check, code swap and refresh logic, and handle a refresh token that stops working",
+    "Check your home page and privacy policy against Google's brand checklist before you click \"Verify Branding\"",
+    "Draft scope justifications and the demo video script",
+    "Track test users and warn you as the 100-user and 7-day limits approach"
+  ],
+  "youDo": [
+    "Sign in to Google Cloud and accept Google's API terms and user data policy",
+    "Verify the domain in Search Console",
+    "Click \"Verify Branding\", publish the app, and submit for verification",
+    "Record and upload the demo video",
+    "Reply to reviewer emails from the project owner or editor account",
+    "Choose and pay a security assessor if you request any restricted scope"
+  ],
+  "drafts": [
+    {
+      "title": "Scope justification: per-file Drive access with the Picker",
+      "body": "Our assistant works only on files the user chooses. Users pick files through the Google Picker, and the app then reads or edits those files and creates new files the user asks for. drive.file is the narrowest scope that allows this. We do not need access to the rest of the user's Drive."
+    },
+    {
+      "title": "Scope justification: Calendar events",
+      "body": "Our assistant books and reschedules meetings that the user has approved in our app. It needs to view and edit events on the user's calendars to find free time and create the event. We do not manage calendar sharing or settings, so we do not request the broader calendar scope."
+    },
+    {
+      "title": "Demo video script",
+      "body": "1. Show the app home page and the privacy policy link.\n2. Click Connect Google. Show the consent screen with the app name and the OAuth client ID in the address bar.\n3. Grant each permission, then show the feature behind each scope in use: a sent email (gmail.send), a created calendar event (calendar.events), a Sheet or Doc edited by the assistant, and a file picked with the Picker (drive.file).\n4. Show how the user disconnects and revokes access."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Restricted scope verification",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification"
+    },
+    {
+      "title": "Sensitive scope verification",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+    },
+    {
+      "title": "Brand verification",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
+    },
+    {
+      "title": "Manage app audience (Testing vs In production, user caps)",
+      "url": "https://support.google.com/cloud/answer/15549945"
+    },
+    {
+      "title": "Submitting your app for OAuth verification",
+      "url": "https://support.google.com/cloud/answer/13461325"
+    },
+    {
+      "title": "When verification is not needed",
+      "url": "https://support.google.com/cloud/answer/13464323"
+    },
+    {
+      "title": "OAuth 2.0 for Google APIs (refresh token expiry)",
+      "url": "https://developers.google.com/identity/protocols/oauth2"
+    },
+    {
+      "title": "Gmail API scopes by sensitivity",
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes"
+    },
+    {
+      "title": "Drive API scopes by sensitivity",
+      "url": "https://developers.google.com/workspace/drive/api/guides/api-specific-auth"
+    },
+    {
+      "title": "Sheets API scopes",
+      "url": "https://developers.google.com/workspace/sheets/api/scopes"
+    },
+    {
+      "title": "Docs API scopes",
+      "url": "https://developers.google.com/workspace/docs/api/auth"
+    },
+    {
+      "title": "Calendar API scopes",
+      "url": "https://developers.google.com/workspace/calendar/api/auth"
+    },
+    {
+      "title": "CASA (App Defense Alliance)",
+      "url": "https://appdefensealliance.dev/casa"
+    },
+    {
+      "title": "Nylas: Google verification and security assessment guide (community, Calendar sensitivity)",
+      "url": "https://developer.nylas.com/docs/provider-guides/google/google-verification-security-assessment-guide/"
+    }
+  ],
+  "unconfirmed": [
+    "Calendar scope sensitivity. Google's Calendar auth page lists the scopes but gives no category. Only a third-party guide (Nylas) names calendar, calendar.readonly, calendar.events and calendar.events.readonly as sensitive and not restricted. Check the labels the console shows when you add them.",
+    "Whether one restricted scope puts the whole app, rather than only that scope, through the review. Google says an app requesting a restricted scope must meet the extra requirements. It does not say in those words that every other scope in the app is dragged along.",
+    "Cost of the security assessment, and how long it takes on top of 'several weeks'. The pages we opened state no fee and no assessor timeline.",
+    "How long the sensitive review takes in practice. Google says typically 3-5 business days. We found no source on delays when reviewers ask for changes.",
+    "Whether a user who consents to a subset of the scopes still counts toward the 100-user cap before verification. No page we opened says."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about half a day"
+    },
+    {
+      "label": "Publish and record demo",
+      "owner": "you",
+      "when": "Day 2",
+      "duration": "about half a day"
+    },
+    {
+      "label": "Google's review; restricted adds yearly assessment",
+      "owner": "provider",
+      "when": "Days 3-12",
+      "duration": "3-8 business days",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "About day 12",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      8,
+      10
+    ],
+    "waitDays": [
+      4,
+      11
+    ],
+    "toRealUsers": "1-3 weeks"
+  }
+}

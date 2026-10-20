@@ -1,0 +1,309 @@
+{
+  "slug": "figma",
+  "name": "Figma",
+  "category": "Design",
+  "sample": false,
+  "difficulty": "hard",
+  "headline": "Hard: outside users cannot connect until Figma approves your public app, and 2026 forum posts report weeks of waiting.",
+  "firstTest": {
+    "text": "About 30 minutes to create the OAuth app and sign in with your own account. A draft app works only for you and plan admins.",
+    "proof": "docs",
+    "source": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+  },
+  "production": {
+    "text": "Private: no Figma review, but only your linked team or organization can connect. Public: Figma must approve it before any outside user can.",
+    "proof": "docs",
+    "source": "https://developers.figma.com/docs/rest-api/republish-oauth-apps"
+  },
+  "approvalWait": {
+    "text": "Reportedly the form says 5 to 10 business days, but Figma's docs and staff give no timeframe. One March 2026 request waited a month.",
+    "proof": "community",
+    "source": "https://forum.figma.com/ask-the-community-7/how-long-does-it-take-for-a-figma-oauth-app-to-get-approved-52433"
+  },
+  "whoCanRegister": {
+    "text": "Anyone on a Figma team or organization can create an app, and your users need not belong to it. Public apps also need a description and testing steps.",
+    "proof": "docs",
+    "source": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+  },
+  "testMode": {
+    "text": "A draft app cannot act for other users, even on your team. Private publish gives your team full use with no review. Access tokens last 90 days, and refresh tokens are reusable. Rate limits depend on plan and seat: 10 to 20 requests a minute for the heaviest file calls on Dev and Full seats, down to 20 a month on View and Collab seats.",
+    "proof": "docs",
+    "source": "https://developers.figma.com/docs/rest-api/rate-limits/"
+  },
+  "actions": [
+    {
+      "id": "profile",
+      "label": "Identify the connected Figma user",
+      "scope": "current_user:read",
+      "level": "basic",
+      "review": "Same public app review as every permission. You must give a reason for each one you select.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review"
+    },
+    {
+      "id": "read-files",
+      "label": "Read file contents such as nodes and layers",
+      "scope": "file_content:read",
+      "level": "sensitive",
+      "review": "Public app review. Reviewers check that your permissions match the calls your app makes. This replaces an older, deprecated broad permission.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review"
+    },
+    {
+      "id": "file-metadata",
+      "label": "Read file names, thumbnails and metadata",
+      "scope": "file_metadata:read",
+      "level": "sensitive",
+      "review": "Public app review.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review"
+    },
+    {
+      "id": "read-comments",
+      "label": "Read comments on files",
+      "scope": "file_comments:read",
+      "level": "sensitive",
+      "review": "Public app review.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review"
+    },
+    {
+      "id": "write-comments",
+      "label": "Post comments on files for the user",
+      "scope": "file_comments:write",
+      "level": "sensitive",
+      "review": "Public app review.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review"
+    },
+    {
+      "id": "variables",
+      "label": "Read or write design variables",
+      "scope": "file_variables:read, file_variables:write",
+      "level": "partner",
+      "review": "Enterprise plan only, on top of public app review.",
+      "proof": "docs",
+      "timeToLive": "weeks, tied to app review; Enterprise plan only"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Choose private or public",
+      "detail": "Private apps skip review but work only for their own team or organization. If your users are Figma users in general, go public and wait for review. You choose on the Publish page of setup.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/republish-oauth-apps"
+    },
+    {
+      "title": "Create the OAuth app",
+      "detail": "Go to figma.com/developers/apps, click 'Create a new app', and copy the Client ID and Client Secret. The secret shows once, and you must belong to a team or organization.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+    },
+    {
+      "title": "Add redirect addresses",
+      "detail": "On the OAuth credentials page, list each callback URL. Figma swaps codes for tokens only for listed URLs, and the redirect address you send must match one.",
+      "owner": "you",
+      "time": "3 min",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+    },
+    {
+      "title": "Pick permissions and give reasons",
+      "detail": "On the OAuth scopes page, select only the permissions your agent's calls need, and write a reason for each. Avoid the deprecated, very permissive older one.",
+      "owner": "you",
+      "time": "20 min",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/scopes/"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Figma's sign-in page (www.figma.com/oauth) with your client ID, redirect address, scopes and a state value, plus the extra security check most libraries handle. Swap the code for tokens within 30 seconds, then store both.",
+      "owner": "agent",
+      "time": "1 to 2 hrs",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+    },
+    {
+      "title": "Handle expiry and rate limits",
+      "detail": "Access tokens expire after 90 days by default. Use the refresh token for a new one, which cancels the old (each user has one active token per app); on a 429, wait as Retry-After says.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/rate-limits/"
+    },
+    {
+      "title": "Write testing instructions",
+      "detail": "Public apps need steps a reviewer can follow; a testing video and trial or login credentials are optional. Give credentials for your own app, so the reviewer reaches the 'Connect Figma' button, not a Figma password.",
+      "owner": "you",
+      "time": "1 hr",
+      "proof": "community",
+      "link": "https://forum.figma.com/ask-the-community-7/oauth-app-review-testing-clarification-54037"
+    },
+    {
+      "title": "Submit for review",
+      "detail": "Read the app review guidelines, tick the acknowledgment on the last step and click 'Submit for review'. Figma emails you if it is approved or needs changes; until then, outside users cannot connect.",
+      "owner": "you",
+      "time": "15 min, then review wait",
+      "proof": "docs",
+      "link": "https://developers.figma.com/docs/rest-api/oauth-apps/",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Teammates and customers cannot connect",
+      "fix": "A draft app cannot act for other users, even on your own team. Publish as private for an internal tool, or get a public app approved for anyone else.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review takes weeks and Figma gives no ETA",
+      "fix": "Submit early, with testing instructions and a working test path. Staff give no timeframe or queue position, so plan around weeks of waiting, not the 5 to 10 business days some developers see on the form.",
+      "proof": "community"
+    },
+    {
+      "title": "Review rejected because the reviewer could not sign in",
+      "fix": "Some reports say only the submitting account can finish the flow before approval. Figma staff said reviewers use a service account that works on unapproved apps, so give test credentials for your own app, not a Figma login, and clear steps to 'Connect Figma'.",
+      "proof": "community"
+    },
+    {
+      "title": "Permission errors or a rejected permission list",
+      "fix": "Permissions must match the calls you make, each with a reason. Two older broad permissions are deprecated, so use granular ones such as file content and file metadata. Adding one later makes users sign in again.",
+      "proof": "docs"
+    },
+    {
+      "title": "Very low request limits on some seats",
+      "fix": "The heaviest file calls allow only 20 a month on View and Collab seats, on all plans, and 10 to 20 a minute on Dev and Full seats. Cache file data, and check the X-Figma-Rate-Limit-Type header to see which limit applies.",
+      "proof": "docs"
+    },
+    {
+      "title": "Variables or library analytics are missing",
+      "fix": "Variables and library analytics are Enterprise plan only. Tell users on other plans the feature is not available to them.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the sign-in redirect, the extra security check and the 30 second code swap",
+    "Store tokens and refresh before the 90 day expiry",
+    "Choose granular permissions and write the reason Figma asks for on each",
+    "Cache file reads and back off on a 429 using Retry-After",
+    "Draft the app description, testing instructions and test script"
+  ],
+  "youDo": [
+    "Sign in to Figma and create the OAuth app in developer settings",
+    "Upload the logo and accept Figma's terms and the review acknowledgment",
+    "Choose private or public and submit for review",
+    "Set up a test path the reviewer can follow, and answer reviewer emails",
+    "Sign in to Figma as a test user to give consent",
+    "Chase Figma support if the review stalls"
+  ],
+  "drafts": [
+    {
+      "title": "App description for the Figma review form",
+      "body": "[Product name] is an AI assistant that helps [designers / product teams] work with their Figma files. After a user connects with Figma OAuth, the assistant reads the file they choose to answer questions about layers, text and comments, and can post comments they approve. We request only the scopes needed: [file_content:read, file_comments:read ...]. We store tokens encrypted, do not train on file content, and users can disconnect at any time from Settings."
+    },
+    {
+      "title": "Reason for each requested permission",
+      "body": "file_content:read: the assistant reads the nodes of the file the user selects to answer their questions. file_metadata:read: the assistant shows the file name and thumbnail so the user can pick the right file. file_comments:read: the assistant summarises open comments on the selected file. [Remove any scope you do not use.]"
+    },
+    {
+      "title": "Testing instructions for the reviewer",
+      "body": "1. Open [app URL] and sign in with the test login below (this is a login for our app, not Figma). 2. Click Connect Figma and approve the consent screen. 3. Choose the file [file URL] from the list. 4. Ask 'list the pages in this file'. 5. Click Disconnect to remove the connection. Test login: [email] / [password]. Optional video: [link]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "REST API authentication",
+      "url": "https://developers.figma.com/docs/rest-api/authentication/"
+    },
+    {
+      "title": "OAuth apps",
+      "url": "https://developers.figma.com/docs/rest-api/oauth-apps/"
+    },
+    {
+      "title": "Scopes",
+      "url": "https://developers.figma.com/docs/rest-api/scopes/"
+    },
+    {
+      "title": "Rate limits",
+      "url": "https://developers.figma.com/docs/rest-api/rate-limits/"
+    },
+    {
+      "title": "Re-publish OAuth apps",
+      "url": "https://developers.figma.com/docs/rest-api/republish-oauth-apps"
+    },
+    {
+      "title": "Updates to Figma's developer platform",
+      "url": "https://developers.figma.com/docs/updates-to-figmas-developer-platform"
+    },
+    {
+      "title": "How long does it take for a Figma OAuth app to get approved? (forum)",
+      "url": "https://forum.figma.com/ask-the-community-7/how-long-does-it-take-for-a-figma-oauth-app-to-get-approved-52433"
+    },
+    {
+      "title": "Pending OAuth app approval, delayed review timeline (forum)",
+      "url": "https://forum.figma.com/report-a-problem-6/pending-oauth-app-approval-delayed-review-timeline-56173"
+    },
+    {
+      "title": "OAuth app review testing clarification (forum)",
+      "url": "https://forum.figma.com/ask-the-community-7/oauth-app-review-testing-clarification-54037"
+    }
+  ],
+  "unconfirmed": [
+    "How long a public OAuth app review takes. Figma publishes no wait time. The 5 to 10 business days figure is only reported second-hand by forum posters, and staff say timelines vary with volume. Threads dated March to July 2026 show waits of two weeks to over a month.",
+    "What Figma's app review guidelines actually check. We read the process pages but did not open the guidelines text, so we cannot list the criteria.",
+    "The mapping of rate limit values to plans. The Tier 1 to 3 pages show three numbers for Dev and Full seats across four plan columns (Starter, Professional, Organization, Enterprise). The numbers above are not tied to a plan.",
+    "The exact refresh endpoint and parameters. The OAuth apps page we opened confirms refresh tokens are reusable and access tokens last 90 days by default, but we did not read the endpoint reference.",
+    "Whether the reviewer-testing problem in the forum is fixed. Staff said the reviewer uses a dedicated service account, but other threads report rejections for the same reason."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 40 minutes"
+    },
+    {
+      "label": "Build the sign-in flow",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "2 to 3 hours"
+    },
+    {
+      "label": "Write test steps and submit",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1.25 hours"
+    },
+    {
+      "label": "Figma's public app review",
+      "owner": "provider",
+      "when": "Days 2-31",
+      "duration": "not published, reports of 5 business days to a month",
+      "wait": true
+    },
+    {
+      "label": "Outside users can connect",
+      "owner": "you",
+      "when": "Days 8-31",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      2,
+      2
+    ],
+    "waitDays": [
+      7,
+      30
+    ],
+    "toRealUsers": "1-4 weeks"
+  }
+}

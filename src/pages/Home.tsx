@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { APPS } from "@/data/apps"
+import { APPS, isTested } from "@/data/apps"
+import { TimeChart } from "@/components/Timeline"
 import library from "@/data/library.json"
 import { AppLogo, DifficultyBadge } from "@/components/bits"
 import { planFromDescription, savePlan } from "@/lib/api"
@@ -147,7 +148,7 @@ export default function Home() {
                     <AppLogo slug={a.slug} name={a.name} />
                     <div className="grid">
                       <CardTitle>{a.name}</CardTitle>
-                      <span className="text-xs text-zinc-500">{a.category}{a.sample ? " · sample" : " · tested"}</span>
+                      <span className="text-xs text-zinc-500">{a.category}{a.sample ? " · sample" : isTested(a) ? " · tested" : " · researched"}</span>
                     </div>
                     <DifficultyBadge d={a.difficulty} className="ml-auto" />
                   </div>
@@ -157,6 +158,14 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="grid gap-4">
+        <div>
+          <h2 className="text-xl font-semibold">How long each app takes</h2>
+          <p className="text-sm text-zinc-600">From a blank form to your first real user, fastest first. Your work in violet, the provider's review in amber.</p>
+        </div>
+        <div className="rounded-xl border bg-white p-4"><TimeChart apps={APPS} /></div>
       </section>
     </div>
   )

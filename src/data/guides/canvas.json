@@ -1,0 +1,301 @@
+{
+  "slug": "canvas",
+  "name": "Canvas LMS",
+  "category": "Education",
+  "sample": false,
+  "difficulty": "gated",
+  "headline": "Gated: no self-serve signup. Every school's admin must give you a key, and each approval can take weeks or months.",
+  "firstTest": {
+    "text": "Same day with admin rights on a Canvas account, but the key works for that one school only. Free educator API access is unconfirmed.",
+    "proof": "unconfirmed",
+    "source": "https://www.instructure.com/canvas/try-canvas"
+  },
+  "production": {
+    "text": "Per school. For one integration across schools, request a global key from Instructure; each school's root admin must still turn it on.",
+    "proof": "docs",
+    "source": "https://developerdocs.instructure.com/services/canvas/oauth2/file.developer_keys"
+  },
+  "approvalWait": {
+    "text": "Instructure publishes no wait time. One university states a 6 to 12 month vendor review; another allows only pre-approved, security-reviewed integrations.",
+    "proof": "community",
+    "source": "https://support.canvas.fsu.edu/kb/article/1391-external-apps-third-party-tools-in-canvas-policy-procedure-and-support/"
+  },
+  "whoCanRegister": {
+    "text": "Only a Canvas admin. Root admins make school keys and enable scopes; only Instructure staff make global keys. Self-hosted open source Canvas is the exception.",
+    "proof": "docs",
+    "source": "https://developerdocs.instructure.com/services/canvas/oauth2/file.developer_keys"
+  },
+  "testMode": {
+    "text": "No free hosted sandbox confirmed. Options: free web demo, local build, or a paid partner sandbox (one old post says $2,000). Access lasts 1 hour.",
+    "proof": "community",
+    "source": "https://groups.google.com/g/canvas-lms-users/c/StNwJg-jMpA"
+  },
+  "actions": [
+    {
+      "id": "list-courses",
+      "label": "List the courses a user is enrolled in",
+      "scope": "url:GET|/api/v1/courses",
+      "level": "sensitive",
+      "review": "The school's root admin must turn the key on and, if scopes are enforced, grant this scope. Each school decides.",
+      "proof": "unconfirmed",
+      "timeToLive": "days to months, depends on the school"
+    },
+    {
+      "id": "read-assignments",
+      "label": "Read assignments and due dates in a course",
+      "scope": "url:GET|/api/v1/courses/:course_id/assignments",
+      "level": "sensitive",
+      "review": "Same per-school admin approval. Student data falls under the school's privacy and security review.",
+      "proof": "unconfirmed",
+      "timeToLive": "days to months, depends on the school"
+    },
+    {
+      "id": "read-grades",
+      "label": "Read a student's submissions and grades",
+      "scope": "url:GET|/api/v1/courses/:course_id/students/submissions",
+      "level": "sensitive",
+      "review": "Per-school admin approval. Some schools refuse keys that read grades or student records.",
+      "proof": "unconfirmed",
+      "timeToLive": "days to months, depends on the school"
+    },
+    {
+      "id": "refresh-session",
+      "label": "Keep the user connected without asking them again",
+      "scope": "grant_type=refresh_token (no scope needed)",
+      "level": "basic",
+      "review": "None beyond the key being enabled. Access tokens last 1 hour. The same refresh token can be reused.",
+      "proof": "docs",
+      "timeToLive": "instant once connected"
+    },
+    {
+      "id": "all-schools",
+      "label": "Work in every school without per-school key setup",
+      "scope": "global developer key",
+      "level": "partner",
+      "review": "Request a global developer key from Instructure. Each school's root admin still turns it on for their account.",
+      "proof": "docs",
+      "timeToLive": "unknown, Instructure publishes no wait"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Choose your key type",
+      "detail": "Canvas has API keys and LTI 1.3 keys. An agent acting for a user through OAuth needs an API key; a tool launched inside a course needs LTI 1.3.",
+      "owner": "you",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/resources/developer_keys"
+    },
+    {
+      "title": "Find a test Canvas",
+      "detail": "Try the free web demo, a local build from GitHub, a customer's Canvas or a paid partner sandbox. Check that a free educator account allows API access before relying on it.",
+      "owner": "you",
+      "time": "1 day",
+      "proof": "community",
+      "link": "https://groups.google.com/g/canvas-lms-users/c/StNwJg-jMpA"
+    },
+    {
+      "title": "Ask for a school key",
+      "detail": "Send the admin your redirect address, an owner email, your icon, the exact scopes you need, and your privacy and security answers. Expect a security and privacy review.",
+      "owner": "you",
+      "time": "weeks to months per school",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth",
+      "slow": true
+    },
+    {
+      "title": "Get the key switched on",
+      "detail": "The admin creates the key, grants scopes (root admins only) and turns it on. If it's off, sign-in fails and calls return 401. The menu path was not confirmed.",
+      "owner": "provider",
+      "time": "10 min for the admin",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.developer_keys"
+    },
+    {
+      "title": "Store one key per school",
+      "detail": "Keys work only for the school that issued them. Look up the right key by the school's Canvas domain at launch, and save each user's Canvas base address with their connection.",
+      "owner": "agent",
+      "time": "2 hr",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth"
+    },
+    {
+      "title": "Send users to sign in",
+      "detail": "Send users to the school's Canvas sign-in page with your client ID, state value and redirect address. List scopes once, separated by spaces, and reuse the same redirect address for the code swap.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth_endpoints"
+    },
+    {
+      "title": "Swap the code for tokens",
+      "detail": "Send the code to the school's token address; a code works once. Save the access token (valid 1 hour) and the refresh token.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth"
+    },
+    {
+      "title": "Refresh before the hour ends",
+      "detail": "Ask for a new access token with your client ID, secret and refresh token. No new refresh token comes back, so keep reusing the original. Revoke the token when the user disconnects.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth_endpoints"
+    },
+    {
+      "title": "Request a global key (optional)",
+      "detail": "If many schools will use you, ask Instructure for a global key so schools only need to switch it on. How to apply, and whether a partner agreement is needed, was not confirmed.",
+      "owner": "you",
+      "time": "unknown",
+      "proof": "unconfirmed",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "No self-serve signup",
+      "fix": "Treat each school as its own onboarding, because keys work only at the school that issued them. Build a one-page admin request pack to speed each ask.",
+      "proof": "docs"
+    },
+    {
+      "title": "A school refuses or stalls your key",
+      "fix": "Some schools reserve keys for pre-approved, security-reviewed integrations, and one cites FERPA and a key's reach across the whole instance. Others run a 6 to 12 month vendor review. Lead with your security answers and the narrowest scopes.",
+      "proof": "community"
+    },
+    {
+      "title": "Sign-in fails with 'unauthorized client' or 401",
+      "fix": "The key isn't switched on for that account. Ask the admin to turn it on, and check every requested scope was granted, since a missing scope returns 401.",
+      "proof": "docs"
+    },
+    {
+      "title": "All tokens die after a scope change",
+      "fix": "If an admin removes a scope from the key, every access token made from it stops working. Watch for 401 and send the user through sign-in again.",
+      "proof": "docs"
+    },
+    {
+      "title": "Tokens expire every hour",
+      "fix": "Refresh before expiry using the stored refresh token. The refresh response has no new refresh token, so don't overwrite the one you hold.",
+      "proof": "docs"
+    },
+    {
+      "title": "One key doesn't fit every school",
+      "fix": "An account key works only in the account and sub-accounts it was made in. Store credentials per school, or ask Instructure for a global key.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the sign-in redirect, state check, code swap and hourly refresh job",
+    "Store a separate key and Canvas domain for each school",
+    "Spot 401 and 'unauthorized client' errors and prompt the user to reconnect",
+    "Draft the admin request email, scope list, and privacy and security answers",
+    "Track which schools are pending, approved or blocked"
+  ],
+  "youDo": [
+    "Email each school's Canvas admin and answer their security and privacy review",
+    "Sign any data privacy agreement or contract a school requires",
+    "Apply to Instructure for a global key or partner access, if you want one",
+    "Get a Canvas test account or sandbox and sign in as a test teacher and student",
+    "Accept the terms of any Instructure program"
+  ],
+  "drafts": [
+    {
+      "title": "Email to a school's Canvas admin",
+      "body": "Hello [Name],\n\n[Teacher/department] would like to use [Product name], an assistant that [one-line purpose]. It connects to Canvas through the standard Canvas OAuth consent screen, so each person approves their own access.\n\nWe need an API developer key for your root account with these settings:\n- Key name: [Product name]\n- Owner email: [email]\n- Redirect URI: [https URL]\n- Scopes (please grant only these): [list of url:GET|/api/v1/... scopes]\n\nWe read only [courses, assignments]. We do not [write grades / read other users' data]. We store tokens encrypted and delete them when a user disconnects. Privacy policy: [URL]. Security contact: [email].\n\nHappy to complete your vendor security and privacy review. Thank you."
+    },
+    {
+      "title": "Scope justification for the admin",
+      "body": "[Scope 1]: needed to show the user which courses to pick. [Scope 2]: needed to read due dates so the assistant can remind the user. We do not request any scope that writes to Canvas. If you remove a scope, the app stops working for that feature and asks the user to reconnect."
+    },
+    {
+      "title": "Consent explainer before the Canvas screen",
+      "body": "[Product name] will ask your school's Canvas for permission to see your courses and due dates. Your school must have approved [Product name] first. You can remove access any time from your Canvas profile settings."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Developer Keys (Canvas OAuth2 docs)",
+      "url": "https://developerdocs.instructure.com/services/canvas/oauth2/file.developer_keys"
+    },
+    {
+      "title": "OAuth2 overview",
+      "url": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth"
+    },
+    {
+      "title": "OAuth2 endpoints",
+      "url": "https://developerdocs.instructure.com/services/canvas/oauth2/file.oauth_endpoints"
+    },
+    {
+      "title": "Developer Keys API resource",
+      "url": "https://developerdocs.instructure.com/services/canvas/resources/developer_keys"
+    },
+    {
+      "title": "Canvas Lite (free educator account)",
+      "url": "https://www.instructure.com/canvas/try-canvas"
+    },
+    {
+      "title": "FSU: External apps in Canvas, policy and procedure",
+      "url": "https://support.canvas.fsu.edu/kb/article/1391-external-apps-third-party-tools-in-canvas-policy-procedure-and-support/"
+    },
+    {
+      "title": "University of Missouri System: API developer key policy",
+      "url": "https://tdx.umsystem.edu/TDClient/66/MOOnline/KB/ArticleDet?ID=1852"
+    },
+    {
+      "title": "Third-party development for Canvas (developer forum)",
+      "url": "https://groups.google.com/g/canvas-lms-users/c/StNwJg-jMpA"
+    }
+  ],
+  "unconfirmed": [
+    "The exact Admin screen path and the Enforce Scopes toggle label. The web search showed them, but we could not open the Instructure help article, so the guide only states the documented fields (redirect URIs, scopes, require_scopes).",
+    "The exact scope strings for each endpoint. The docs give the url:VERB|path pattern. We did not open the endpoint pages, so the three example strings follow the pattern and are not checked.",
+    "Whether PKCE is supported. The OAuth pages we opened do not mention it.",
+    "Whether a free educator account (Canvas Lite) can create API keys or tokens. The Canvas Lite page does not say, and the Instructure community threads would not open.",
+    "How to join the Instructure partner program, what it costs now, and how long a global key request takes. The only price is $2,000 from one old forum post.",
+    "Instructure's published school approval time. None found. The 6 to 12 month figure is one university's own policy, not Instructure's."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Choose a key and test Canvas",
+      "owner": "you",
+      "when": "Days 1-2",
+      "duration": "about 1.5 days"
+    },
+    {
+      "label": "Ask the school for a key",
+      "owner": "you",
+      "when": "Day 3",
+      "duration": "not published"
+    },
+    {
+      "label": "School reviews your request",
+      "owner": "provider",
+      "when": "Weeks 1+",
+      "duration": "weeks to months per school",
+      "wait": true
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "After approval",
+      "duration": "about 5 hours"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "After approval",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      13,
+      14
+    ],
+    "waitDays": null,
+    "toRealUsers": "months, per school"
+  }
+}

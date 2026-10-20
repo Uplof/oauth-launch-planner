@@ -1,0 +1,325 @@
+{
+  "slug": "outlook",
+  "name": "Microsoft Outlook",
+  "category": "Email",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: Microsoft doesn't review your app, but company tenants may block users until your publisher is verified.",
+  "firstTest": {
+    "text": "Register the app in the Entra admin center and sign in with your own tenant account the same day. Nobody approves it.",
+    "proof": "docs",
+    "source": "https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app"
+  },
+  "production": {
+    "text": "Personal accounts and open tenants connect once you pick the right account type. By default, a new unverified multitenant app needs admin approval beyond sign-in.",
+    "proof": "docs",
+    "source": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-risk-based-step-up-consent"
+  },
+  "approvalWait": {
+    "text": "Microsoft doesn't review permissions. Verification takes minutes once your partner account is verified; that account's wait is unpublished. Admins decide on their own time.",
+    "proof": "docs",
+    "source": "https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview"
+  },
+  "whoCanRegister": {
+    "text": "Any Application Developer can register an app. Publisher verification needs a verified partner program account, a matching domain, an admin role and multifactor sign-in.",
+    "proof": "docs",
+    "source": "https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview"
+  },
+  "testMode": {
+    "text": "No test mode, no user cap. Access tokens last 60-90 minutes. Refresh tokens last 90 days and renew on use; single-page apps get 24 hours.",
+    "proof": "docs",
+    "source": "https://learn.microsoft.com/en-us/entra/identity-platform/refresh-tokens"
+  },
+  "actions": [
+    {
+      "id": "refresh",
+      "label": "Keep users signed in without asking again, and read their profile",
+      "scope": "offline_access, User.Read",
+      "level": "basic",
+      "review": "None. Ask for offline access explicitly or no refresh token comes back. Reading the profile is added to new apps by default.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "mail-read",
+      "label": "Read the user's email",
+      "scope": "Mail.Read",
+      "level": "basic",
+      "review": "No admin consent needed. A tenant that blocks unverified publishers still stops the user.",
+      "proof": "docs",
+      "timeToLive": "same day for personal accounts and open tenants"
+    },
+    {
+      "id": "mail-write",
+      "label": "Create, edit, move and delete email (cannot send)",
+      "scope": "Mail.ReadWrite",
+      "level": "basic",
+      "review": "No admin consent needed. Doesn't include sending mail.",
+      "proof": "docs",
+      "timeToLive": "same day for personal accounts and open tenants"
+    },
+    {
+      "id": "mail-send",
+      "label": "Send email as the user",
+      "scope": "Mail.Send",
+      "level": "basic",
+      "review": "No admin consent needed. Works without mailbox read access and can save a copy to Sent Items.",
+      "proof": "docs",
+      "timeToLive": "same day for personal accounts and open tenants"
+    },
+    {
+      "id": "calendar-read",
+      "label": "Read events on the user's calendars",
+      "scope": "Calendars.Read",
+      "level": "basic",
+      "review": "No admin consent needed.",
+      "proof": "docs",
+      "timeToLive": "same day for personal accounts and open tenants"
+    },
+    {
+      "id": "calendar-write",
+      "label": "Create, update and delete calendar events",
+      "scope": "Calendars.ReadWrite",
+      "level": "basic",
+      "review": "No admin consent needed.",
+      "proof": "docs",
+      "timeToLive": "same day for personal accounts and open tenants"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Sign in to Entra",
+      "detail": "Go to entra.microsoft.com as at least an Application Developer. If you belong to several tenants, switch to the one that should own the app; you can't move it later.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app"
+    },
+    {
+      "title": "Register the app",
+      "detail": "Go to 'App registrations', then 'New registration'. Pick 'Any Entra ID Tenant + Personal Microsoft accounts' so any company or personal account can sign in. Copy the Application (client) ID.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app"
+    },
+    {
+      "title": "Add the redirect address",
+      "detail": "Register the exact redirect address your server uses. Then add a client secret, certificate or federated credential; web apps send it when they swap the code for a token.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/graph/auth-v2-user"
+    },
+    {
+      "title": "Add the Graph permissions",
+      "detail": "Add the delegated Microsoft Graph permissions for reading or writing mail, sending mail and managing the calendar. Ask for the smallest set; none needs admin consent.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Microsoft's sign-in page with a state value and offline access, then swap the one-time code for tokens within about 10 minutes. Use 'common' for work and personal accounts, 'organizations' for work only, 'consumers' for personal only.",
+      "owner": "agent",
+      "time": "A few hours",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/graph/auth-v2-user"
+    },
+    {
+      "title": "Store and rotate tokens",
+      "detail": "Refresh each access token before it expires. Every refresh returns a new refresh token, so replace the old one; if a refresh fails, ask the user to sign in again.",
+      "owner": "agent",
+      "time": "Under an hour",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity-platform/refresh-tokens"
+    },
+    {
+      "title": "Test three account types",
+      "detail": "Sign in from your own tenant, another tenant and a personal Outlook.com account. The other tenant is the real test: it shows whether users can consent or need an admin.",
+      "owner": "you",
+      "time": "An hour",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-risk-based-step-up-consent"
+    },
+    {
+      "title": "Join the Partner Program",
+      "detail": "Get a verified account and use its partner global account ID, not a location ID. Its email domain must match your publisher domain or a DNS-verified custom domain.",
+      "owner": "you",
+      "time": "Wait time not published",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview",
+      "slow": true
+    },
+    {
+      "title": "Mark the app verified",
+      "detail": "In 'App registrations', open 'Branding & properties', set the publisher domain, choose 'Add Partner ID to verify publisher' and enter your Partner One ID. Select 'Verify and save' and sign in with multifactor authentication.",
+      "owner": "you",
+      "time": "A few minutes",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity-platform/mark-app-as-publisher-verified"
+    },
+    {
+      "title": "Give admins an approval path",
+      "detail": "When a tenant blocks user consent, users see an approval-required screen. If the admin consent workflow is on, they can send a request; prepare a short note on what the app reads and why.",
+      "owner": "you",
+      "time": "Under an hour to prepare",
+      "proof": "docs",
+      "link": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/user-admin-consent-overview"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "User sees 'Need admin approval' (AADSTS90094)",
+      "fix": "New unverified multitenant apps that ask for more than basic sign-in go to an admin by default. Get publisher verified, or ask the tenant's admin to approve the app or turn on the admin consent workflow.",
+      "proof": "docs"
+    },
+    {
+      "title": "A company blocks all user consent",
+      "fix": "Admins can turn user consent off, or allow it only for verified publishers and low-impact permissions. Then an admin must grant consent for the tenant or approve a request.",
+      "proof": "docs"
+    },
+    {
+      "title": "You can't become publisher verified",
+      "fix": "Common causes: you registered with a personal Microsoft account, you used a location ID instead of the partner global account, or your publisher domain is onmicrosoft.com. Also check the partner email domain matches, and the signer has multifactor authentication and the right role in Entra and Partner Center.",
+      "proof": "docs"
+    },
+    {
+      "title": "No refresh token, or users logged out daily",
+      "fix": "Ask for offline access or no refresh token comes back. Refresh tokens last only 24 hours for single-page-app redirects, so register your server callback as a Web redirect.",
+      "proof": "docs"
+    },
+    {
+      "title": "Access token dies mid-session",
+      "fix": "Access tokens last a random 60 to 90 minutes. Refresh before they expire, not after the first 401. A user, an admin or a password reset in the Entra or Microsoft 365 admin center can also revoke refresh tokens.",
+      "proof": "docs"
+    },
+    {
+      "title": "Users from other companies can't sign in",
+      "fix": "A single-tenant registration blocks other organizations and personal accounts. Change 'Supported account types', and send users to the common address instead of a tenant-specific one.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the sign-in redirect, code swap, token storage and refresh handling using the shared common address",
+    "Request only the permissions each feature needs, and check which ones came back",
+    "Catch the admin-approval error and show users a plain 'ask your admin' screen with a request they can copy",
+    "Check your publisher domain and Partner One ID line up before you verify",
+    "Draft the note tenant admins read when they approve the app"
+  ],
+  "youDo": [
+    "Sign in to the Entra admin center and register the app",
+    "Create the client secret or certificate and store it in your hosting settings",
+    "Join the Microsoft AI Cloud Partner Program and finish its verification",
+    "Verify your domain and sign in with multifactor authentication to mark the app publisher verified",
+    "Send approval requests to customer admins and follow up"
+  ],
+  "drafts": [
+    {
+      "title": "Message asking a customer's IT admin to approve",
+      "body": "Hello. Your team wants to connect [Product name] to their Outlook mailbox and calendar. The app asks Microsoft for these delegated permissions: Mail.Read, Mail.Send and Calendars.ReadWrite, plus offline_access so the connection continues without repeated sign-ins. It acts only as the signed-in user and never sees other people's mailboxes. Publisher: [company name], verified publisher: [yes/no]. Data use and privacy policy: [URL]. Users can disconnect at any time, and you can remove the app under Enterprise applications. Please approve the request, or grant consent for the organization."
+    },
+    {
+      "title": "Consent explainer before the Microsoft screen",
+      "body": "[Product name] will ask Microsoft for permission to read your email, send messages you approve and manage events on your calendar. We act only when you ask. If your organization asks for admin approval, send the request and we will wait. You can disconnect any time from Settings, and remove the app in your Microsoft account under My apps."
+    },
+    {
+      "title": "Reconnect prompt after a failed refresh",
+      "body": "Your Outlook connection has stopped working. This can happen if you or your administrator revoked access, or after a password reset. Choose Reconnect and sign in again with Microsoft to continue."
+    }
+  ],
+  "sources": [
+    {
+      "title": "How to register an app in Microsoft Entra ID",
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app"
+    },
+    {
+      "title": "Get access on behalf of a user (Microsoft Graph)",
+      "url": "https://learn.microsoft.com/en-us/graph/auth-v2-user"
+    },
+    {
+      "title": "Microsoft Graph permissions reference",
+      "url": "https://learn.microsoft.com/en-us/graph/permissions-reference"
+    },
+    {
+      "title": "Overview of user and admin consent",
+      "url": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/user-admin-consent-overview"
+    },
+    {
+      "title": "Configure how users consent to applications",
+      "url": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent"
+    },
+    {
+      "title": "Configure risk-based step-up consent",
+      "url": "https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-risk-based-step-up-consent"
+    },
+    {
+      "title": "Publisher verification overview",
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview"
+    },
+    {
+      "title": "Mark an app as publisher verified",
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/mark-app-as-publisher-verified"
+    },
+    {
+      "title": "Configurable token lifetimes",
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/configurable-token-lifetimes"
+    },
+    {
+      "title": "Refresh tokens in the Microsoft identity platform",
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/refresh-tokens"
+    }
+  ],
+  "unconfirmed": [
+    "How long Microsoft takes to verify a new Cloud Partner Program account. The publisher verification pages say only that developers who already meet the requirements can be verified in minutes.",
+    "Which tenants actually have user consent disabled. Microsoft's default allows user consent for permissions that do not need admin consent, but each admin can change it, and we found no figure for how many do.",
+    "Whether personal Microsoft account users consent entirely on their own with no tenant policy in the way. The docs show a consent dialog for a Microsoft account user and list the mail and calendar permissions as supported for personal accounts. We found no page that says tenant consent policies never apply.",
+    "The exact portal wording for adding delegated permissions and client secrets. The pages we opened describe them but not the menu names.",
+    "Whether step-up consent applies to your app if it is registered single-tenant. The docs describe it for newly registered multitenant apps used by users outside the tenant where the app is registered."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "half a day"
+    },
+    {
+      "label": "Test three account types",
+      "owner": "you",
+      "when": "Day 2",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Get publisher verified",
+      "owner": "provider",
+      "when": "After day 2",
+      "duration": "not published",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "After verification",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      6,
+      10
+    ],
+    "waitDays": null,
+    "toRealUsers": "same day for some users"
+  }
+}

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { toast } from "sonner"
-import { Copy, ExternalLink, Share2, Terminal, Hourglass, Rocket, TestTube2, KeyRound, ShieldAlert, Check, Globe, PlugZap } from "lucide-react"
+import { Copy, ExternalLink, Share2, Terminal, Hourglass, Rocket, TestTube2, ShieldAlert, Check, Globe, PlugZap, Clock, TriangleAlert, BadgeCheck, BookOpen, Bot, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -12,9 +12,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { getApp, type Action, type Claim } from "@/data/apps"
+import { getApp, isTested, type Action, type Claim } from "@/data/apps"
 import { AppLogo, DifficultyBadge, LevelBadge, OwnerChip, ProofBadge, SampleNote } from "@/components/bits"
 import { checkReadiness, loadGuide, type ReadinessResult } from "@/lib/api"
+import { GuideTimeline } from "@/components/Timeline"
 import { Loader2, Sparkles } from "lucide-react"
 
 const RANK = { basic: 0, sensitive: 1, restricted: 2, partner: 3 } as const
@@ -23,14 +24,19 @@ function copy(text: string) {
   navigator.clipboard.writeText(text).then(() => toast.success("Copied"), () => toast.error("Could not copy. Select the text instead."))
 }
 
-function Tile({ icon: Icon, label, claim }: { icon: typeof Rocket; label: string; claim: Claim }) {
+function Fact({ icon: Icon, label, claim }: { icon: typeof Rocket; label: string; claim: Claim }) {
   return (
-    <div className="grid content-start gap-2 rounded-lg border bg-white p-4">
-      <div className="flex items-center gap-2 text-sm text-zinc-500"><Icon className="size-4" />{label}</div>
-      <p className="text-sm font-medium leading-snug">{claim.text}</p>
-      <div><ProofBadge proof={claim.proof} source={claim.source} /></div>
+    <div className="grid content-start gap-1.5 rounded-lg bg-zinc-50 p-3">
+      <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-500"><Icon className="size-3.5" />{label}</div>
+      <p className="text-sm leading-snug text-zinc-800">{claim.text}</p>
+      <ProofDot proof={claim.proof} source={claim.source} />
     </div>
   )
+}
+
+// Small proof label for dense lists; the full badge with tooltip.
+function ProofDot({ proof, source }: { proof: Claim["proof"]; source?: string }) {
+  return <span className="w-fit scale-90 origin-left"><ProofBadge proof={proof} source={source} /></span>
 }
 
 // Real test apps we registered and kept as proof; each start link runs a live OAuth sign-in.
@@ -61,11 +67,13 @@ export default function Guide() {
   const [ready, setReady] = useState<ReadinessResult | null>(null)
   const [checking, setChecking] = useState(false)
   const [readyError, setReadyError] = useState<string | null>(null)
+  const [tab, setTab] = useState("proof")
+  const [showReady, setShowReady] = useState(false)
 
   async function runCheck() {
     if (!site.trim() || !app) return
     setChecking(true); setReadyError(null); setReady(null)
-    try { setReady(await checkReadiness(site.trim(), app.slug)) } catch (e) { setReadyError(e instanceof Error ? e.message : "The check failed.") }
+    try { setReady(await checkReadiness(site.trim(), app.slug)); setShowReady(true) } catch (e) { setReadyError(e instanceof Error ? e.message : "The check failed.") }
     setChecking(false)
   }
 
@@ -84,8 +92,9 @@ export default function Guide() {
     )
   }
 
-  const steps = [...app.steps].sort((a, b) => Number(!!b.slow) - Number(!!a.slow))
   const agentSteps = app.steps.filter((s) => s.owner === "agent").length
+  const tested = isTested(app)
+  const showProof = () => { setTab("proof"); document.getElementById("more")?.scrollIntoView({ behavior: "smooth" }) }
 
   return (
     <div className="grid gap-6">
@@ -104,12 +113,12 @@ export default function Guide() {
             <h1 className="text-3xl font-semibold tracking-tight">{app.name}</h1>
             <DifficultyBadge d={app.difficulty} />
           </div>
-          <p className="text-sm text-zinc-500">OAuth app setup and approval · checked {app.checked}</p>
+          <p className="text-sm text-zinc-500">{tested ? "Tested by us" : "Researched"} · checked {app.checked}</p>
         </div>
         <div className="ml-auto flex gap-2">
-          <Button variant="outline" onClick={() => copy(window.location.href)}><Share2 className="size-4" /> Share</Button>
+          <Button variant="outline" size="sm" onClick={() => copy(window.location.href)}><Share2 className="size-4" /> Share</Button>
           <Dialog>
-            <DialogTrigger asChild><Button variant="outline"><Terminal className="size-4" /> Send to coding agent</Button></DialogTrigger>
+            <DialogTrigger asChild><Button variant="outline" size="sm"><Terminal className="size-4" /> Send to coding agent</Button></DialogTrigger>
             <DialogContent className="sm:max-w-xl">
               <DialogHeader>
                 <DialogTitle>Hand this plan to your coding agent</DialogTitle>
@@ -129,203 +138,156 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
       {generated && (
         <div className="flex items-start gap-2 rounded-md border border-violet-200 bg-violet-50 px-3 py-2 text-sm text-violet-900">
           <Sparkles className="mt-0.5 size-4" />
-          Generated live by the research agent on {app.checked}.{" "}
-          {generated.factCheck === "skipped" ? "The fact check did not run (the free AI allowance ran out), so the key claims are unchecked. Research again later to check them."
+          Written live by the research agent on {app.checked}.{" "}
+          {generated.factCheck === "skipped" ? "The fact check didn't run (the free AI allowance ran out), so the key claims are unchecked."
             : generated.factCheck === "none" ? "No key claim had a source page, so there was nothing to check."
-            : generated.corrections?.length ? `The checker downgraded ${generated.corrections.length} claim(s) to “not confirmed”.`
-            : "The checker confirmed the key claims against their source pages."}
+            : generated.corrections?.length ? `The checker marked ${generated.corrections.length} claim(s) as not confirmed.`
+            : "The checker confirmed the key claims against their sources."}
         </div>
       )}
 
-      <Card className="border-zinc-900/10 shadow-sm">
-        <CardHeader>
-          <CardDescription className="text-xs font-medium uppercase tracking-wider">Verdict</CardDescription>
-          <CardTitle className="text-balance text-2xl leading-snug">{app.headline}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Tile icon={TestTube2} label="First test" claim={app.firstTest} />
-          <Tile icon={Rocket} label="Real users can connect" claim={app.production} />
-          <Tile icon={Hourglass} label="Approval wait" claim={app.approvalWait} />
-          <Tile icon={KeyRound} label="Who can register" claim={app.whoCanRegister} />
-        </CardContent>
-      </Card>
+      <section className="grid gap-4 rounded-xl border bg-white p-5 shadow-sm">
+        <p className="text-balance text-xl font-semibold leading-snug sm:text-2xl">{app.headline}</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Fact icon={TestTube2} label="Try it yourself" claim={app.firstTest} />
+          <Fact icon={Rocket} label="Real users can connect" claim={app.production} />
+          <Fact icon={Hourglass} label="Review" claim={app.approvalWait} />
+        </div>
+      </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>What will your agent do in {app.name}?</CardTitle>
-          <CardDescription>The permissions you ask for decide how hard approval is. Tick what you need.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-10" />
-                <TableHead>Action</TableHead>
-                <TableHead>Permission</TableHead>
-                <TableHead>Review level</TableHead>
-                <TableHead>To go live</TableHead>
-                <TableHead>Proof</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {app.actions.map((a) => (
-                <TableRow key={a.id}>
-                  <TableCell>
-                    <Checkbox id={`act-${a.id}`} checked={picked.includes(a.id)} onCheckedChange={(v) => setPicked((p) => (v ? [...p, a.id] : p.filter((x) => x !== a.id)))} />
-                  </TableCell>
-                  <TableCell><label htmlFor={`act-${a.id}`} className="font-medium">{a.label}</label></TableCell>
-                  <TableCell><code className="text-xs">{a.scope}</code></TableCell>
-                  <TableCell><LevelBadge level={a.level} /></TableCell>
-                  <TableCell className="text-sm text-zinc-600">{a.review}</TableCell>
-                  <TableCell><ProofBadge proof={a.proof} /></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Alert className={worst?.level === "restricted" ? "border-rose-200 bg-rose-50" : "border-emerald-200 bg-emerald-50"}>
-            <ShieldAlert className="size-4" />
-            <AlertTitle>{worst ? `Your path: ${worst.level} · about ${worst.timeToLive} to go live` : "Pick at least one action"}</AlertTitle>
-            <AlertDescription>
-              {worst?.level === "restricted"
-                ? "Reading email puts you in Google's strictest review, with a yearly paid security assessment. If you can do without it, untick Read email: send-only takes about 1-2 weeks."
-                : worst ? `${worst.review}. No security assessment needed.` : "Your verdict updates as you tick."}
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      {app.timeline && app.timeline.length > 0 && (
+        <section className="grid gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">Your timeline</h2>
+            <p className="text-sm text-zinc-500">{app.typical ? `Typical: ${app.typical.toRealUsers} to real users.` : "What happens when, and who you wait on."}</p>
+          </div>
+          <GuideTimeline phases={app.timeline} />
+        </section>
+      )}
 
-      <Tabs defaultValue="plan">
-        <TabsList className="flex-wrap">
-          <TabsTrigger value="plan">Launch plan</TabsTrigger>
-          <TabsTrigger value="blockers">Blockers</TabsTrigger>
-          <TabsTrigger value="paperwork">Paperwork drafts</TabsTrigger>
-          <TabsTrigger value="readiness">Readiness check</TabsTrigger>
-          <TabsTrigger value="test">Test sign-in</TabsTrigger>
-          <TabsTrigger value="evidence">Evidence</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="plan" className="grid gap-4 pt-2 lg:grid-cols-[1fr_320px]">
-          <Card>
-            <CardHeader>
-              <CardTitle>Launch plan</CardTitle>
-              <CardDescription>Slowest step first. {agentSteps} of {app.steps.length} steps an agent can do for you.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ol className="relative grid gap-5 border-l pl-6">
-                {steps.map((s, i) => (
-                  <li key={s.title} className="relative grid gap-1.5">
-                    <span className={`absolute -left-[33px] grid size-5 place-items-center rounded-full border bg-white text-[10px] font-medium ${s.slow ? "border-rose-300 text-rose-600" : "text-zinc-500"}`}>{i + 1}</span>
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="grid min-w-0 gap-6">
+          <section className="grid gap-4">
+            <div>
+              <h2 className="text-lg font-semibold">How to do it</h2>
+              <p className="text-sm text-zinc-500">{app.steps.length} steps{agentSteps ? ` · an agent can do ${agentSteps} of them` : ""}</p>
+            </div>
+            <ol className="grid gap-3">
+              {app.steps.map((s, i) => (
+                <li key={s.title} className={`grid grid-cols-[28px_minmax(0,1fr)] gap-3 rounded-lg border bg-white p-4 ${s.slow ? "border-rose-200" : ""}`}>
+                  <span className={`grid size-7 place-items-center rounded-full text-sm font-semibold tabular-nums ${s.slow ? "bg-rose-100 text-rose-700" : "bg-zinc-100 text-zinc-700"}`}>{i + 1}</span>
+                  <div className="grid min-w-0 gap-1.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-medium">{s.title}</span>
-                      {s.slow && <span className="rounded bg-rose-50 px-1.5 py-0.5 text-[11px] font-medium text-rose-700">Start today</span>}
+                      {s.slow && <span className="rounded bg-rose-50 px-1.5 py-0.5 text-[11px] font-medium text-rose-700">Slowest step: start it early</span>}
                     </div>
-                    <p className="text-sm text-zinc-600">{s.detail}</p>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-sm leading-relaxed text-zinc-600">{s.detail}</p>
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
                       <OwnerChip owner={s.owner} />
-                      <span className="text-xs text-zinc-500">{s.time}</span>
-                      <ProofBadge proof={s.proof} />
-                      {s.link && <a className="inline-flex items-center gap-1 text-xs text-sky-700 hover:underline" href={s.link} target="_blank" rel="noreferrer">Open <ExternalLink className="size-3" /></a>}
+                      <span className="inline-flex items-center gap-1 text-xs text-zinc-500"><Clock className="size-3" />{s.time}</span>
+                      <ProofDot proof={s.proof} />
+                      {s.link && <a className="inline-flex items-center gap-1 text-xs text-sky-700 hover:underline" href={s.link} target="_blank" rel="noreferrer">Open page <ExternalLink className="size-3" /></a>}
                     </div>
-                  </li>
-                ))}
-              </ol>
-            </CardContent>
-          </Card>
-          <div className="grid content-start gap-4">
-            <Card>
-              <CardHeader><CardTitle className="text-base">An agent can</CardTitle></CardHeader>
-              <CardContent><ul className="grid gap-2 text-sm">{app.agentCan.map((t) => <li key={t} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-violet-600" />{t}</li>)}</ul></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-base">You take over</CardTitle></CardHeader>
-              <CardContent><ul className="grid gap-2 text-sm">{app.youDo.map((t) => <li key={t} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-zinc-500" />{t}</li>)}</ul></CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-base">Testing mode</CardTitle></CardHeader>
-              <CardContent className="grid gap-2 text-sm"><p>{app.testMode.text}</p><div><ProofBadge proof={app.testMode.proof} /></div></CardContent>
-            </Card>
-          </div>
-        </TabsContent>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
 
-        <TabsContent value="blockers" className="grid gap-3 pt-2">
-          {app.blockers.map((b) => (
-            <Card key={b.title}>
-              <CardHeader className="flex flex-row items-start gap-3">
-                <div className="grid flex-1 gap-1">
-                  <CardTitle className="text-base">{b.title}</CardTitle>
-                  <CardDescription className="text-zinc-700">{b.fix}</CardDescription>
+          <section className="grid gap-3">
+            <h2 className="text-lg font-semibold">Where people get stuck</h2>
+            <div className="grid gap-2">
+              {app.blockers.map((b) => (
+                <div key={b.title} className="grid gap-1 rounded-lg border bg-white p-4">
+                  <div className="flex items-start gap-2">
+                    <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-600" />
+                    <span className="flex-1 font-medium">{b.title}</span>
+                    <ProofDot proof={b.proof} />
+                  </div>
+                  <p className="pl-6 text-sm leading-relaxed text-zinc-600">{b.fix}</p>
                 </div>
-                <ProofBadge proof={b.proof} />
-              </CardHeader>
-            </Card>
-          ))}
-        </TabsContent>
+              ))}
+            </div>
+          </section>
 
-        <TabsContent value="paperwork" className="grid gap-3 pt-2">
-          <p className="text-sm text-zinc-600">Drafts an agent writes from your product description. Edit before you submit.</p>
-          {app.drafts.map((d) => (
-            <Card key={d.title}>
-              <CardHeader className="flex flex-row items-center gap-2">
-                <CardTitle className="flex-1 text-base">{d.title}</CardTitle>
-                <Button size="sm" variant="outline" onClick={() => copy(d.body)}><Copy className="size-3.5" /> Copy</Button>
-              </CardHeader>
-              <CardContent><p className="whitespace-pre-line rounded-md bg-zinc-50 p-3 text-sm">{d.body}</p></CardContent>
-            </Card>
-          ))}
-        </TabsContent>
-
-        <TabsContent value="readiness" className="pt-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Would a reviewer approve your site today?</CardTitle>
-              <CardDescription>The agent checks your site the way {app.name}'s reviewers do.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); runCheck() }}>
-                <div className="relative flex-1">
-                  <Globe className="absolute left-2.5 top-2.5 size-4 text-zinc-400" />
-                  <Input id="site" className="pl-8" placeholder="yourproduct.com" value={site} onChange={(e) => setSite(e.target.value)} />
-                </div>
-                <Button type="submit" disabled={checking}>{checking ? <><Loader2 className="size-4 animate-spin" /> Checking</> : "Check"}</Button>
-              </form>
-              {readyError && <p className="text-sm text-rose-700">{readyError}</p>}
-              {ready && (
-                <div className="grid gap-3">
-                  <div className="flex items-center gap-3"><span className="text-3xl font-semibold tabular-nums">{ready.score}/{ready.total}</span><Progress value={(ready.score / ready.total) * 100} className="flex-1" /><span className="text-xs text-zinc-500">{new URL(ready.url).hostname}</span></div>
-                  {ready.checks.map((c) => (
-                    <div key={c.id} className="grid gap-1 rounded-md border bg-white px-3 py-2 text-sm">
-                      <div className="flex items-center justify-between gap-3"><span className="font-medium">{c.label}</span><span className={c.ok ? "text-emerald-700" : "text-rose-700"}>{c.ok ? "Ready" : "Fix before you submit"}</span></div>
-                      <span className="break-all text-xs text-zinc-500">{c.detail}</span>
-                      {c.fix && <span className="text-xs text-zinc-700">{c.fix}</span>}
-                    </div>
+          <section className="grid gap-3">
+            <div>
+              <h2 className="text-lg font-semibold">What will your agent do?</h2>
+              <p className="text-sm text-zinc-500">What you ask for decides how strict the review is. Untick what you don't need.</p>
+            </div>
+            <div className="overflow-x-auto rounded-lg border bg-white">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-10" />
+                    <TableHead>Your agent can</TableHead>
+                    <TableHead>Review</TableHead>
+                    <TableHead>What it means</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {app.actions.map((a) => (
+                    <TableRow key={a.id}>
+                      <TableCell className="align-top">
+                        <Checkbox id={`act-${a.id}`} checked={picked.includes(a.id)} onCheckedChange={(v) => setPicked((p) => (v ? [...p, a.id] : p.filter((x) => x !== a.id)))} />
+                      </TableCell>
+                      <TableCell className="align-top">
+                        <label htmlFor={`act-${a.id}`} className="font-medium">{a.label}</label>
+                        <div><code className="text-[11px] text-zinc-500">{a.scope}</code></div>
+                      </TableCell>
+                      <TableCell className="align-top"><LevelBadge level={a.level} /></TableCell>
+                      <TableCell className="min-w-56 whitespace-normal align-top text-sm text-zinc-600">{a.review}</TableCell>
+                    </TableRow>
                   ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+                </TableBody>
+              </Table>
+            </div>
+            <Alert className={worst?.level === "restricted" || worst?.level === "partner" ? "border-rose-200 bg-rose-50" : "border-emerald-200 bg-emerald-50"}>
+              <ShieldAlert className="size-4" />
+              <AlertTitle>{worst ? `Your review level: ${worst.level} · about ${worst.timeToLive} to go live` : "Pick at least one"}</AlertTitle>
+              <AlertDescription>{worst ? worst.review : "The review level updates as you tick."}</AlertDescription>
+            </Alert>
+          </section>
 
-        <TabsContent value="test" className="pt-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><PlugZap className="size-5" /> Test the sign-in with a real OAuth app</CardTitle>
-              <CardDescription>See exactly what your users see and what {app.name} gives back: permissions granted, token lifetime, refresh token expiry.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-3">
-              {SIGN_IN_TESTS[app.slug] ? (
-                <>
-                  <p className="text-sm text-zinc-600">{SIGN_IN_TESTS[app.slug].note}</p>
-                  <Button asChild className="w-fit"><a href={SIGN_IN_TESTS[app.slug].start}>Start test sign-in <ExternalLink className="size-4" /></a></Button>
-                  {SIGN_IN_TESTS[app.slug].result && <img src={SIGN_IN_TESTS[app.slug].result} alt={`Result of our ${app.name} test sign-in`} className="max-w-xl rounded-md border" />}
-                </>
-              ) : (
-                <p className="text-sm text-zinc-600">No test app for {app.name}. This guide is from research only, so its claims carry docs, community or not-confirmed labels.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <section className="grid gap-3 sm:grid-cols-2">
+            <div className="grid content-start gap-2 rounded-lg border bg-white p-4 text-sm">
+              <span className="flex items-center gap-1.5 font-semibold text-violet-700"><Bot className="size-4" /> An agent can</span>
+              <ul className="grid gap-1.5">{app.agentCan.map((t) => <li key={t} className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-violet-600" />{t}</li>)}</ul>
+            </div>
+            <div className="grid content-start gap-2 rounded-lg border bg-white p-4 text-sm">
+              <span className="flex items-center gap-1.5 font-semibold"><User className="size-4" /> Only you can</span>
+              <ul className="grid gap-1.5">{app.youDo.map((t) => <li key={t} className="flex gap-2"><Check className="mt-0.5 size-3.5 shrink-0 text-zinc-400" />{t}</li>)}</ul>
+            </div>
+            <div className="grid content-start gap-2 rounded-lg border bg-white p-4 text-sm sm:col-span-2">
+              <span className="font-semibold">Before you're approved</span>
+              <p className="text-zinc-600">{app.testMode.text}</p>
+              <ProofDot proof={app.testMode.proof} />
+              <span className="pt-1 text-xs font-medium text-zinc-500">Who can set it up</span>
+              <p className="text-zinc-600">{app.whoCanRegister.text}</p>
+            </div>
+          </section>
 
-        <TabsContent value="evidence" className="grid gap-4 pt-2">
+          <section id="more" className="scroll-mt-20">
+            <Tabs value={tab} onValueChange={setTab}>
+              <TabsList className="flex-wrap">
+                <TabsTrigger value="proof">{tested ? "Evidence and sources" : "Sources"}</TabsTrigger>
+                {app.drafts.length > 0 && <TabsTrigger value="paste">Text to paste</TabsTrigger>}
+              </TabsList>
+
+              <TabsContent value="paste" className="grid gap-3 pt-2">
+                <p className="text-sm text-zinc-600">Review forms ask you to explain your app in writing. Start from these and make them yours.</p>
+                {app.drafts.map((d) => (
+                  <Card key={d.title}>
+                    <CardHeader className="flex flex-row items-center gap-2">
+                      <CardTitle className="flex-1 text-base">{d.title}</CardTitle>
+                      <Button size="sm" variant="outline" onClick={() => copy(d.body)}><Copy className="size-3.5" /> Copy</Button>
+                    </CardHeader>
+                    <CardContent><p className="whitespace-pre-line rounded-md bg-zinc-50 p-3 text-sm">{d.body}</p></CardContent>
+                  </Card>
+                ))}
+              </TabsContent>
+
+        <TabsContent value="proof" className="grid gap-4 pt-2">
           {app.screenshots.length > 0 && (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {app.screenshots.map((s) => (
@@ -350,7 +312,80 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             </Card>
           </div>
         </TabsContent>
-      </Tabs>
+            </Tabs>
+          </section>
+        </div>
+
+        <aside className="grid gap-4 lg:sticky lg:top-20">
+          <div className={`grid gap-3 rounded-xl border p-4 ${tested ? "border-emerald-200 bg-emerald-50/60" : "bg-white"}`}>
+            <div className="flex items-center gap-2 font-semibold">
+              {tested ? <BadgeCheck className="size-5 text-emerald-600" /> : <BookOpen className="size-5 text-sky-600" />}
+              {tested ? "We tested this ourselves" : "Researched from official docs"}
+            </div>
+            <p className="text-sm text-zinc-600">
+              {tested ? "We built a real test app, signed in through it and kept every screenshot." : `${app.sources.length} sources, every claim labelled. Not tested hands-on yet.`}
+            </p>
+            {tested && app.screenshots.length > 0 && (
+              <div className="grid grid-cols-3 gap-1.5">
+                {app.screenshots.slice(0, 3).map((x) => (
+                  <a key={x.src} href={x.src} target="_blank" rel="noreferrer" title={x.caption}><img src={x.src} alt={x.caption} className="aspect-square w-full rounded-md border object-cover object-top" /></a>
+                ))}
+              </div>
+            )}
+            <Button size="sm" variant={tested ? "default" : "outline"} onClick={showProof}>{tested ? `See all ${app.screenshots.length} screenshots` : "See the sources"}</Button>
+          </div>
+
+          <div className="grid gap-2.5 rounded-xl border bg-white p-4">
+            <span className="flex items-center gap-2 font-semibold"><Globe className="size-4 text-sky-600" /> Check your site</span>
+            <p className="text-sm text-zinc-600">Would {app.name}'s reviewers approve it today? We check your home page, privacy policy, terms and contact.</p>
+            <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); runCheck() }}>
+              <Input id="site" aria-label="Your website" placeholder="yourproduct.com" value={site} onChange={(e) => setSite(e.target.value)} />
+              <Button type="submit" size="sm" disabled={checking}>{checking ? <Loader2 className="size-4 animate-spin" /> : "Check"}</Button>
+            </form>
+            {readyError && <p className="text-sm text-rose-700">{readyError}</p>}
+            {ready && (
+              <button type="button" onClick={() => setShowReady(true)} className="grid gap-1.5 rounded-md bg-zinc-50 p-2.5 text-left hover:bg-zinc-100">
+                <span className="flex items-center gap-2"><span className="text-xl font-semibold tabular-nums">{ready.score}/{ready.total}</span><Progress value={(ready.score / ready.total) * 100} className="flex-1" /></span>
+                <span className="text-xs text-zinc-600">{ready.total - ready.score ? `${ready.total - ready.score} to fix before you submit` : "Ready to submit"} · see the report</span>
+              </button>
+            )}
+          </div>
+
+          <div className="grid gap-2.5 rounded-xl border bg-white p-4">
+            <span className="flex items-center gap-2 font-semibold"><PlugZap className="size-4 text-violet-600" /> Try a real sign-in</span>
+            {SIGN_IN_TESTS[app.slug] ? (
+              <>
+                <p className="text-sm text-zinc-600">Sign in through our own {app.name} test app. You'll see exactly what your users see, and what access {app.name} gives back.</p>
+                <Button asChild size="sm" variant="outline"><a href={SIGN_IN_TESTS[app.slug].start}>Start the sign-in <ExternalLink className="size-3.5" /></a></Button>
+                <span className="text-xs text-zinc-500">{SIGN_IN_TESTS[app.slug].note}</span>
+              </>
+            ) : (
+              <p className="text-sm text-zinc-600">Not available for {app.name} yet. We have real test apps for Gmail, GitHub, Slack and Notion.</p>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      <Dialog open={showReady} onOpenChange={setShowReady}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Readiness report{ready ? ` for ${new URL(ready.url).hostname}` : ""}</DialogTitle>
+            <DialogDescription>What {app.name}'s reviewers look at, checked on your live site.</DialogDescription>
+          </DialogHeader>
+          {ready && (
+            <div className="grid gap-2">
+              <div className="flex items-center gap-3"><span className="text-3xl font-semibold tabular-nums">{ready.score}/{ready.total}</span><Progress value={(ready.score / ready.total) * 100} className="flex-1" /></div>
+              {ready.checks.map((c) => (
+                <div key={c.id} className="grid gap-1 rounded-md border bg-white px-3 py-2 text-sm">
+                  <div className="flex items-center justify-between gap-3"><span className="font-medium">{c.label}</span><span className={c.ok ? "text-emerald-700" : "text-rose-700"}>{c.ok ? "Ready" : "Fix this"}</span></div>
+                  <span className="break-all text-xs text-zinc-500">{c.detail}</span>
+                  {c.fix && <span className="text-xs text-zinc-700">{c.fix}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

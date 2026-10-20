@@ -4,28 +4,28 @@
   "category": "Email",
   "sample": false,
   "difficulty": "hard",
-  "headline": "Start today. Going live depends on one question: does your agent read email?",
+  "headline": "Start today. Going live depends on whether your agent reads email.",
   "firstTest": {
-    "text": "About 20 minutes to a working sign-in with your own app",
+    "text": "About 20 minutes to a working sign-in with your own app.",
     "proof": "tested"
   },
   "production": {
-    "text": "Send only: about 1-2 weeks. Read email: several weeks to a few months",
+    "text": "Sending email takes about 1-2 weeks. Reading email takes several weeks to a few months.",
     "proof": "docs",
     "source": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
   },
   "approvalWait": {
-    "text": "Scope review typically 3-5 business days; restricted scopes add a yearly security assessment",
+    "text": "A scope review usually takes 3-5 business days. Restricted scopes add a yearly security assessment.",
     "proof": "docs",
     "source": "https://support.google.com/cloud/answer/13464321"
   },
   "whoCanRegister": {
-    "text": "Any Google account can create the app. Going live needs a verified domain, a homepage and a privacy policy.",
+    "text": "Any Google account can create the app. To go live you need a verified domain, a homepage and a privacy policy.",
     "proof": "docs",
     "source": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
   },
   "testMode": {
-    "text": "No verification in testing, but only test users you add, max 100 over the app's lifetime. Refresh tokens expire after 7 days.",
+    "text": "Testing needs no verification. Only test users you add can sign in, up to 100 over the app's lifetime. Refresh tokens expire after 7 days.",
     "proof": "tested"
   },
   "actions": [
@@ -43,7 +43,7 @@
       "label": "Send email",
       "scope": "gmail.send",
       "level": "sensitive",
-      "review": "Brand check + scope review + demo video",
+      "review": "Brand check, scope review and a demo video",
       "proof": "tested",
       "timeToLive": "about 1-2 weeks"
     },
@@ -52,16 +52,16 @@
       "label": "Read email",
       "scope": "gmail.readonly",
       "level": "restricted",
-      "review": "Full verification + yearly security assessment (CASA)",
+      "review": "Full verification plus a yearly security assessment (CASA)",
       "proof": "tested",
       "timeToLive": "several weeks to months"
     },
     {
       "id": "modify",
-      "label": "Label, archive, draft",
+      "label": "Label, archive and draft email",
       "scope": "gmail.modify",
       "level": "restricted",
-      "review": "Same as read email",
+      "review": "Same as reading email",
       "proof": "docs",
       "timeToLive": "several weeks to months"
     }
@@ -69,7 +69,7 @@
   "steps": [
     {
       "title": "Book a security assessment lab",
-      "detail": "Only if your agent reads email. It is the slowest step, so start it on day one.",
+      "detail": "Do this only if your agent reads email. It is the slowest step, so start on day one.",
       "owner": "you",
       "time": "1-8 weeks",
       "proof": "community",
@@ -77,7 +77,7 @@
     },
     {
       "title": "Create a Google Cloud project",
-      "detail": "console.cloud.google.com → New project. Keep it separate from other work.",
+      "detail": "Go to console.cloud.google.com and click New project. Keep it separate from your other work.",
       "owner": "you",
       "time": "1 min",
       "proof": "tested",
@@ -85,42 +85,42 @@
     },
     {
       "title": "Set up the consent screen",
-      "detail": "Google Auth Platform → Get started: app name, support email, audience External, contact email, agree to the User Data Policy.",
+      "detail": "Open Google Auth Platform and click Get started. Enter the app name, support email, External audience and contact email, then agree to the User Data Policy.",
       "owner": "you",
       "time": "3 min",
       "proof": "tested"
     },
     {
       "title": "Add Gmail permissions",
-      "detail": "Data Access → Add or remove scopes. Gmail scopes only appear after the Gmail API is enabled; pasting the scope address also works.",
+      "detail": "Open Data Access, then Add or remove scopes. Gmail scopes only appear once the Gmail API is enabled; pasting the scope address also works.",
       "owner": "agent",
       "time": "2 min",
       "proof": "tested"
     },
     {
       "title": "Add your pilot users",
-      "detail": "Audience → Test users. Anyone not listed is blocked with Error 403.",
+      "detail": "Open Audience, then Test users. Anyone not on the list is blocked with Error 403.",
       "owner": "agent",
       "time": "1 min",
       "proof": "tested"
     },
     {
       "title": "Create the OAuth client",
-      "detail": "Clients → Web application → add your callback address. The secret is shown once; store it in your hosting settings.",
+      "detail": "Open Clients, pick Web application and add your callback address. Google shows the secret once, so store it in your hosting settings.",
       "owner": "you",
       "time": "2 min",
       "proof": "tested"
     },
     {
       "title": "Prepare brand verification",
-      "detail": "Verify your domain in Search Console, publish a homepage and a privacy policy on that domain, add them on the Branding page.",
+      "detail": "Verify your domain in Search Console. Publish a homepage and a privacy policy on it, then add both on the Branding page.",
       "owner": "you",
       "time": "1-2 days",
       "proof": "docs"
     },
     {
       "title": "Write scope justifications",
-      "detail": "One sentence per scope on why a narrower one won't work.",
+      "detail": "Write one sentence per scope explaining why a narrower scope won't work.",
       "owner": "agent",
       "time": "15 min",
       "proof": "docs"
@@ -134,7 +134,7 @@
     },
     {
       "title": "Submit for verification",
-      "detail": "Verification Center → Prepare for verification. Answer reviewer emails promptly.",
+      "detail": "Open Verification Center and click Prepare for verification. Answer reviewer emails promptly.",
       "owner": "provider",
       "time": "3-5 business days+",
       "proof": "docs"
@@ -148,27 +148,27 @@
     },
     {
       "title": "Pilot users lose access after a week",
-      "fix": "Refresh tokens expire after 7 days in testing. Plan reconnects or finish verification first.",
+      "fix": "Refresh tokens expire after 7 days in testing. Plan for reconnects, or finish verification first.",
       "proof": "tested"
     },
     {
       "title": "Users untick a permission",
-      "fix": "Google shows one checkbox per permission. Check which scopes came back and ask again for missing ones.",
+      "fix": "Google shows one checkbox per permission. Check which scopes came back, and ask again for any that are missing.",
       "proof": "tested"
     },
     {
-      "title": "Callback domain you can't verify",
+      "title": "You can't verify your callback domain",
       "fix": "Redirect domains become authorized domains. Use a callback on your own verified domain.",
       "proof": "tested"
     },
     {
-      "title": "Vague scope justification",
-      "fix": "Name the feature that needs each scope and why a narrower scope fails.",
+      "title": "Your scope justification reads as vague",
+      "fix": "Name the feature that needs each scope, and say why a narrower scope fails.",
       "proof": "docs"
     }
   ],
   "agentCan": [
-    "Fill the consent screen and scope forms from your product details",
+    "Fill in the consent screen and scope forms from your product details",
     "Draft scope justifications and the demo video script",
     "Check your site for a privacy policy and homepage before you submit",
     "Add and track pilot users"
@@ -178,15 +178,15 @@
     "Verify your domain (DNS or Search Console)",
     "Store the client secret in your hosting settings",
     "Record the demo video",
-    "Pay for and complete the security assessment"
+    "Pay for the security assessment and complete it"
   ],
   "drafts": [
     {
-      "title": "Scope justification: gmail.send",
+      "title": "Justification for sending email",
       "body": "Our assistant sends replies that the user has reviewed and approved in our app. gmail.send is the narrowest scope that allows sending; we do not read, modify or delete existing mail."
     },
     {
-      "title": "Scope justification: gmail.readonly",
+      "title": "Justification for reading email",
       "body": "Our assistant summarises the user's support inbox so they can triage faster. It needs message bodies, which gmail.metadata does not include. We never modify or delete mail."
     },
     {
@@ -234,5 +234,50 @@
       "caption": "New: OAuth client type for AI-powered agents"
     }
   ],
-  "checked": "20 Oct 2026"
+  "checked": "20 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 10 minutes"
+    },
+    {
+      "label": "Prepare brand verification",
+      "owner": "you",
+      "when": "Days 1-3",
+      "duration": "1-2 days"
+    },
+    {
+      "label": "Write justifications, record demo",
+      "owner": "you",
+      "when": "Day 3",
+      "duration": "about 1.5 hours"
+    },
+    {
+      "label": "Google review; reading adds restricted",
+      "owner": "provider",
+      "when": "Days 4-10",
+      "duration": "3-5 business days",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "About week 2",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      10,
+      18
+    ],
+    "waitDays": [
+      3,
+      7
+    ],
+    "toRealUsers": "1-2 weeks"
+  }
 }

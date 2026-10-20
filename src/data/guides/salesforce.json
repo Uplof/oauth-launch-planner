@@ -1,0 +1,316 @@
+{
+  "slug": "salesforce",
+  "name": "Salesforce",
+  "category": "CRM",
+  "sample": false,
+  "difficulty": "hard",
+  "headline": "Hard: no approval to build, but you must use an External Client App and each customer's admin must approve it.",
+  "firstTest": {
+    "text": "A new app can take up to 10 minutes to activate, so early attempts may fail. No source gives a total setup time.",
+    "proof": "community",
+    "source": "https://developers.apideck.com/apis/crm/salesforce/configuration"
+  },
+  "production": {
+    "text": "Local apps work only in your own org. Other orgs need a Packaged app (Dev Hub, namespace org). Each customer admin must also approve it.",
+    "proof": "community",
+    "source": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+  },
+  "approvalWait": {
+    "text": "None to build or connect to your own org. AppExchange security review has no published turnaround. For customer orgs, you wait on each admin.",
+    "proof": "community",
+    "source": "https://tekunda.com/blog/How-ISVs-Pass-the-Salesforce-AppExchange-Security-Review"
+  },
+  "whoCanRegister": {
+    "text": "Anyone who can create External Client Apps (Professional, Performance, Unlimited, Developer). New Connected Apps are off since Spring '26. Packaging needs two orgs.",
+    "proof": "community",
+    "source": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+  },
+  "testMode": {
+    "text": "Works in your own org, no review. Refresh tokens last until revoked by default. Sandboxes do not copy Local apps, so recreate them.",
+    "proof": "docs",
+    "source": "https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_oauth.htm&language=en_US&type=5"
+  },
+  "actions": [
+    {
+      "id": "api-access",
+      "label": "Read and write CRM records: leads, contacts, accounts, opportunities",
+      "scope": "api",
+      "level": "basic",
+      "review": "No Salesforce review. The customer's admin must install or pre-authorize the app, or the user needs the \"Approve Uninstalled Connected Apps\" permission. The user's profile and permission sets decide which objects the agent can touch.",
+      "proof": "community",
+      "timeToLive": "same day in your own org, depends on each customer admin"
+    },
+    {
+      "id": "stay-connected",
+      "label": "Keep the connection alive without asking the user again",
+      "scope": "refresh_token, offline_access",
+      "level": "basic",
+      "review": "No review. Select refresh tokens as a scope in the app. The admin can set a policy that expires them.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "identity",
+      "label": "Identify the user who connected",
+      "scope": "openid",
+      "level": "basic",
+      "review": "No review.",
+      "proof": "community",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "broad-access",
+      "label": "Request everything the user can do",
+      "scope": "full",
+      "level": "sensitive",
+      "review": "No review, but admins are likely to push back on a broad grant. Prefer API access plus refresh tokens. Even with full access chosen, you must select refresh tokens separately.",
+      "proof": "community",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "listing",
+      "label": "Distribute through AppExchange as a listed integration",
+      "scope": "n/a (a listing, not a scope)",
+      "level": "restricted",
+      "review": "AppExchange security review for managed packages and API-based solutions. Salesforce publishes no fixed turnaround.",
+      "proof": "community",
+      "timeToLive": "weeks, no official figure"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Get an org you control",
+      "detail": "A Developer Edition, Professional, Performance or Unlimited org works. Your user needs permission to create External Client Apps. For packaging later, you need two Developer Edition orgs: one Dev Hub, one namespace.",
+      "owner": "you",
+      "time": "15 min",
+      "proof": "community",
+      "link": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+    },
+    {
+      "title": "Create an External Client App",
+      "detail": "In Setup, open \"App Manager\" (or \"External Client App Manager\") and click \"New External Client App\". Enter name, API name and contact email, then pick distribution: Local for your own org, Packaged for others. New Connected Apps are off by default since Spring '26.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "community",
+      "link": "https://developers.apideck.com/apis/crm/salesforce/configuration"
+    },
+    {
+      "title": "Enable OAuth and callback",
+      "detail": "Enable OAuth settings and the Authorization Code and Credentials flow, and add your HTTPS callback URL. For a server-side agent, keep \"Require secret for Web Server Flow\" and the extra security check on.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "community",
+      "link": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+    },
+    {
+      "title": "Pick the scopes",
+      "detail": "Add API access and refresh tokens (also called offline access), and optionally OpenID for user identity. Add full access only if you must. Refreshing breaks without refresh tokens.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "community",
+      "link": "https://developers.apideck.com/apis/crm/salesforce/configuration"
+    },
+    {
+      "title": "Decide on refresh rotation",
+      "detail": "Rotation makes each refresh token single-use. If you enable it, save the new refresh token from every refresh and never retry an invalid-grant error. Set the refresh policy (valid until revoked is the default) and never send two refreshes at once.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://help.salesforce.com/s/articleView?id=005316711&language=en_US&type=1"
+    },
+    {
+      "title": "Copy the key and secret",
+      "detail": "Go to \"Settings\", \"OAuth Settings\", and copy the Consumer Key and Secret. A new app can take up to 10 minutes to activate, so a first authorization may fail. Retry before debugging.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "community",
+      "link": "https://developers.apideck.com/apis/crm/salesforce/configuration"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Salesforce's login page (login.salesforce.com, or test.salesforce.com for sandboxes) with the extra security check. Swap the code for tokens, and store the instance URL, access token and refresh token per user. Refresh when access expires.",
+      "owner": "agent",
+      "time": "2 hr",
+      "proof": "docs",
+      "link": "https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_refresh_token_flow.htm&language=en_US&type=5"
+    },
+    {
+      "title": "Test in your own org",
+      "detail": "Connect as an ordinary user and run each action. Then try a non-admin profile to see what fails.",
+      "owner": "you",
+      "time": "1 hr",
+      "proof": "unconfirmed",
+      "link": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+    },
+    {
+      "title": "Package the app",
+      "detail": "Enable Dev Hub (irreversible) in one org and register a namespace in a second, then link them. Create the Packaged app in Dev Hub, pull its metadata with the Salesforce CLI, make a package version, and have each customer admin install it.",
+      "owner": "you",
+      "time": "1 day or more",
+      "proof": "community",
+      "link": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup",
+      "slow": true
+    },
+    {
+      "title": "Ask admins to pre-authorize",
+      "detail": "The admin installs the app (Setup, \"Connected Apps OAuth Usage\", \"Install\"), sets Permitted Users to \"Admin approved users are pre-authorized\", and assigns it by profile or permission set. Alternatively, grant users \"Approve Uninstalled Connected Apps\", or \"Use Any API Client\" if the org has API Access Control.",
+      "owner": "you",
+      "time": "depends on the customer",
+      "proof": "community",
+      "link": "https://help.jiminny.com/en/articles/12292096-salesforce-pre-authorization"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Users see OAUTH_APP_BLOCKED or OAUTH_APPROVAL_ERROR_GENERIC",
+      "fix": "Salesforce restricts self-authorizing apps not installed in the org, enforced from 28 August 2025 for new orgs and 2 September 2025 for existing ones, per a vendor guide. The admin installs the app, or grants \"Approve Uninstalled Connected Apps\" (or \"Use Any API Client\" with API Access Control) through a permission set.",
+      "proof": "community"
+    },
+    {
+      "title": "Cannot create a Connected App",
+      "fix": "New Connected Apps are off by default from Spring '26, and the exception needs Salesforce Support approval. Create an External Client App instead; it does not support the username-password flow, so use the authorization code, JWT bearer or client credentials flow.",
+      "proof": "community"
+    },
+    {
+      "title": "Your app works in your org but not a customer's",
+      "fix": "Local apps only work inside your own org. Reach other orgs with a Packaged app installed there; one community thread reports the same ID and secret failing after packaging, so test a real install early.",
+      "proof": "community"
+    },
+    {
+      "title": "Refresh keeps failing",
+      "fix": "Check that refresh tokens are a selected scope, that \"Require secret for Refresh Token Flow\" matches your code, and that you handle rotation. With rotation on, reusing an old refresh token revokes the current one and forces a new login, so never refresh concurrently.",
+      "proof": "docs"
+    },
+    {
+      "title": "Agent cannot see records or fields the user can",
+      "fix": "The token carries only what that Salesforce user can access. Give integration users a permission set with the object and field permissions, plus permission to use the app.",
+      "proof": "community"
+    },
+    {
+      "title": "Admin refuses a broad grant or locks IP ranges",
+      "fix": "Ask only for API access and refresh tokens. If the org limits login IPs, the admin can relax that on the app for refresh tokens, but JWT and SAML bearer flows always enforce IP limits.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the authorization redirect with the extra security check, the code swap and the refresh logic",
+    "Handle refresh token rotation, invalid-grant errors and concurrent refreshes safely",
+    "Store the instance URL per user and call the REST API against it",
+    "Draft the instructions an admin follows to install and pre-authorize the app",
+    "Draft the AppExchange listing text and security questionnaire answers"
+  ],
+  "youDo": [
+    "Own or create the Salesforce org and the External Client App",
+    "Register the Dev Hub and namespace orgs and create the package version, if distributing",
+    "Ask each customer admin to install the app, set Permitted Users, and assign access",
+    "Sign in as a real, non-admin Salesforce user to test consent",
+    "Decide whether an AppExchange listing is worth the security review",
+    "Accept Salesforce terms and any partner program agreements"
+  ],
+  "drafts": [
+    {
+      "title": "Instructions for your customer's Salesforce admin",
+      "body": "To let your team connect [Product name]: 1. In Setup, open Connected Apps OAuth Usage (or External Client App Manager), find [Product name] and click Install. 2. Open the app's OAuth policies and set Permitted Users to 'Admin approved users are pre-authorized'. 3. Assign access by profile or permission set to the people who should connect. 4. Ask those users to click Connect Salesforce in [Product name]. [Product name] asks for api and refresh_token only. You can revoke access at any time from Connected Apps OAuth Usage."
+    },
+    {
+      "title": "Consent note shown before the Salesforce login",
+      "body": "[Product name] will ask Salesforce for permission to read and update records you already have access to, and to stay connected without asking you to sign in again. We only change a record when you ask us to. If Salesforce says the app is blocked, ask your Salesforce admin to approve it using the guide we link here."
+    },
+    {
+      "title": "Use-case summary for a security review",
+      "body": "[Product name] is a [company type] tool with an AI assistant. Users connect their own Salesforce org with OAuth (authorization code with PKCE). We request api and refresh_token. We store tokens encrypted, rotate refresh tokens, and delete them when a user disconnects. The assistant acts only with the signed-in user's permissions and writes only on explicit user request. Contact: [security email]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "OAuth Policies for a Connected App (Salesforce Help)",
+      "url": "https://help.salesforce.com/s/articleView?id=xcloud.connected_app_manage_oauth.htm&language=en_US&type=5"
+    },
+    {
+      "title": "OAuth 2.0 Refresh Token Flow for Renewed Sessions (Salesforce Help)",
+      "url": "https://help.salesforce.com/s/articleView?id=xcloud.remoteaccess_oauth_refresh_token_flow.htm&language=en_US&type=5"
+    },
+    {
+      "title": "Enforce One-Time-Use Refresh Tokens with Refresh Token Rotation (Salesforce Help)",
+      "url": "https://help.salesforce.com/s/articleView?id=005316711&language=en_US&type=1"
+    },
+    {
+      "title": "Salesforce OAuth app setup (Nango)",
+      "url": "https://nango.dev/docs/api-integrations/salesforce/salesforce-api-oauth-app-setup"
+    },
+    {
+      "title": "Salesforce configuration guide (Apideck)",
+      "url": "https://developers.apideck.com/apis/crm/salesforce/configuration"
+    },
+    {
+      "title": "Salesforce Connected Apps and External Client Apps (Striim)",
+      "url": "https://striim.com/docs/en/salesforce-connected-apps-and-external-client-apps.html"
+    },
+    {
+      "title": "How to fix OAUTH_APPROVAL_ERROR_GENERIC in Salesforce (Xappex)",
+      "url": "https://www.xappex.com/blog/oauth-approval-error-generic-salesforce/"
+    },
+    {
+      "title": "Salesforce pre-authorization (Jiminny help)",
+      "url": "https://help.jiminny.com/en/articles/12292096-salesforce-pre-authorization"
+    },
+    {
+      "title": "How ISVs pass the Salesforce AppExchange security review (Tekunda)",
+      "url": "https://tekunda.com/blog/How-ISVs-Pass-the-Salesforce-AppExchange-Security-Review"
+    }
+  ],
+  "unconfirmed": [
+    "AppExchange security review cost and wait. Salesforce's own pages returned an access error when we tried to open them. One community source says Salesforce publishes no fixed SLA. We give no fee or week count.",
+    "Whether the September 2025 'uninstalled app' restriction applies the same way to External Client Apps as to Connected Apps. The sources we opened describe Connected Apps.",
+    "Whether a packaged External Client App gives every installing org the same Consumer Key and secret. A community thread asks this and has no answer.",
+    "Whether a packaged app installed from outside AppExchange shows customers a warning. We could not open a page that confirms it.",
+    "The exact access token lifetime. The docs say the session timeout controls it and give no number.",
+    "Whether Developer Edition signup is free and unlimited. We could not open Salesforce's signup page.",
+    "Spring '26 and Winter '26 dates come from vendor guides, not Salesforce release notes, which we could not open. One search result said Connected App support ends in Winter '27. We could not confirm it and did not include it.",
+    "The official scope reference page returned an access error, so scope descriptions come from vendor setup guides."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Build and test sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 3.5 hours"
+    },
+    {
+      "label": "Package the app",
+      "owner": "you",
+      "when": "Day 2 onward",
+      "duration": "1 day or more"
+    },
+    {
+      "label": "Customer admins approve",
+      "owner": "you",
+      "when": "After packaging",
+      "duration": "depends on the customer",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "After admin approval",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      12,
+      16
+    ],
+    "waitDays": null,
+    "toRealUsers": "unknown"
+  }
+}

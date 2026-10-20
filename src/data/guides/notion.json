@@ -4,27 +4,27 @@
   "category": "Productivity",
   "sample": false,
   "difficulty": "easy",
-  "headline": "Easy: create a public connection with Any workspace scope and any Notion user can install it. Marketplace listing (5-10 business days) is optional.",
+  "headline": "Easy: a connection set to 'Any workspace' installs anywhere with no review. The optional Marketplace takes 5-10 business days.",
   "firstTest": {
-    "text": "About 5 minutes of clicks once the account has a workspace: New connection, pick OAuth, add a redirect URI, create, then sign in. A brand-new account needs its onboarding finished first, or the Create button stays greyed out with no message.",
+    "text": "About 5 minutes to a working sign-in. New accounts must finish onboarding first, or Create stays greyed out with no message.",
     "proof": "tested"
   },
   "production": {
-    "text": "Same day. Our OAuth connection was installable in any workspace ('Public') from the moment it was created; no listing or review was needed for our test sign-in. Marketplace listing is optional.",
+    "text": "Same day. Our OAuth connection was public and installable in any workspace from creation; sign-in needed no listing or review. Marketplace is optional.",
     "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
   "approvalWait": {
-    "text": "None to install a public connection: our test sign-in worked minutes after creating it. Marketplace listing: email response within 5-10 business days, and a Notion security review.",
+    "text": "None to install a public connection; our sign-in worked in minutes. Marketplace: an email reply in 5-10 business days plus a security review.",
     "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
   "whoCanRegister": {
-    "text": "Any Notion user with a workspace. The New connection form asks only for a name, API token or OAuth, installable-in and redirect URIs; it did not ask for a website, privacy policy or terms. Creating it means agreeing to Notion's Developer Terms.",
+    "text": "Any Notion user with a workspace can create one. Creating means accepting Notion's Developer Terms. No website or privacy policy needed.",
     "proof": "tested"
   },
   "testMode": {
-    "text": "There is no separate test mode: an OAuth connection is live for any workspace at once. On consent the user picks a workspace and which pages to share (top-level pages are pre-ticked). Our sign-in returned an access token with no stated lifetime and a refresh token.",
+    "text": "No test mode: the connection is live for any workspace. Our sign-in gave an access token with no stated lifetime, plus a refresh token.",
     "proof": "tested"
   },
   "actions": [
@@ -33,7 +33,7 @@
       "label": "Read pages and databases",
       "scope": "Capability: Read content",
       "level": "basic",
-      "review": "None to install. Marketplace listing needs a security review.",
+      "review": "None to install. A Marketplace listing needs a security review.",
       "proof": "tested",
       "timeToLive": "same day"
     },
@@ -42,7 +42,7 @@
       "label": "Edit existing pages",
       "scope": "Capability: Update content",
       "level": "basic",
-      "review": "None to install. Marketplace listing needs a security review.",
+      "review": "None to install. A Marketplace listing needs a security review.",
       "proof": "tested",
       "timeToLive": "same day"
     },
@@ -51,7 +51,7 @@
       "label": "Create new pages and rows",
       "scope": "Capability: Insert content",
       "level": "basic",
-      "review": "None to install. Marketplace listing needs a security review.",
+      "review": "None to install. A Marketplace listing needs a security review.",
       "proof": "tested",
       "timeToLive": "same day"
     },
@@ -69,7 +69,7 @@
       "label": "See who the users are",
       "scope": "User capability: no user info, or user info without email, or with email",
       "level": "basic",
-      "review": "None to install. Note: new connections start with 'user info including email' switched on; pick the lowest option you need.",
+      "review": "None to install. New connections start with 'user info including email' switched on, so pick the lowest option you need.",
       "proof": "tested",
       "timeToLive": "same day"
     }
@@ -77,31 +77,31 @@
   "steps": [
     {
       "title": "Open the developer portal",
-      "detail": "Profile, Integrations now opens Developer tools, Connections (integrations are now called connections), next to Workers, personal access tokens and MCP tokens.",
+      "detail": "Go to Profile, then Integrations, which now opens Developer tools > Connections. Integrations are now called connections; the page also lists Workers, personal access tokens and MCP tokens.",
       "owner": "you",
       "time": "2 min",
       "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
-      "title": "Pick Public and installation scope",
-      "detail": "Choose OAuth, not API token: an API token is limited to 1 workspace and can't go on the Marketplace. With OAuth, Installable in defaults to Any workspace.",
+      "title": "Choose OAuth and Any workspace",
+      "detail": "Choose OAuth, not API token: an API token covers 1 workspace and can't go on the Marketplace. With OAuth, 'Installable in' defaults to Any workspace.",
       "owner": "you",
       "time": "2 min",
       "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
-      "title": "Organization fields (not needed to create)",
-      "detail": "Third-party guides say the form asks for a website, privacy policy, terms and support email. Our form didn't: name, auth method, installable-in and redirect URIs were enough. Expect them for a Marketplace listing instead.",
+      "title": "Skip the organization fields",
+      "detail": "Third-party guides say the form asks for a website, privacy policy, terms and support email, but ours only needed a name, auth method, install scope and redirect addresses. Expect those fields for a Marketplace listing instead.",
       "owner": "you",
       "time": "15 min",
       "proof": "tested",
       "link": "https://docs.ampersand.ai/provider-guides/notion"
     },
     {
-      "title": "Add redirect URIs",
-      "detail": "OAuth domain & URIs section. Add your callback URI. Notion lists it as required for a public connection.",
+      "title": "Add the redirect address",
+      "detail": "In the OAuth domain & URIs section, add your callback address. Notion lists it as required for a public connection.",
       "owner": "you",
       "time": "5 min",
       "proof": "tested",
@@ -109,23 +109,23 @@
     },
     {
       "title": "Choose capabilities",
-      "detail": "After creating, the connection page lists content (read, update, insert, all on by default), comments (off by default) and user info (default: including email). Changes save on their own.",
+      "detail": "After you create the connection, its page lists content (read, update, insert; all on by default), comments (off by default) and user info (default: including email). Changes save on their own.",
       "owner": "you",
       "time": "5 min",
       "proof": "tested",
       "link": "https://developers.notion.com/reference/capabilities"
     },
     {
-      "title": "Copy client ID and secret",
-      "detail": "Configuration tab. Store the secret server-side.",
+      "title": "Copy the client ID and secret",
+      "detail": "Open the Configuration tab and copy both. Store the secret on your server.",
       "owner": "you",
       "time": "2 min",
       "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
-      "title": "Build the OAuth flow",
-      "detail": "Send users to api.notion.com/v1/oauth/authorize with owner=user, then exchange the code at /v1/oauth/token with Basic auth. Our exchange returned an access token and a refresh token.",
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Notion's authorize page as the user, then swap the one-time code for tokens using your client ID and secret. Our exchange returned an access token and a refresh token.",
       "owner": "agent",
       "time": "1-2 hours",
       "proof": "tested",
@@ -133,15 +133,15 @@
     },
     {
       "title": "Handle the page picker",
-      "detail": "Users choose pages on the consent screen; top-level pages are pre-ticked and 'People' appears when you ask for user info. Our test shared 3 pages or databases.",
+      "detail": "Users choose pages on the consent screen. Top-level pages are pre-ticked, and 'People' appears when you ask for user info. Our test shared 3 pages or databases.",
       "owner": "agent",
       "time": "1 hour",
       "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/overview.md"
     },
     {
-      "title": "Optional: list on the Marketplace",
-      "detail": "Needs Any workspace scope, a listing with name, description, category, tags, images and logo. Notion reviews every submission and replies by email in 5-10 business days.",
+      "title": "List on the Marketplace (optional)",
+      "detail": "You need Any workspace scope and a listing with name, description, category, tags, images and logo. Notion reviews every submission and replies by email in 5-10 business days.",
       "owner": "you",
       "time": "1-2 weeks",
       "proof": "docs",
@@ -151,33 +151,33 @@
   ],
   "blockers": [
     {
-      "title": "Created with 'Selected workspaces only'",
-      "fix": "Scope can't be changed later. Create a new connection with Any workspace.",
+      "title": "The connection was created as 'Selected workspaces only'",
+      "fix": "You can't change the scope later. Create a new connection with Any workspace.",
       "proof": "docs"
     },
     {
-      "title": "Agent sees no pages",
-      "fix": "Notion grants access only to pages the user picks in the OAuth page picker. Prompt users to share more pages, or offer a template to duplicate.",
+      "title": "Your agent sees no pages",
+      "fix": "Notion only gives access to pages the user picks in the page picker. Ask users to share more pages, or offer a template to duplicate.",
       "proof": "docs"
     },
     {
       "title": "Create connection is greyed out",
-      "fix": "Happens on a new account with no workspace yet; the form gives no reason. Finish Notion's onboarding to create a workspace, then try again.",
+      "fix": "This happens on a new account with no workspace yet, and the form gives no reason. Finish Notion's onboarding to create a workspace, then try again.",
       "proof": "tested"
     },
     {
-      "title": "Marketplace listing rejected",
-      "fix": "Notion emails the reason. Update the listing and resubmit. The connection must be public with Any workspace scope.",
+      "title": "Your Marketplace listing is rejected",
+      "fix": "Notion emails the reason. Update the listing and resubmit; the connection must be public with Any workspace scope.",
       "proof": "docs"
     },
     {
-      "title": "Access token stops working",
-      "fix": "A refresh flow exists and returns a new access and refresh token. The docs opened here give no lifetimes, so refresh on 401 and save the new pair every time.",
+      "title": "The access token stops working",
+      "fix": "A refresh flow returns a new access token and refresh token. The docs we read give no lifetimes, so refresh on a 401 error and save both new tokens each time.",
       "proof": "docs"
     }
   ],
   "agentCan": [
-    "Write the OAuth flow and token refresh",
+    "Write the sign-in flow and token refresh",
     "Choose the minimum capability set from the actions the agent needs",
     "Build the page-picker handling and 'share more pages' prompt",
     "Draft the privacy policy and listing copy",
@@ -188,7 +188,7 @@
     "Publish a privacy policy, terms page and support email",
     "Copy the client secret into your secrets store",
     "Submit the Marketplace listing if you want one",
-    "Customers pick the pages to share"
+    "Your customers pick the pages to share"
   ],
   "drafts": [
     {
@@ -269,5 +269,37 @@
       "caption": "Our test sign-in: 3 pages shared, refresh token returned"
     }
   ],
-  "checked": "21 Oct 2026"
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Create the connection",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 5 minutes"
+    },
+    {
+      "label": "Build sign-in and page picker",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "2-3 hours"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      2,
+      4
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
 }

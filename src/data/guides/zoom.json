@@ -1,0 +1,342 @@
+{
+  "slug": "zoom",
+  "name": "Zoom",
+  "category": "Meetings",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: you can build in an afternoon, but outside users need a Zoom-approved beta share or a published app.",
+  "firstTest": {
+    "text": "No time in the docs. Create a General app, use the development credentials, and add the app to your account from the \"Local Test\" page.",
+    "proof": "unconfirmed",
+    "source": "https://developers.zoom.us/docs/build-flow/quick-start-guide/"
+  },
+  "production": {
+    "text": "Beta share: 4 weeks plus two 4-week extensions. Published or Unlisted: Zoom review. Private: your account only, max 100 additions (user-level) or 10 (account-level).",
+    "proof": "docs",
+    "source": "https://developers.zoom.us/docs/distribute/sharing-private-and-beta-apps/"
+  },
+  "approvalWait": {
+    "text": "Beta share: Zoom replies in 3 to 4 business days. Review: no time in the docs; a third-party guide says 5 to 7 business days.",
+    "proof": "docs",
+    "source": "https://developers.zoom.us/docs/distribute/sharing-private-and-beta-apps/"
+  },
+  "whoCanRegister": {
+    "text": "Account owners, admins or users with the Zoom for developers role. Publishing adds domain checks, test logins per role, and a verified developer account.",
+    "proof": "docs",
+    "source": "https://developers.zoom.us/docs/distribute/app-submission/common-rejection-issues/"
+  },
+  "testMode": {
+    "text": "Development credentials work on your account; outside accounts are blocked while unpublished. Access lasts 1 hour, refresh tokens 90 days; save each new one.",
+    "proof": "docs",
+    "source": "https://developers.zoom.us/docs/integrations/oauth/"
+  },
+  "actions": [
+    {
+      "id": "read-meetings",
+      "label": "Read a user's meetings",
+      "scope": "meeting:read:meeting",
+      "level": "basic",
+      "review": "No review for your own account. At publish, Zoom's Security Review team checks each scope and may reject ones it sees as unnecessary.",
+      "proof": "docs",
+      "timeToLive": "same day for your account, review wait for outside users"
+    },
+    {
+      "id": "create-meetings",
+      "label": "Create and update meetings",
+      "scope": "meeting:write:meeting",
+      "level": "basic",
+      "review": "Same as above. Give a written reason for the scope.",
+      "proof": "docs",
+      "timeToLive": "same day for your account, review wait for outside users"
+    },
+    {
+      "id": "read-recordings",
+      "label": "List a user's cloud recordings",
+      "scope": "cloud_recording:read:list_recording_files",
+      "level": "basic",
+      "review": "Same as above. Unneeded scopes are a listed rejection reason.",
+      "proof": "docs",
+      "timeToLive": "same day for your account, review wait for outside users"
+    },
+    {
+      "id": "read-profile",
+      "label": "Read the user's profile",
+      "scope": "user:read:user",
+      "level": "basic",
+      "review": "Same as above.",
+      "proof": "docs",
+      "timeToLive": "same day for your account, review wait for outside users"
+    },
+    {
+      "id": "admin-wide",
+      "label": "Read or manage meetings for everyone on an account (admin-managed app)",
+      "scope": "meeting:read:meeting:admin, meeting:write:meeting:admin",
+      "level": "sensitive",
+      "review": "Needs an admin-managed app, so an account admin adds it. A third-party guide says you cannot mix admin and non-admin scopes. Workspaces with pre-approval need the admin to approve first.",
+      "proof": "community",
+      "timeToLive": "depends on each customer admin"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Get a developer role",
+      "detail": "You must be the account owner, an account admin, or hold the Zoom for developers role. An admin can enable it under \"User Management\", \"Roles\", \"Role Settings\", \"Advanced features\".",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/create/"
+    },
+    {
+      "title": "Create a General app",
+      "detail": "Sign in to the Zoom App Marketplace and click \"Developer\", then \"Develop\", \"Build an app\", \"General app\", \"Create\".",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/create/"
+    },
+    {
+      "title": "Choose user or admin managed",
+      "detail": "User-managed apps see only the data of each user who adds them; admin-managed apps are added by an account admin and can reach everyone. Decide before building, since it limits your scopes, and pick user-managed for agents acting for individuals.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/build-flow/before-you-build/"
+    },
+    {
+      "title": "Set the redirect address",
+      "detail": "Add the OAuth redirect URL (required) and the OAuth allow list, and optionally turn on \"Strict Mode URL\". Copy the Client ID and Client Secret, and use the development pair while building.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/create/"
+    },
+    {
+      "title": "Add scopes with reasons",
+      "detail": "On the Scopes page click \"Add Scopes\", pick the product and API scopes, and fill the Scope Description for each. Request only what the agent uses.",
+      "owner": "you",
+      "time": "20 min",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/oauth-scopes-granular/"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Zoom's authorize page, then swap the code for tokens using your client ID and secret. Access lasts 1 hour and the refresh token 90 days, and each refresh returns a new refresh token, so overwrite the old one.",
+      "owner": "agent",
+      "time": "1 to 2 hr",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/oauth/"
+    },
+    {
+      "title": "Handle app removal",
+      "detail": "Production General apps get a deauthorization notice when a user removes the app. Delete that user's data then, and provide a working removal path, since a missing one is a listed rejection reason.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/integrations/oauth/"
+    },
+    {
+      "title": "Test on your own account",
+      "detail": "On the \"Local Test\" page click \"Add App Now\", then \"Allow\". Use development credentials throughout, and do not install under both the Development and Production tabs, or authorization may break.",
+      "owner": "you",
+      "time": "30 min",
+      "proof": "community",
+      "link": "https://devforum.zoom.us/t/invitation-link-does-not-work-in-other-accounts-while-zoom-app-is-in-development-mode/90574"
+    },
+    {
+      "title": "Request a beta share",
+      "detail": "In Production settings, click \"Beta Test\", \"Share App\", \"Request to Share\". Zoom replies in 3 to 4 business days, case by case. The link lasts 4 weeks with two 4-week extensions, and publishing the beta app voids it.",
+      "owner": "you",
+      "time": "3 to 4 business days",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/distribute/sharing-private-and-beta-apps/",
+      "slow": true
+    },
+    {
+      "title": "Submit for Marketplace review",
+      "detail": "Turn on Publishing under \"Activation\", fill the required fields, verify domains, add reviewer notes with a test plan and test logins for every role, and use the Production Client ID on a first submission. Review covers branding, usability and compliance, then security (OWASP Top 10).",
+      "owner": "you",
+      "time": "1 day to prepare, then review wait",
+      "proof": "docs",
+      "link": "https://developers.zoom.us/docs/build-flow/publish.md"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Outside users cannot authorize the app",
+      "fix": "A Zoom staffer calls this expected for an unpublished app. Add testers to your account, request a beta share, or publish, and make sure testers use only development credentials and have not installed under both the Development and Production tabs.",
+      "proof": "community"
+    },
+    {
+      "title": "Beta share link stops working",
+      "fix": "Approved links last 4 weeks, after which new users cannot add the app but existing users keep access. Request up to two 4-week extensions in the \"Share App\" section; while a link is approved, you cannot make app information public or present the app as a Zoom integration.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review rejects your submission",
+      "fix": "Zoom's rejection list: unclear test plan or missing test logins, wrong client ID (development for a first submission, or production for an update), Terms, privacy or support pages on third-party domains, thin documentation, missing 2 to 3 gallery images, vague descriptions, unused scopes, or no valid removal process.",
+      "proof": "docs"
+    },
+    {
+      "title": "Free developer account cannot publish",
+      "fix": "Upgrade a free developer account to Free with Credit Card, or submit the developer information form, before submission passes.",
+      "proof": "docs"
+    },
+    {
+      "title": "Some customer workspaces need admin approval",
+      "fix": "A third-party guide says workspaces that require pre-approval send the user's request to their Zoom admin by email. The user cannot install until the admin approves, so offer an admin install guide.",
+      "proof": "community"
+    },
+    {
+      "title": "Adding scopes later forces a resubmission",
+      "fix": "Changing scopes or webhooks means users must re-authorize, and a published app needs another review. Ask for every scope you need before the first submission.",
+      "proof": "community"
+    }
+  ],
+  "agentCan": [
+    "Write the authorization redirect, code swap and refresh, storing each new refresh token",
+    "Refresh before the 1 hour access token expires and warn before the 90 day refresh token ends",
+    "Handle the removal notice and delete user data",
+    "Call the meetings and recordings APIs within granted scopes",
+    "Draft scope descriptions, release notes and the reviewer test plan"
+  ],
+  "youDo": [
+    "Hold or request the Zoom for developers role",
+    "Create the app, pick user-managed or admin-managed, and copy credentials",
+    "Verify your domains and accept the Marketplace Developer Agreement",
+    "Create test logins for every user role and record the walkthrough video",
+    "Send the beta \"Request to Share\" and answer Zoom's questions",
+    "Upgrade a free developer account if Zoom asks"
+  ],
+  "drafts": [
+    {
+      "title": "Scope descriptions for the Scopes page",
+      "body": "meeting:read:meeting: lets the assistant show the user their upcoming meeting details when they ask. meeting:write:meeting: lets the assistant schedule or change a meeting only when the user asks. cloud_recording:read:list_recording_files: lets the assistant find the user's recordings so they can ask about a past meeting. user:read:user: used to show which Zoom account is connected. We do not request any scope the product does not use."
+    },
+    {
+      "title": "Reviewer test plan",
+      "body": "1. Sign in to [Product name] with the test login for each role (credentials supplied). 2. Click Connect Zoom and accept the Zoom consent screen. 3. Ask the assistant to list upcoming meetings, then to schedule one, and confirm it appears in Zoom. 4. Open Settings and click Disconnect, then confirm access is removed in Zoom and our app_deauthorized handler deletes the user's data. Walkthrough video: [URL]."
+    },
+    {
+      "title": "Consent note shown before the Zoom screen",
+      "body": "[Product name] will ask Zoom for permission to see and manage your meetings. We only create or change a meeting when you ask us to. Zoom's connection tokens expire after 90 days, so you may be asked to reconnect. You can remove the app any time in Zoom under Connected Apps."
+    }
+  ],
+  "sources": [
+    {
+      "title": "OAuth 2.0 (Zoom Developer Docs)",
+      "url": "https://developers.zoom.us/docs/integrations/oauth/"
+    },
+    {
+      "title": "Create an OAuth app",
+      "url": "https://developers.zoom.us/docs/integrations/create/"
+    },
+    {
+      "title": "Before you start",
+      "url": "https://developers.zoom.us/docs/build-flow/before-you-build/"
+    },
+    {
+      "title": "Quick start guide",
+      "url": "https://developers.zoom.us/docs/build-flow/quick-start-guide/"
+    },
+    {
+      "title": "Sharing private and beta apps",
+      "url": "https://developers.zoom.us/docs/distribute/sharing-private-and-beta-apps/"
+    },
+    {
+      "title": "Enabling publishing for private and beta apps",
+      "url": "https://developers.zoom.us/docs/distribute/app-submission/enabling-publishing-for-private-and-beta-apps/"
+    },
+    {
+      "title": "App Review Process",
+      "url": "https://developers.zoom.us/docs/distribute/app-review-process/"
+    },
+    {
+      "title": "Publish (build flow)",
+      "url": "https://developers.zoom.us/docs/build-flow/publish.md"
+    },
+    {
+      "title": "App Credentials",
+      "url": "https://developers.zoom.us/docs/build-flow/basic-info/app-credentials/"
+    },
+    {
+      "title": "App distribution",
+      "url": "https://developers.zoom.us/docs/distribute/"
+    },
+    {
+      "title": "Common reasons for app submission rejection",
+      "url": "https://developers.zoom.us/docs/distribute/app-submission/common-rejection-issues/"
+    },
+    {
+      "title": "Granular OAuth scopes",
+      "url": "https://developers.zoom.us/docs/integrations/oauth-scopes-granular/"
+    },
+    {
+      "title": "Zoom app submission process (Recall.ai, community)",
+      "url": "https://www.recall.ai/blog/explaining-the-zoom-app-submission-process"
+    },
+    {
+      "title": "Invitation link does not work in other accounts while app is in development mode (Zoom dev forum)",
+      "url": "https://devforum.zoom.us/t/invitation-link-does-not-work-in-other-accounts-while-zoom-app-is-in-development-mode/90574"
+    },
+    {
+      "title": "OAuth issue with development credentials (Zoom dev forum)",
+      "url": "https://devforum.zoom.us/t/oauth-issue-with-development-credentials/131563"
+    }
+  ],
+  "unconfirmed": [
+    "How long Marketplace review takes. Zoom's review page gives no wait time. The 5 to 7 business day figure is from a third-party guide only.",
+    "How many outside testers a beta app may have. The sharing page says 'limited' and gives no number for beta apps.",
+    "Whether an unlisted app needs the same full review as a listed one. The docs say an unlisted app needs full metadata or it will fail review, but give no separate timing.",
+    "Whether user:read:user is still the current granular scope name. It appears in an example token response, not on the scope list page section we read. The scope reference page is very long and we read only its first part.",
+    "Whether the :admin suffix rule (cannot mix admin and non-admin scopes) is current. It comes from a third-party connector guide.",
+    "Whether admin pre-approval workspaces exist for all accounts or are a per-account setting. Only a third-party guide describes it.",
+    "Whether the free-developer-account upgrade applies to every app or only to some. The rejection page lists it without detail."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "2-3 hours"
+    },
+    {
+      "label": "Test and prepare submission",
+      "owner": "you",
+      "when": "Days 2-3",
+      "duration": "about 1 day"
+    },
+    {
+      "label": "Zoom's Marketplace review",
+      "owner": "provider",
+      "when": "Days 3-11",
+      "duration": "5-7 business days (third-party guide)",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "About day 11",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      11,
+      13
+    ],
+    "waitDays": [
+      7,
+      9
+    ],
+    "toRealUsers": "1-3 weeks"
+  }
+}

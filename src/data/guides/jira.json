@@ -1,0 +1,319 @@
+{
+  "slug": "jira",
+  "name": "Jira",
+  "category": "Project management",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: Atlassian documents no review for sharing, but users see an unreviewed-app warning and site admins can block user-installed apps.",
+  "firstTest": {
+    "text": "Under an hour to sign in against your own Jira site, once you have an Atlassian account and a Jira Cloud site to test on.",
+    "proof": "unconfirmed",
+    "source": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+  },
+  "production": {
+    "text": "Other sites can connect once Distribution is Sharing, with no Marketplace listing. Users see an unreviewed warning, and site admins can block user-installed apps.",
+    "proof": "docs",
+    "source": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+  },
+  "approvalWait": {
+    "text": "Docs describe no review for Sharing. A 2020 request sat unanswered about a week; Atlassian cleared the backlog in Jan 2021. Whether approval applies today is undocumented.",
+    "proof": "community",
+    "source": "https://community.developer.atlassian.com/t/oauth-2-0-3lo-public-distribution-how-to-get-approval-to-make-private-app-public/36168"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with an Atlassian account can create an app. To share it, set Distribution to Sharing and fill in vendor, privacy and personal data details.",
+    "proof": "community",
+    "source": "https://community.developer.atlassian.com/t/do-i-really-need-to-list-my-oauth-2-0-3lo-app-on-marketplace-to-share-with-other-people/69937"
+  },
+  "testMode": {
+    "text": "A new app is private until Distribution is Sharing. Refresh tokens expire after 90 days unused and change on every use. Since 2 March 2026, Jira Cloud also caps OAuth apps at 65,000 points an hour on the default shared pool.",
+    "proof": "docs",
+    "source": "https://developer.atlassian.com/cloud/jira/platform/rate-limiting/"
+  },
+  "actions": [
+    {
+      "id": "read-issues",
+      "label": "Read projects and issues, and search with JQL",
+      "scope": "read:jira-work",
+      "level": "basic",
+      "review": "No Atlassian review documented. Add the permission on the 'Permissions' tab of the developer console.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "write-issues",
+      "label": "Create and edit issues, add comments, log work",
+      "scope": "write:jira-work",
+      "level": "basic",
+      "review": "No Atlassian review documented. The user's own Jira permissions still limit what your agent can do.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "read-users",
+      "label": "Look up user profiles to assign issues",
+      "scope": "read:jira-user",
+      "level": "basic",
+      "review": "No Atlassian review documented. May tie in with the personal data declaration on the Distribution tab.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "stay-connected",
+      "label": "Keep the connection alive without the user signing in again",
+      "scope": "offline_access",
+      "level": "basic",
+      "review": "None. Add it to your request to get a rotating refresh token.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "granular-issue",
+      "label": "Narrow access to individual objects, such as only viewing issues",
+      "scope": "read:issue:jira, write:issue:jira, delete:issue:jira",
+      "level": "basic",
+      "review": "No review documented. Atlassian recommends classic permissions where they exist, and granular ones only when classic cannot cover the need.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create the OAuth integration",
+      "detail": "Open the developer console, click 'Create', then 'OAuth 2.0 integration', and name the app. Choose an account-level grant (covers many sites) or a resource-level grant (only the sites the user picks).",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+    },
+    {
+      "title": "Add the Jira API and permissions",
+      "detail": "On 'Permissions', add the Jira platform REST API and click 'Configure'. Start with read and write for Jira work, keep the total under 50, and note you can request only what you add here.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/"
+    },
+    {
+      "title": "Set the callback URL",
+      "detail": "On 'Authorization', click 'Configure' next to the OAuth 2.0 option and enter your callback URL. The redirect address you send in later requests must match it.",
+      "owner": "you",
+      "time": "2 min",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+    },
+    {
+      "title": "Turn on Sharing",
+      "detail": "On 'Distribution', click 'Edit', set status to Sharing, and fill in vendor name, privacy policy URL and the personal data declaration. Then copy the Authorization URL from 'Authorization'; without Sharing, only you can use it.",
+      "owner": "you",
+      "time": "15 min",
+      "proof": "community",
+      "link": "https://help.merge.dev/articles/9111358716-atlassian-partnership"
+    },
+    {
+      "title": "Send users to consent",
+      "detail": "Only the code flow works: redirect users to the authorization URL with a random state value and offline access. Swap the code for tokens from your server and check the state on return.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+    },
+    {
+      "title": "Look up the cloud ID",
+      "detail": "Ask Atlassian which sites the token can reach. Each result has a cloud ID that goes into every Jira API address; users who picked several sites get several, so let them choose.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+    },
+    {
+      "title": "Handle rotating refresh tokens",
+      "detail": "Every refresh returns a new refresh token and disables the one you used, so save the new one first and refresh one request at a time per user. Old tokens work for 10 minutes; read the expiry time in the response.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/oauth/getting-started/refresh-tokens"
+    },
+    {
+      "title": "Test with an unrelated account",
+      "detail": "Use an Atlassian account that did not create the app, on a different Jira site. Confirm the unreviewed warning shows and the flow still completes, then test a site where an admin blocked user-installed apps.",
+      "owner": "you",
+      "time": "30 min",
+      "proof": "unconfirmed",
+      "slow": false
+    },
+    {
+      "title": "Consider a Marketplace listing",
+      "detail": "Only needed to remove the unreviewed warning or to sell the app. Since 17 Sep 2025 only Forge apps can be submitted, so you cannot submit this kind of app as is.",
+      "owner": "you",
+      "time": "days to weeks, unknown",
+      "proof": "docs",
+      "link": "https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Only you can authorize the app",
+      "fix": "New apps are private. Set Distribution to Sharing and give users the Authorization URL; Sharing is separate from a Marketplace listing.",
+      "proof": "community"
+    },
+    {
+      "title": "Users see an unreviewed-app warning",
+      "fix": "Docs say users installing an unapproved integration are warned. Tell users in advance what the screen says; removing it means the Marketplace route.",
+      "proof": "docs"
+    },
+    {
+      "title": "A site admin has switched off user-installed apps",
+      "fix": "Users see a message that their admin disabled end-user installs. The admin must re-enable the setting or install the app; Atlassian offers a control for this, while an allow list for specific apps was still an open feature request.",
+      "proof": "community"
+    },
+    {
+      "title": "Unsure what to enter for vendor, privacy and personal data",
+      "fix": "Use your company name and a real privacy policy URL. A 2021 Atlassian answer on the personal data question was reversed within two days and later posts disagree, so confirm with your privacy lead; answering Yes may mean implementing the Personal Data Reporting API.",
+      "proof": "community"
+    },
+    {
+      "title": "Refresh fails with an invalid grant error",
+      "fix": "Refresh tokens rotate and the old one stops working. Causes include reuse after the 10 minute grace period, 90 days unused, or a password change; ask the user to reconnect and keep only the latest token.",
+      "proof": "docs"
+    },
+    {
+      "title": "Requests fail with 429 from the hourly quota",
+      "fix": "Since 2 March 2026 each request costs points, and quotas reset at the top of each UTC hour. Once used up, all requests are denied until the reset, so back off using Retry-After and cut calls that fetch users or groups, which cost 2 points per object.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the authorization redirect, state check and code swap",
+    "List the user's Jira sites and let them pick one",
+    "Build a refresh queue that keeps the newest refresh token and never reuses an old one",
+    "Handle 401, invalid grant and 429 errors, waiting as Retry-After says",
+    "Draft the privacy policy page, vendor details and consent explainer"
+  ],
+  "youDo": [
+    "Sign in to Atlassian and create the app in the developer console",
+    "Set Distribution to Sharing and settle the personal data declaration with your privacy lead",
+    "Publish a privacy policy on your own domain",
+    "Test from an unrelated Atlassian account on a different Jira site",
+    "Ask customer admins to allow the app if user installs are blocked",
+    "Decide whether a Forge rewrite and Marketplace listing is worth it"
+  ],
+  "drafts": [
+    {
+      "title": "Distribution tab values",
+      "body": "Distribution status: Sharing. Vendor name: [Company legal name]. Privacy policy URL: https://[your-domain]/privacy. Personal data declaration: [decide with your privacy lead. Declare Yes if you store personal data tied to user references such as accountId, or cache data longer than 24 hours]."
+    },
+    {
+      "title": "Short note to a customer's Jira admin",
+      "body": "[Product name] lets your team create and update Jira issues from [Product name]. It connects through Atlassian's OAuth 2.0 consent screen and can only do what each person's own Jira permissions allow. Scopes: read:jira-work, write:jira-work, read:jira-user and offline_access. Atlassian will show a notice that the app has not been reviewed by Atlassian. If user app installs are turned off on your site, please allow them or install [Product name] for your organization. Privacy policy: [URL]."
+    },
+    {
+      "title": "Consent explainer shown before the Atlassian screen",
+      "body": "[Product name] will ask Atlassian for permission to read and update Jira issues on your behalf. It cannot see anything you cannot already see in Jira. Atlassian may show a notice that the app is not yet reviewed. You can remove access any time from your Atlassian account settings."
+    }
+  ],
+  "sources": [
+    {
+      "title": "OAuth 2.0 (3LO) apps (Jira Cloud platform)",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+    },
+    {
+      "title": "Jira scopes for OAuth 2.0 (3LO) and Forge apps",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/"
+    },
+    {
+      "title": "Jira Cloud rate limiting",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/rate-limiting/"
+    },
+    {
+      "title": "Integrating with Jira Cloud (Forge, Connect, OAuth, Marketplace)",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/integrating-with-jira-cloud/"
+    },
+    {
+      "title": "Rotating refresh tokens (Atlassian OAuth)",
+      "url": "https://developer.atlassian.com/cloud/oauth/getting-started/refresh-tokens"
+    },
+    {
+      "title": "Updated: Action required, deprecating persistent refresh tokens",
+      "url": "https://community.developer.atlassian.com/t/updated-31-january-2022-action-required-deprecating-persistent-refresh-tokens/54172"
+    },
+    {
+      "title": "Do I really need to list my OAuth 2.0 (3LO) app on Marketplace to share it?",
+      "url": "https://community.developer.atlassian.com/t/do-i-really-need-to-list-my-oauth-2-0-3lo-app-on-marketplace-to-share-with-other-people/69937"
+    },
+    {
+      "title": "OAuth 2.0 (3LO) public distribution, how to get approval",
+      "url": "https://community.developer.atlassian.com/t/oauth-2-0-3lo-public-distribution-how-to-get-approval-to-make-private-app-public/36168"
+    },
+    {
+      "title": "Do I have to implement Personal Data Reporting in my OAuth2 app?",
+      "url": "https://community.developer.atlassian.com/t/do-i-have-to-implement-personal-data-reporting-in-my-oauth2-app/54402"
+    },
+    {
+      "title": "Privacy Policy for OAuth 2.0 (3LO) app",
+      "url": "https://community.developer.atlassian.com/t/privacy-policy-for-oauth-2-0-3lo-app/45652"
+    },
+    {
+      "title": "What to choose? Forge/Connect app or OAuth 2.0 (3LO) app",
+      "url": "https://community.developer.atlassian.com/t/what-to-choose-forge-connect-app-or-oauth-2-0-3lo-app/81822"
+    },
+    {
+      "title": "Introducing a new control for end-user OAuth 2.0 (3LO) app installs",
+      "url": "https://community.atlassian.com/forums/App-Central-articles/Introducing-a-new-control-for-end-user-OAuth-2-0-3LO-app/ba-p/1966912"
+    },
+    {
+      "title": "Atlassian setup steps (Merge help center, third-party)",
+      "url": "https://help.merge.dev/articles/9111358716-atlassian-partnership"
+    }
+  ],
+  "unconfirmed": [
+    "Whether Atlassian still reviews or approves 3LO distribution today. The official page documents none; the only approval evidence is a 2020 to 2021 forum thread.",
+    "The exact access token lifetime. Atlassian's pages show an expires_in field but give no number. Developers report about one hour, but no official page or opened thread states 3600 seconds, so read expires_in at runtime.",
+    "The exact Distribution tab fields. The official OAuth page lists only the Sharing toggle. Vendor name, privacy policy and personal data declaration come from a forum thread and a third-party setup guide.",
+    "Whether the personal data declaration must be Yes for typical issue and comment access, and whether the Personal Data Reporting API is then mandatory. Forum answers conflict.",
+    "The site admin control for user-installed 3LO apps. We could open only the title of the Atlassian community post, so menu labels and exact behaviour come from search summaries and need checking in admin.atlassian.com.",
+    "Whether a new Forge app is needed to remove the unreviewed warning. The docs say only Forge apps can be submitted to the Marketplace from 17 Sep 2025.",
+    "Time to a first working sign-in. No source states it."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 2.5 hours"
+    },
+    {
+      "label": "Test with another account",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Other sites can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      1,
+      1
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
+}

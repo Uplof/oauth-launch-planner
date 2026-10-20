@@ -4,27 +4,27 @@
   "category": "Communication",
   "sample": false,
   "difficulty": "moderate",
-  "headline": "Moderate: you can ship to any workspace without review, but unlisted apps get a harsh 1 request per minute on conversations.history, so reading channels at scale effectively needs Marketplace approval.",
+  "headline": "Moderate: no review to ship, but unlisted apps get 1 channel-history request per minute.",
   "firstTest": {
-    "text": "About 10 minutes from a blank form to an installed app, including 5 minutes to make a new free workspace: a 4-step wizard (name and workspace, scopes, events, review), then Create and Install. No review at any step.",
+    "text": "About 10 minutes, including 5 to make a free workspace: a 4-step wizard (name and workspace, scopes, events, review), then Create and Install. No review.",
     "proof": "tested"
   },
   "production": {
-    "text": "Same day for unlisted apps: we ticked one self-check box ('no hard-coded tokens or webhook URLs'), clicked Activate Public Distribution, and any workspace could install at once. Marketplace listing is a separate 5-step submission that needs 10 active workspaces first, then weeks of review.",
+    "text": "Same day for unlisted apps: click Activate Public Distribution and any workspace can install. Marketplace needs 10 active workspaces first, then weeks of review.",
     "proof": "tested",
     "source": "https://docs.slack.dev/app-management/distribution"
   },
   "approvalWait": {
-    "text": "None for unlisted distribution: activating it was instant in our test. Marketplace: preliminary review up to 10 business days, functional review up to 10 weeks for new submissions.",
+    "text": "None for unlisted apps; ours was instant. Marketplace: up to 10 business days preliminary review, then up to 10 weeks functional review for new apps.",
     "proof": "tested",
     "source": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide"
   },
   "whoCanRegister": {
-    "text": "Anyone with a Slack account, but only for a workspace the browser is signed in to: our new workspace showed up in the app form only after signing in to it. To go beyond one workspace, finish the 4-item Manage Distribution checklist and click Activate Public Distribution. Workspace admins may still need to approve installs.",
+    "text": "Anyone with a Slack account, for workspaces you're signed in to. Beyond one workspace, finish the 4-item Manage Distribution checklist; admins may still approve installs.",
     "proof": "tested"
   },
   "testMode": {
-    "text": "Tokens do not expire by default: our bot token (xoxb) and user token came back with no lifetime and no refresh token. Expiry only starts if you opt in to token rotation (then 12-hour access tokens), and that needs a redirect URL first. Once distributed without Marketplace approval, new installs get conversations.history at 1 request per minute.",
+    "text": "Our tokens came with no expiry and no refresh token. Rotation is opt-in (12-hour tokens). New installs of unlisted apps get 1 history request per minute.",
     "proof": "tested",
     "source": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps"
   },
@@ -43,7 +43,7 @@
       "label": "Read public channel history",
       "scope": "channels:history",
       "level": "basic",
-      "review": "No review to install. Unlisted apps are rate-limited to 1 request per minute on this method.",
+      "review": "No review to install. Unlisted apps get 1 request per minute on this method.",
       "proof": "tested",
       "timeToLive": "same day (rate-limited)"
     },
@@ -52,7 +52,7 @@
       "label": "Read private channels and DMs",
       "scope": "groups:history, im:history, mpim:history",
       "level": "sensitive",
-      "review": "Broad data access scopes are questioned in Marketplace review. Same rate limit applies if unlisted. No warning when adding them; granted at once in our test install.",
+      "review": "Marketplace review questions broad data-access scopes. The same rate limit applies if unlisted. Adding them showed no warning, and they were granted at once in our test install.",
       "proof": "tested",
       "timeToLive": "same day unlisted; weeks if listing"
     },
@@ -70,7 +70,7 @@
       "label": "Post as the user",
       "scope": "chat:write (user_scope)",
       "level": "basic",
-      "review": "None for unlisted. Requested with user_scope, not scope.",
+      "review": "None for unlisted. Request it as a user scope, not a bot scope.",
       "proof": "tested",
       "timeToLive": "same day"
     }
@@ -78,7 +78,7 @@
   "steps": [
     {
       "title": "Create the app",
-      "detail": "At api.slack.com/apps, Create an App, then Blank app (there is also an AI agent template and a manifest option). Name it and pick the workspace; the workspace can't be changed later. Only workspaces you're signed in to are listed.",
+      "detail": "At api.slack.com/apps, click Create an App, then Blank app (an AI agent template and a manifest option also exist). Name it and pick a signed-in workspace; you can't change it later.",
       "owner": "you",
       "time": "3 min",
       "proof": "tested",
@@ -86,23 +86,23 @@
     },
     {
       "title": "Add scopes",
-      "detail": "Step 2 of the wizard: search and add bot scopes and user scopes. Each shows a plain-English line. We added 8 bot scopes and 1 user scope with no warnings.",
+      "detail": "In step 2 of the wizard, search for and add bot scopes and user scopes. Each shows a plain-English line. We added 8 bot scopes and 1 user scope with no warnings.",
       "owner": "you",
       "time": "10 min",
       "proof": "tested",
       "link": "https://docs.slack.dev/authentication/installing-with-oauth"
     },
     {
-      "title": "Add HTTPS redirect URL",
-      "detail": "Add your callback under OAuth & Permissions > Redirect URLs. It must be https. The redirect_uri you send must match it. No # anchors.",
+      "title": "Add the redirect address",
+      "detail": "Under OAuth & Permissions > Redirect URLs, add your callback. It must be https, with no # anchor, and the address you send must match it.",
       "owner": "you",
       "time": "5 min",
       "proof": "tested",
       "link": "https://docs.slack.dev/authentication/installing-with-oauth"
     },
     {
-      "title": "Build the OAuth flow",
-      "detail": "Send users to slack.com/oauth/v2/authorize with scope (bot) and user_scope (user), then exchange the code at oauth.v2.access. Our sign-in returned every scope we asked for.",
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Slack's authorize page, asking for bot scopes and user scopes separately. Then swap the one-time code for tokens. Our sign-in returned every scope we asked for.",
       "owner": "agent",
       "time": "1-2 hours",
       "proof": "tested",
@@ -110,7 +110,7 @@
     },
     {
       "title": "Decide on token rotation",
-      "detail": "Opt-in, and it needs a redirect URL first. Without it, tokens never expire (our test). With it, access tokens last 12 hours and refresh tokens are single use. You cannot turn it off later.",
+      "detail": "Opt in only after saving a redirect address. Without it our tokens never expired; with it, access lasts 12 hours, refresh tokens are single use, and you can't turn it off.",
       "owner": "you",
       "time": "15 min",
       "proof": "tested",
@@ -118,7 +118,7 @@
     },
     {
       "title": "Meet distribution requirements",
-      "detail": "Manage Distribution lists 4 items: features, redirect URLs, no hard-coded information (a box you tick), HTTPS. Three turned green on their own once the redirect URL was saved.",
+      "detail": "Manage Distribution lists 4 items: features, redirect URLs, no hard-coded tokens or webhook URLs (a box you tick), and HTTPS. Three turned green once the redirect address was saved.",
       "owner": "you",
       "time": "30 min",
       "proof": "tested",
@@ -126,7 +126,7 @@
     },
     {
       "title": "Activate Public Distribution",
-      "detail": "One click, no review: the page switched to 'Share Your App with Any Workspace' straight away. You can deactivate it later, which removes the app from other workspaces.",
+      "detail": "One click, no review: the page switched to 'Share Your App with Any Workspace' at once. Deactivating later removes the app from other workspaces.",
       "owner": "you",
       "time": "10 min",
       "proof": "tested",
@@ -134,15 +134,15 @@
     },
     {
       "title": "Plan around the rate limit",
-      "detail": "Unlisted apps: conversations.history and conversations.replies at 1 request per minute, limit capped at 15. Use Events API pushes or webhooks instead of polling history.",
+      "detail": "Unlisted apps get 1 request per minute for channel history and thread replies, with the limit setting capped at 15. Use event pushes or webhooks instead of polling history.",
       "owner": "agent",
       "time": "half a day",
       "proof": "docs",
       "link": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps"
     },
     {
-      "title": "Optional: Marketplace review",
-      "detail": "Needs 10 active workspaces (28 days), a privacy policy, support within 2 business days, and scope justifications. Preliminary review up to 10 business days; functional review up to 10 weeks.",
+      "title": "Apply for Marketplace review (optional)",
+      "detail": "Review is a 5-step submission needing 10 active workspaces (28 days), a privacy policy, support within 2 business days and scope justifications. Preliminary review takes up to 10 business days; functional review up to 10 weeks.",
       "owner": "you",
       "time": "2-3 months",
       "proof": "docs",
@@ -157,40 +157,40 @@
       "proof": "tested"
     },
     {
-      "title": "1 request per minute on conversations.history",
-      "fix": "Applies to new unlisted commercial apps and new installs after 29 May 2025. Marketplace approval removes it. Existing installs and internal customer-built apps are exempt. Design for event pushes, not history polling.",
+      "title": "Channel history is limited to 1 request per minute",
+      "fix": "It hits new unlisted commercial apps and installs after 29 May 2025. Marketplace approval removes it, and existing installs and internal customer-built apps are exempt.",
       "proof": "docs"
     },
     {
-      "title": "Cannot submit to Marketplace yet",
-      "fix": "Slack wants at least 10 active workspaces (used in the last 28 days) before you can submit. Run as unlisted first.",
+      "title": "You can't submit to Marketplace yet",
+      "fix": "Slack wants at least 10 active workspaces (used in the last 28 days) before you submit. Run as an unlisted app first.",
       "proof": "docs"
     },
     {
-      "title": "Workspace admin approval",
-      "fix": "Some workspaces require admin approval of installs, and admins judge the scopes. Keep scopes minimal and explain each one.",
+      "title": "Workspace admins must approve your install",
+      "fix": "Some workspaces require admin approval, and admins judge your scopes. Keep scopes minimal and explain each one.",
       "proof": "docs"
     },
     {
-      "title": "http redirect rejected",
-      "fix": "Redirect URLs and redirect_uri must be https. No localhost exception is documented. Use an https tunnel in development.",
+      "title": "Slack rejects your http redirect address",
+      "fix": "Redirect addresses must be https, and no localhost exception is documented. Use an https tunnel in development.",
       "proof": "docs"
     },
     {
-      "title": "Rotation cannot be undone",
-      "fix": "Once token rotation is on it can't be turned off. Build refresh and save the new refresh token on every refresh.",
+      "title": "Token rotation can't be undone",
+      "fix": "Once rotation is on, you can't turn it off. Build in refresh, and save the new refresh token every time.",
       "proof": "docs"
     },
     {
       "title": "Marketplace rejects broad scopes",
-      "fix": "Legacy or restricted scopes and scopes giving broad workspace data access are not accepted. Justify each scope in writing.",
+      "fix": "Slack doesn't accept legacy or restricted scopes, or scopes that give broad workspace data access. Justify each scope in writing.",
       "proof": "docs"
     }
   ],
   "agentCan": [
-    "Write the OAuth install flow with state and per-workspace token storage",
-    "Implement token rotation and refresh",
-    "Replace history polling with Events API handlers",
+    "Write the install flow with a state value and per-workspace token storage",
+    "Add token rotation and refresh",
+    "Replace history polling with event handlers",
     "Draft scope justifications for Marketplace review",
     "Run the pre-submission checks"
   ],
@@ -199,7 +199,7 @@
     "Click Activate Public Distribution",
     "Provide a privacy policy and a support channel",
     "Supply a test account and optional demo video for review",
-    "Workspace admins at customers approve installs where required"
+    "Your customers' workspace admins approve installs where required"
   ],
   "drafts": [
     {
@@ -281,5 +281,43 @@
       "caption": "Our test sign-in: every scope granted; bot and user tokens don't expire"
     }
   ],
-  "checked": "21 Oct 2026"
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Create and install the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 10 minutes"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "1-2 hours"
+    },
+    {
+      "label": "Activate public distribution",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 1 hour"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      2,
+      3
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
 }

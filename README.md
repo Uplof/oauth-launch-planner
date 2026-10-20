@@ -11,6 +11,7 @@ This tool answers that question first. Describe your product (or name one app) a
 - **A launch plan:** the slowest step first, every step marked *agent does this*, *you do this* or *wait for the provider*.
 - **The permissions your agent needs**, and the review level each one triggers. Untick "read email" and watch a 10-week security audit drop to a 2-week review.
 - **Blockers and fixes**, **paperwork drafts** (scope justifications, form values, demo video script), a **readiness check** of your website the way a reviewer would look at it, a **test sign-in**, and the **evidence**.
+- **A timeline:** day by day, what you do, what an agent does, and how long you wait on the provider. A chart compares all 20 apps.
 - **A proof label on every claim:** *tested* (we did it), *official docs* (linked), *community* (forum or blog), or *not confirmed*.
 
 For an app without a guide, a **live research agent** searches the provider's docs, writes the guide, fact-checks the key claims against their source pages, and saves it with a shareable link.
@@ -33,7 +34,7 @@ The pain is not the OAuth code. It is three things the provider docs spread acro
 | Verdict first | The first question is "can I launch this month?". Everything else is detail under it. |
 | Actions decide difficulty, not the app | Gmail is easy or very hard depending on one scope. The permissions picker makes that visible and lets you trade a feature for weeks. |
 | Proof label on every line | Provider rules change. A guide is only useful if you can see which parts were tried, which are cited, and which are guesses. |
-| Six deep guides, one per kind of path | GitHub (instant), Slack (self-serve, optional marketplace review), Notion (public integration), Gmail (security review), LinkedIn (approved partners only), X (paid access tiers). Together they cover the shapes most providers take. |
+| 20 guides, 4 tested by hand | Gmail, GitHub, Slack and Notion are tested end to end. The other 16 (HubSpot, Salesforce, Zoom, Google Workspace, Outlook, Calendly, Canvas, Canva, HighLevel, Shopify, Dropbox, Figma, Jira, Asana, LinkedIn, X) are researched from official docs, every claim labelled. Together they cover every shape of path: instant, self-serve, review, security audit, admin-only, partners only. |
 | Real setup attempts, kept | Test apps on Google, GitHub, Slack and Notion were created and signed in through, every step screenshotted. The apps are kept as proof. |
 | A checker after the writer | The research agent's first draft is a claim, not a fact. A second pass reopens each source and downgrades what it cannot confirm. |
 | Built for coding agents too | Every guide is JSON at `/api/plan`, and an MCP endpoint at `/api/mcp` lets Claude Code or Cursor fetch a plan inside the editor. |
@@ -80,7 +81,8 @@ The evidence page (`/evidence`) lists every test, timing and correction.
 
 ## Limits
 
-- **Four of six guides are hands-on tested** (Gmail, GitHub, Slack, Notion). LinkedIn and X stay docs-only, because real access needs partner approval or a paid tier.
+- **Four of 20 guides are hands-on tested** (Gmail, GitHub, Slack, Notion). The other 16 are researched only; LinkedIn and X would need partner approval or a paid tier to test.
+- **Timelines are planning estimates**, worked out from each guide's own step times and published review waits; where a provider publishes no wait, the chart shows it as not published.
 - **Review times are what providers publish**, not measured. Real waits vary.
 - **Live research runs on free AI tiers** (Groq, with Gemini as backup). A run uses roughly 150–200K tokens across its searches, so the free daily allowance covers only a handful of new runs; saved guides cost nothing. Each visitor gets 3 new research runs a day; saved and library guides are always free.
 - **The readiness check reads your public pages**; it cannot judge branding or whether your privacy policy is legally sufficient.

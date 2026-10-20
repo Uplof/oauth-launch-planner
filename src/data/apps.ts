@@ -41,6 +41,23 @@ export interface Draft {
   body: string
 }
 
+// A day-by-day plan: what happens when, and who it waits on.
+export interface Phase {
+  label: string
+  owner: Owner
+  when: string // e.g. "Day 1", "Days 2-12"
+  duration: string // e.g. "about 2 hours", "3-5 business days"
+  wait?: boolean // waiting on the provider or a customer, not your own work
+  milestone?: boolean // a point in time, e.g. "Real users can connect"
+}
+
+// Typical time for the cross-app chart. waitDays is [0, 0] when there is no review; null when nobody publishes it.
+export interface Typical {
+  setupHours: [number, number]
+  waitDays: [number, number] | null
+  toRealUsers: string
+}
+
 export interface AppGuide {
   slug: string
   name: string
@@ -63,6 +80,8 @@ export interface AppGuide {
   unconfirmed: string[]
   screenshots: { src: string; caption: string }[]
   checked: string
+  timeline?: Phase[]
+  typical?: Typical
 }
 
 
@@ -76,3 +95,6 @@ export const APPS: AppGuide[] = Object.values(files).sort((a, b) => {
 })
 
 export const getApp = (slug: string) => APPS.find((a) => a.slug === slug)
+
+// A guide counts as tested once any key claim comes from our own hands-on test.
+export const isTested = (g: AppGuide) => [g.firstTest, g.production, g.approvalWait, g.whoCanRegister, g.testMode].some((c) => c.proof === "tested")

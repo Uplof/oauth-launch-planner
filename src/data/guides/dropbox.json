@@ -1,0 +1,301 @@
+{
+  "slug": "dropbox",
+  "name": "Dropbox",
+  "category": "File storage",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: test today, but Dropbox reviews only after 50 users link, and the app freezes if unapproved after two weeks.",
+  "firstTest": {
+    "text": "About 30 minutes to sign in with your own account: create the app, tick permissions, add a redirect address, ask for offline access.",
+    "proof": "docs",
+    "source": "https://docs.dropboxapi.com/dropbox-api/docs/oauth"
+  },
+  "production": {
+    "text": "A new app links only your account until you enable users (up to 500). At 50 linked, you have two weeks to get production status.",
+    "proof": "docs",
+    "source": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+  },
+  "approvalWait": {
+    "text": "Dropbox says it answers nearly all requests within a few business days. It won't review until 50 users link, unless you use 'Request early review'.",
+    "proof": "docs",
+    "source": "https://www.dropbox.com/developers/support"
+  },
+  "whoCanRegister": {
+    "text": "The App Console needs a Dropbox login. Review checks branding, terms and access scope. You need an icon and description. The name locks after approval.",
+    "proof": "docs",
+    "source": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+  },
+  "testMode": {
+    "text": "Development works like production, except only your account can connect until you enable users, up to 500. The two-week deadline starts at 50 linked users. Tokens last about 4 hours (14,400 seconds in one sample), so ask for offline access to get a refresh token.",
+    "proof": "docs",
+    "source": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+  },
+  "actions": [
+    {
+      "id": "account-info",
+      "label": "Identify the connected Dropbox user",
+      "scope": "account_info.read",
+      "level": "basic",
+      "review": "None before production. It is on by default for user-linked apps, which need it to register.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "list-files",
+      "label": "List folders and read file names, sizes and dates",
+      "scope": "files.metadata.read",
+      "level": "basic",
+      "review": "None in development. Production review checks you ask for no more than you use.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "read-files",
+      "label": "Download and read file contents",
+      "scope": "files.content.read",
+      "level": "sensitive",
+      "review": "No separate approval documented. Full Dropbox access gets extra scrutiny at production review unless you justify it. Use an app folder if you can.",
+      "proof": "docs",
+      "timeToLive": "same day in development; production review comes after 50 users"
+    },
+    {
+      "id": "write-files",
+      "label": "Upload or change files for the user",
+      "scope": "files.content.write",
+      "level": "sensitive",
+      "review": "Same production review as other permissions. Each API call lists the permission it needs, and calls without it return an error.",
+      "proof": "docs",
+      "timeToLive": "same day in development; production review comes after 50 users"
+    },
+    {
+      "id": "shared-links",
+      "label": "Read sharing settings and shared links",
+      "scope": "sharing.read",
+      "level": "sensitive",
+      "review": "Same production review. Request it only if your agent needs it.",
+      "proof": "community",
+      "timeToLive": "same day in development; production review comes after 50 users"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create the app",
+      "detail": "Sign in at dropbox.com/developers/apps and create a scoped app. Pick 'App folder' (one dedicated folder) over 'Full Dropbox' if you can, and keep 'Dropbox' and 'drop' out of the name.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+    },
+    {
+      "title": "Tick permissions",
+      "detail": "On the 'Permissions' tab, tick only what your agent calls, such as reading file names and file contents. These set the most the app can ask for; you can ask for fewer when users sign in.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://dropbox.tech/developers/customizing-scopes-in-oauth-flow"
+    },
+    {
+      "title": "Add redirect addresses",
+      "detail": "Add each callback URL in the App Console. Dropbox checks that the redirect address you send matches a registered one, so copy the app key and secret into your server secrets.",
+      "owner": "you",
+      "time": "3 min",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/oauth"
+    },
+    {
+      "title": "Build the sign-in redirect",
+      "detail": "Send users to the authorize page asking for a code and offline access, plus the extra security check most libraries handle (a 43 to 128 character verifier). Ask for fewer permissions here if you want.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/oauth"
+    },
+    {
+      "title": "Swap the code for tokens",
+      "detail": "Send the code to Dropbox from your server. Save the short-lived access token with its expiry time, and the refresh token, which stays valid until the user revokes it.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/oauth"
+    },
+    {
+      "title": "Refresh expired tokens",
+      "detail": "When the access token expires or a call returns 401, ask for a new one using the refresh token plus your app key and secret. The official SDKs can do this for you.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://dropbox.tech/developers/migrating-app-permissions-and-access-tokens"
+    },
+    {
+      "title": "Enable additional users",
+      "detail": "On the app info page in the App Console, enable more users, up to 500 in total. Watch the count: the two-week production deadline starts when 50 users have linked.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+    },
+    {
+      "title": "Check branding before applying",
+      "detail": "Your app name must not include 'Dropbox' or a Dropbox product name, or look or sound like one. The logo must not resemble Dropbox imagery, and marketing must not suggest a partnership.",
+      "owner": "you",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/branding-guide"
+    },
+    {
+      "title": "Apply for production",
+      "detail": "On the app info page, apply for production with an icon, a thorough description, how you use the API, and any planned features needing broader access. Use 'Request early review' with evidence if you need approval before 50 users.",
+      "owner": "you",
+      "time": "30 min to apply, then a few business days",
+      "proof": "docs",
+      "link": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "App freezes after 50 linked users",
+      "fix": "Two weeks after the 50th user links, no more can join until you get production status. Unlinking users does not unfreeze it, so apply before 50, or soon after.",
+      "proof": "docs"
+    },
+    {
+      "title": "Production application is rejected",
+      "fix": "Documented reasons are branding or terms breaches, asking for broader access than the app needs, and disallowed categories. Narrow your permissions, use 'App folder' over 'Full Dropbox' if you can, and fix the name and logo.",
+      "proof": "docs"
+    },
+    {
+      "title": "Users get disconnected after a few hours",
+      "fix": "Access tokens are short-lived. Ask for offline access when you send users to authorize, to get a refresh token, then refresh when the token expires or a call returns 401.",
+      "proof": "docs"
+    },
+    {
+      "title": "Redirect address mismatch error",
+      "fix": "Register the exact redirect address in the App Console. The one in your authorize link must match a registered one.",
+      "proof": "docs"
+    },
+    {
+      "title": "You need more permissions later",
+      "fix": "Permissions enabled in the console set the maximum. Enable the new one there, then send users through sign-in again; including earlier grants saves you relisting the old ones.",
+      "proof": "docs"
+    },
+    {
+      "title": "You want a new app name after approval",
+      "fix": "The name cannot change once the app has production status. Choose it carefully before you apply.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the authorize redirect with offline access, the extra security check and a narrower permission list",
+    "Swap the code for tokens, store both, and refresh before expiry or on a 401",
+    "Pick the narrowest permissions and choose between app folder and Full Dropbox",
+    "Count linked users and warn you before the 50 user mark",
+    "Draft the production application text and check your name and logo against the branding rules"
+  ],
+  "youDo": [
+    "Sign in to Dropbox and create the app in the App Console",
+    "Tick the permissions and add redirect addresses",
+    "Enable additional users for testers",
+    "Apply for production status and upload the app icon",
+    "Reply if Dropbox asks questions about the app",
+    "Sign in as a test user and approve the consent screen"
+  ],
+  "drafts": [
+    {
+      "title": "Production application: how your app uses the API",
+      "body": "[Product name] is an AI assistant that helps [type of user] work with their Dropbox files. After a user connects, it lists their [app folder / folders] and reads files they ask about, to summarise or search them. It uses files.metadata.read and files.content.read only. It does not write, share or delete files. Tokens are stored encrypted, users can disconnect from Settings, and disconnecting deletes the stored tokens. [Add planned features that need broader access, if any.]"
+    },
+    {
+      "title": "Early review request (before 50 users)",
+      "body": "We have [N] users linked and a launch on [date] that will exceed 50. Our app follows the Dropbox branding guide and uses the narrowest permission, [App folder / Full Dropbox because ...]. We ask for early review so launch does not hit the two-week freeze. Test account: [email]. Screenshots of the consent flow: [link]."
+    },
+    {
+      "title": "Explainer shown before the Dropbox screen",
+      "body": "[Product name] will ask Dropbox for permission to see [your app folder / your files]. We read files only when you ask. You can disconnect any time here, or remove access in Dropbox under Settings, Connected apps."
+    }
+  ],
+  "sources": [
+    {
+      "title": "DBX Platform developer guide",
+      "url": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/developer-guide"
+    },
+    {
+      "title": "Dropbox OAuth guide",
+      "url": "https://docs.dropboxapi.com/dropbox-api/docs/oauth"
+    },
+    {
+      "title": "Developer branding guide",
+      "url": "https://docs.dropboxapi.com/dropbox-api/docs/developer-resources/branding-guide"
+    },
+    {
+      "title": "Dropbox developer support",
+      "url": "https://www.dropbox.com/developers/support"
+    },
+    {
+      "title": "Migrating app permissions and access tokens",
+      "url": "https://dropbox.tech/developers/migrating-app-permissions-and-access-tokens"
+    },
+    {
+      "title": "Customizing scopes in the OAuth flow",
+      "url": "https://dropbox.tech/developers/customizing-scopes-in-oauth-flow"
+    },
+    {
+      "title": "django-storages Dropbox backend (sample token response)",
+      "url": "https://django-storages.readthedocs.io/en/1.14.5/backends/dropbox.html"
+    }
+  ],
+  "unconfirmed": [
+    "The exact access token lifetime in Dropbox's own docs. The OAuth page says only 'short-lived' and says to read expires_in. The 4 hour figure comes from a sample response (expires_in 14400) in a third-party library's docs.",
+    "Whether a user cap of 50 applies in development. The developer guide says 500 users can link, with a two-week approval deadline once 50 have linked. We treat 50 as the practical limit.",
+    "Whether sharing.read and files.content.write need any extra review. The Dropbox pages we opened list no per-scope review. The sharing.read description comes from third-party docs.",
+    "Whether the Dropbox pages list the full scope table. We could not open the API reference page that lists every scope, so only the scopes named in the Dropbox blog posts and the third-party descriptions are shown.",
+    "Who can create an app. The App Console page we opened showed only a login prompt, and no page we opened states any account requirement.",
+    "Whether 'a few business days' is still the real turnaround today. The support page states it but is undated."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 15 minutes"
+    },
+    {
+      "label": "Build the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 2.5 hours"
+    },
+    {
+      "label": "Turn on outside users",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "a few minutes, up to 500 users"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    },
+    {
+      "label": "Production review, due once 50 users link",
+      "owner": "provider",
+      "when": "Within 2 weeks of 50 users",
+      "duration": "a few business days",
+      "wait": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      3,
+      4
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
+}

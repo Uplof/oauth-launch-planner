@@ -1,0 +1,321 @@
+{
+  "slug": "highlevel",
+  "name": "HighLevel",
+  "category": "CRM & marketing",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "Moderate: a private app works same day for 5 agencies; more needs a public review (10 business days per changelog).",
+  "firstTest": {
+    "text": "Same day for a private app installed in your own agency or sub-account. Private apps go live with no review.",
+    "proof": "docs",
+    "source": "https://marketplace.gohighlevel.com/docs/oauth/HowToUpdateYourAPP/"
+  },
+  "production": {
+    "text": "Private apps allow 5 agencies; at 6, installs are blocked until you go public or pass a Security Review. Public apps need Marketplace approval.",
+    "proof": "docs",
+    "source": "https://marketplace.gohighlevel.com/docs/MarketplacePolicies/PrivateAppInstallLimits.md"
+  },
+  "approvalWait": {
+    "text": "None for private apps. Public apps: a 2023 changelog says 10 business days, a third-party guide says 7 to 14. Current guidelines give no timeline.",
+    "proof": "docs",
+    "source": "https://ideas.gohighlevel.com/changelog/marketplace-updates-introducing-review-functionality-for-apps"
+  },
+  "whoCanRegister": {
+    "text": "Anyone can create an app. Public listing needs review and a Loom demo. OAuth needs Advanced API access, on the Agency Pro plan.",
+    "proof": "docs",
+    "source": "https://marketplace.gohighlevel.com/docs/oauth/AppReviewGuidelines.md"
+  },
+  "testMode": {
+    "text": "Private apps allow 5 agencies (made since 18 Nov 2025). Limits: 100 requests per 10 seconds, 200,000 a day. Access lasts 24 hours.",
+    "proof": "docs",
+    "source": "https://marketplace.gohighlevel.com/docs/other/rate-limits.md"
+  },
+  "actions": [
+    {
+      "id": "contacts",
+      "label": "Read and create contacts in a sub-account",
+      "scope": "contacts.readonly, contacts.write",
+      "level": "sensitive",
+      "review": "Public review checks each scope is justified. Asking for too many is a listed rejection reason.",
+      "proof": "docs",
+      "timeToLive": "private: same day. public: review wait"
+    },
+    {
+      "id": "conversations",
+      "label": "Read and send messages in conversations",
+      "scope": "conversations.readonly, conversations/message.readonly, conversations/message.write",
+      "level": "sensitive",
+      "review": "Same public review. Be ready to explain in the demo why you need message access.",
+      "proof": "docs",
+      "timeToLive": "private: same day. public: review wait"
+    },
+    {
+      "id": "calendar",
+      "label": "Read calendars and book appointments",
+      "scope": "calendars.readonly, calendars.write, calendars/events.readonly, calendars/events.write",
+      "level": "sensitive",
+      "review": "Same public review.",
+      "proof": "docs",
+      "timeToLive": "private: same day. public: review wait"
+    },
+    {
+      "id": "opportunities",
+      "label": "Read and update pipeline opportunities",
+      "scope": "opportunities.readonly, opportunities.write",
+      "level": "sensitive",
+      "review": "Same public review.",
+      "proof": "docs",
+      "timeToLive": "private: same day. public: review wait"
+    },
+    {
+      "id": "agency-level",
+      "label": "Manage sub-accounts and users at agency level",
+      "scope": "locations.readonly, locations.write, users.readonly, users.write",
+      "level": "restricted",
+      "review": "These are agency-level scopes, so use an agency (Company) token. Review will ask why you need agency access.",
+      "proof": "docs",
+      "timeToLive": "private: same day. public: review wait"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Sign up as a developer",
+      "detail": "Go to the HighLevel Marketplace and sign in to your developer account. Signup steps and cost weren't documented on the pages we opened.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/oauth/CreateMarketplaceApp"
+    },
+    {
+      "title": "Create a private app",
+      "detail": "Go to 'My Apps', then 'Create App', and fill in the name, type, target user, who can install and listing type. HighLevel suggests Sub-account as target user, 'Both Agency and Sub-account' for installs, and starting Private.",
+      "owner": "you",
+      "time": "10 min",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0"
+    },
+    {
+      "title": "Set scopes and redirect address",
+      "detail": "In 'Advanced Settings', then 'Auth', add the fewest scopes and an HTTPS redirect address that matches your flow exactly. Create a client key and copy the Client Secret right away; it isn't shown again.",
+      "owner": "you",
+      "time": "15 min",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/oauth/CreateMarketplaceApp"
+    },
+    {
+      "title": "Build the install flow",
+      "detail": "An admin opens your Installation URL and picks an account, then HighLevel sends them to your redirect address with a one-time code. Swap that code for tokens on your server.",
+      "owner": "agent",
+      "time": "2 hr",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0"
+    },
+    {
+      "title": "Store and rotate tokens",
+      "detail": "Save the access token (about 24 hours), refresh token (up to a year), token type and agency or location ID. A refresh token works once and returns a new one, so save each new one.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0"
+    },
+    {
+      "title": "Handle agency and location tokens",
+      "detail": "An agency token runs agency APIs; a location token runs sub-account APIs. To act on one sub-account with an agency token, request a location token with your agency and location IDs.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0"
+    },
+    {
+      "title": "Respect rate limits",
+      "detail": "Limits are 100 requests per 10 seconds and 200,000 per day, per app and per sub-account or agency. Read the rate limit headers instead of counting yourself.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/other/rate-limits.md"
+    },
+    {
+      "title": "Test real installs",
+      "detail": "Install the private app into test sub-accounts. The cap counts agencies, not sub-accounts: you see a warning at 4 to 5, and installs are blocked at 6.",
+      "owner": "you",
+      "time": "1 to 2 days",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/MarketplacePolicies/PrivateAppInstallLimits.md"
+    },
+    {
+      "title": "Prepare listing and demo",
+      "detail": "Write the name, description, costs and setup needs, and add real screenshots and a support email or phone. The Loom demo is the last submission step: show install, setup, main function, the third-party connection, errors, and uninstall.",
+      "owner": "you",
+      "time": "half a day",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/oauth/AppReviewGuidelines.md"
+    },
+    {
+      "title": "Go public and submit",
+      "detail": "Switch to Public and submit to Marketplace review; updates go live only after approval. If rejected, you get the reasons; fix them and resubmit. Only one Draft or Disapproved version can exist at a time.",
+      "owner": "you",
+      "time": "1 hr to submit, then review wait",
+      "proof": "docs",
+      "link": "https://marketplace.gohighlevel.com/docs/oauth/HowToUpdateYourAPP/",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Private app stops taking installs at the sixth agency",
+      "fix": "Private apps made since 18 November 2025 allow 5 agencies. Go public, or request a Security Review with a demo video, a scopes-justification video and a written reason the app must stay private.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review rejects you for too many scopes",
+      "fix": "Request only scopes you use and be ready to justify each one. A third-party guide calls over-requesting the top cause of rejection, and HighLevel's guidelines list it as a reason to reject.",
+      "proof": "community"
+    },
+    {
+      "title": "Review rejects HighLevel branding",
+      "fix": "Don't use HighLevel or GHL logos without authorization. Unofficial integrations need a visible disclaimer, white-label apps must show no HighLevel branding, and listing text should avoid 'sub-account' and 'agency'.",
+      "proof": "docs"
+    },
+    {
+      "title": "Review says your demo doesn't match the app",
+      "fix": "Core functionality must be complete and testable in the submitted version, with no undocumented setup. Re-record the Loom if the app or flow changed.",
+      "proof": "docs"
+    },
+    {
+      "title": "Refresh token lost after a failed refresh",
+      "fix": "A refresh token stops working once used. Save the new one atomically, and lock the refresh so two workers don't use the same token.",
+      "proof": "docs"
+    },
+    {
+      "title": "A busy sub-account hits limits",
+      "fix": "Limits are 100 per 10 seconds and 200,000 per day for each app and sub-account. Queue calls and slow down when the remaining-requests header runs low.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the install redirect, code swap and token refresh with safe rotation",
+    "Turn an agency token into a location token for a chosen sub-account",
+    "Queue API calls under the burst and daily limits using the rate limit headers",
+    "Draft the listing copy, scope justifications and Loom script",
+    "Check the app against the review guidelines before you submit"
+  ],
+  "youDo": [
+    "Create the developer account and the app, and copy the client secret",
+    "Install the app into a test sub-account and sign in as an admin",
+    "Record the Loom demo and submit the app for review",
+    "Provide a support email or phone and legal pages if asked",
+    "Verify your domain and identity if HighLevel requests it"
+  ],
+  "drafts": [
+    {
+      "title": "Listing description",
+      "body": "[Product name] is an AI assistant for [agency or business type]. It connects to your HighLevel sub-account to [read and create contacts / reply to conversations / book appointments]. You approve access when you install, and you can uninstall at any time. Requires: [your own account, plan, any cost]. Setup takes about [N] minutes. Support: [email]. This app is not affiliated with or endorsed by HighLevel."
+    },
+    {
+      "title": "Loom demo script",
+      "body": "1. Show the install from the Installation URL and pick a sub-account. 2. Show setup in our app. 3. Run the main task, for example: ask the assistant to add a contact and show it in HighLevel. 4. Show what happens if the user denies access or a call fails. 5. Show disconnect and uninstall, and say what data we delete. Keep it short and narrate each step."
+    },
+    {
+      "title": "Scope justification",
+      "body": "contacts.write: creates contacts the user asks the assistant to add. contacts.readonly: finds an existing contact before creating a duplicate. conversations/message.write: sends a reply the user approved. We do not request any scope we do not use, and we do not store HighLevel data after uninstall."
+    }
+  ],
+  "sources": [
+    {
+      "title": "HighLevel: OAuth 2.0",
+      "url": "https://marketplace.gohighlevel.com/docs/Authorization/OAuth2.0"
+    },
+    {
+      "title": "HighLevel: Create a Marketplace app",
+      "url": "https://marketplace.gohighlevel.com/docs/oauth/CreateMarketplaceApp"
+    },
+    {
+      "title": "HighLevel: Publishing your app (App Review Guidelines)",
+      "url": "https://marketplace.gohighlevel.com/docs/oauth/AppReviewGuidelines.md"
+    },
+    {
+      "title": "HighLevel: Private app distribution limit",
+      "url": "https://marketplace.gohighlevel.com/docs/MarketplacePolicies/PrivateAppInstallLimits.md"
+    },
+    {
+      "title": "HighLevel: How to update your app",
+      "url": "https://marketplace.gohighlevel.com/docs/oauth/HowToUpdateYourAPP/"
+    },
+    {
+      "title": "HighLevel: Rate limits",
+      "url": "https://marketplace.gohighlevel.com/docs/other/rate-limits.md"
+    },
+    {
+      "title": "HighLevel: Scopes",
+      "url": "https://marketplace.gohighlevel.com/docs/Authorization/Scopes"
+    },
+    {
+      "title": "HighLevel changelog: review functionality for apps",
+      "url": "https://ideas.gohighlevel.com/changelog/marketplace-updates-introducing-review-functionality-for-apps"
+    },
+    {
+      "title": "HighLevel help centre: API documentation",
+      "url": "https://help.gohighlevel.com/support/solutions/articles/48001060529-highlevel-api-documentation"
+    },
+    {
+      "title": "Navigating the HighLevel App Marketplace (third-party guide)",
+      "url": "https://hiregohighleveldeveloper.com/blog/navigating-the-highlevel-app-marketplace/"
+    }
+  ],
+  "unconfirmed": [
+    "The current public review wait. The 10 business days is from a 2023 changelog post. The 7 to 14 business day range is a third-party blog. The current guidelines page gives no timeline.",
+    "How developer account signup works and whether it costs anything. The pages we opened do not say.",
+    "Whether the Agency Pro plan requirement for OAuth applies to you as the developer, to installing users, or both. The help centre says OAuth needs Advanced API access on Agency Pro.",
+    "Whether reviewers get test credentials. The guidelines only require the Loom demo and a complete, testable app.",
+    "What response a rate-limited call gets. The rate limit page lists headers but does not describe a 429 reply.",
+    "Whether private apps created before 18 November 2025 have any cap. The policy covers apps created on or after that date.",
+    "The access token lifetime is stated as 86,399 or 86,400 seconds in the two samples, so 'about 24 hours' is used."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up and build",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 6 hours"
+    },
+    {
+      "label": "Test real installs",
+      "owner": "you",
+      "when": "Days 2-3",
+      "duration": "1-2 days"
+    },
+    {
+      "label": "Prepare listing and submit",
+      "owner": "you",
+      "when": "Days 3-4",
+      "duration": "about half a day plus 1 hour"
+    },
+    {
+      "label": "Marketplace review",
+      "owner": "provider",
+      "when": "Days 4-18",
+      "duration": "7-14 days (older sources)",
+      "wait": true
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Weeks 2-3",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      19,
+      27
+    ],
+    "waitDays": [
+      7,
+      14
+    ],
+    "toRealUsers": "1-3 weeks"
+  }
+}

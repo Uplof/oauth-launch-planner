@@ -1,0 +1,316 @@
+{
+  "slug": "calendly",
+  "name": "Calendly",
+  "category": "Scheduling",
+  "sample": false,
+  "difficulty": "easy",
+  "headline": "Easy: self-serve with no documented review. Watch for single-use refresh tokens and webhooks that need a paid Calendly plan.",
+  "firstTest": {
+    "text": "Sign up with GitHub or Google, create a Sandbox OAuth app and run the flow on localhost. Calendly documents no approval step.",
+    "proof": "docs",
+    "source": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+  },
+  "production": {
+    "text": "Create a separate Production app with an HTTPS redirect address and its own client ID and secret. Calendly documents no review before other users connect.",
+    "proof": "docs",
+    "source": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+  },
+  "approvalWait": {
+    "text": "None documented. The OAuth app pages describe no review, listing or approval step.",
+    "proof": "unconfirmed"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with a developer account (GitHub or Google login), separate from a Calendly user account. Webhooks and Scheduling API endpoints need a paid plan.",
+    "proof": "docs",
+    "source": "https://calendly.com/help/calendly-api-overview"
+  },
+  "testMode": {
+    "text": "Sandbox allows localhost redirects; Production needs HTTPS. Access lasts 2 hours. Per user: 50 requests a minute (500 paid), 8 token requests a minute.",
+    "proof": "docs",
+    "source": "https://developer.calendly.com/api-docs/overview/rate-limits.md"
+  },
+  "actions": [
+    {
+      "id": "read-events",
+      "label": "Read the user's scheduled events and who booked them",
+      "scope": "scheduled_events:read",
+      "level": "basic",
+      "review": "None documented. Select it when you create the app.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "manage-events",
+      "label": "Add invitees, cancel events, and mark no-shows",
+      "scope": "scheduled_events:write",
+      "level": "basic",
+      "review": "None documented. A write permission includes the matching read permission.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "event-types",
+      "label": "Read event types, available times and availability",
+      "scope": "event_types:read, availability:read",
+      "level": "basic",
+      "review": "None documented.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "booking-links",
+      "label": "Create one-time booking links to hand out",
+      "scope": "scheduling_links:write",
+      "level": "basic",
+      "review": "None documented. Scheduling API endpoints need a paid plan.",
+      "proof": "docs",
+      "timeToLive": "same day, paid plan needed"
+    },
+    {
+      "id": "webhooks",
+      "label": "Get notified when someone books or cancels",
+      "scope": "webhooks:write, plus the read scopes for the events you subscribe to",
+      "level": "basic",
+      "review": "None documented, but webhooks need a paid plan. Organization-level subscriptions need an owner or admin.",
+      "proof": "docs",
+      "timeToLive": "same day, paid plan needed"
+    },
+    {
+      "id": "who-is-user",
+      "label": "Identify the connected user and their organization",
+      "scope": "users:read",
+      "level": "basic",
+      "review": "None documented.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create a developer account",
+      "detail": "Sign up at developer.calendly.com with GitHub or Google. It isn't tied to any Calendly user account.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+    },
+    {
+      "title": "Create the Sandbox app",
+      "detail": "Name it, choose web or native, set the environment to Sandbox and tick the scopes you need. Enter a redirect address; http://localhost is allowed in Sandbox.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+    },
+    {
+      "title": "Copy the client secrets",
+      "detail": "Copy the Client ID, Client Secret and webhook signing key right after creation. You can't view the secret or signing key again, so store them in your hosting settings now.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+    },
+    {
+      "title": "Build the sign-in flow",
+      "detail": "Send users to Calendly's sign-in page with your client ID, redirect address and the extra security check most libraries do for you. Then swap the one-time code for tokens.",
+      "owner": "agent",
+      "time": "A few hours",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/api-docs/calendly-o-auth/o-auth/get-oauth-authorize.md"
+    },
+    {
+      "title": "Handle single-use refresh tokens",
+      "detail": "Each refresh token works once and returns a new pair, so overwrite the stored one every time. If a refresh is rejected, clear the tokens and ask the user to reconnect. Access lasts 2 hours.",
+      "owner": "agent",
+      "time": "An hour",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/refresh-token-rotation-guide.md"
+    },
+    {
+      "title": "Test in Sandbox",
+      "detail": "Connect a test Calendly account and read events. Refresh twice in a row to confirm the first refresh token is rejected when reused.",
+      "owner": "agent",
+      "time": "An hour",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/refresh-token-rotation-guide.md"
+    },
+    {
+      "title": "Create the Production app",
+      "detail": "Create a new app with environment Production and an HTTPS redirect address, as Calendly recommends before you use customer data. Copy its new client ID, secret and signing key into your production settings.",
+      "owner": "you",
+      "time": "Minutes",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+    },
+    {
+      "title": "Add webhooks if needed",
+      "detail": "Subscribe through the API to booking, cancellation or routing form events. Your app needs the matching read permissions, and the user needs a paid plan.",
+      "owner": "agent",
+      "time": "A few hours",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/docs/api-guides/receive-data-from-scheduled-events-in-real-time-with-webhook-subscriptions.md"
+    },
+    {
+      "title": "Respect rate limits",
+      "detail": "Watch the rate limit headers. After a 'too many requests' error, wait for the reset (usually 60 seconds) and back off. Creating invitees has a stricter limit, and trial accounts get 5 a day.",
+      "owner": "agent",
+      "time": "Under an hour",
+      "proof": "docs",
+      "link": "https://developer.calendly.com/api-docs/overview/rate-limits.md"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Users are disconnected after one refresh",
+      "fix": "Refresh tokens work once. If two requests refresh at the same time, or you keep an older token, the second one fails. Refresh one request at a time per user, save the new token before using the new access token, and ask the user to reconnect on failure.",
+      "proof": "docs"
+    },
+    {
+      "title": "Webhooks fail or never fire",
+      "fix": "You need a paid Calendly plan, the right read permissions on your app, and an owner or admin for organization-level subscriptions. Routing form submissions work only at organization level.",
+      "proof": "docs"
+    },
+    {
+      "title": "Production rejects your redirect address",
+      "fix": "Production redirect addresses must be HTTPS; only Sandbox allows http://localhost. Match the address exactly to what you registered.",
+      "proof": "docs"
+    },
+    {
+      "title": "Free-plan users hit limits fast",
+      "fix": "Free accounts get 50 requests per user per minute, against 500 on paid plans. Cache event lists, and queue agent calls instead of looping.",
+      "proof": "docs"
+    },
+    {
+      "title": "You lost the client secret",
+      "fix": "The secret and signing key show only once and can't be viewed when you edit the app. Create a new app and update your settings.",
+      "proof": "docs"
+    },
+    {
+      "title": "Booking-link features fail for a customer",
+      "fix": "Webhooks and Scheduling API endpoints need a paid plan on the user's account. Check the plan before offering them, and tell users what's missing.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the sign-in flow with the extra security check, token swap and a per-user locked refresh",
+    "Store the Client ID, secret and signing key, keeping Sandbox and Production apart",
+    "Subscribe to webhooks, check their signatures and handle cancellations and reschedules",
+    "Back off on 'too many requests' errors using the rate limit headers",
+    "Spot a rejected refresh and show a reconnect prompt"
+  ],
+  "youDo": [
+    "Sign up for the Calendly developer account with GitHub or Google",
+    "Create the Sandbox and Production apps and copy the secrets the one time they are shown",
+    "Provide a paid Calendly account for testing webhooks",
+    "Connect a Calendly account as a test user and approve the consent screen",
+    "Host the Production redirect address over HTTPS"
+  ],
+  "drafts": [
+    {
+      "title": "Consent explainer before the Calendly screen",
+      "body": "[Product name] will ask Calendly for permission to see your scheduled events and who booked them, and to create booking links or cancel events when you ask. We never change your availability without you approving it. You can disconnect any time from Settings in [Product name]."
+    },
+    {
+      "title": "Reconnect prompt after a failed refresh",
+      "body": "Your Calendly connection has stopped working. This can happen when access is revoked or expires. Choose Reconnect and sign in to Calendly again to continue."
+    },
+    {
+      "title": "Note to customers about Calendly plans",
+      "body": "Live booking updates (webhooks) and booking-link creation need a paid Calendly plan. If your account is on the free plan, [Product name] will still show your events, but updates arrive when we check, not instantly."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Creating an OAuth app",
+      "url": "https://developer.calendly.com/docs/authentication/creating-an-oauth-app.md"
+    },
+    {
+      "title": "Authentication overview (PAT vs OAuth)",
+      "url": "https://developer.calendly.com/docs/authentication/overview.md"
+    },
+    {
+      "title": "Authorization scopes",
+      "url": "https://developer.calendly.com/docs/authentication/scopes.md"
+    },
+    {
+      "title": "Single-use refresh tokens guide",
+      "url": "https://developer.calendly.com/docs/authentication/refresh-token-rotation-guide.md"
+    },
+    {
+      "title": "OAuth API: Get access token",
+      "url": "https://developer.calendly.com/api-docs/calendly-o-auth/o-auth/post-oauth-refresh-token.md"
+    },
+    {
+      "title": "OAuth API: Get authorization code",
+      "url": "https://developer.calendly.com/api-docs/calendly-o-auth/o-auth/get-oauth-authorize.md"
+    },
+    {
+      "title": "Create webhook subscriptions guide",
+      "url": "https://developer.calendly.com/docs/api-guides/receive-data-from-scheduled-events-in-real-time-with-webhook-subscriptions.md"
+    },
+    {
+      "title": "Rate limits",
+      "url": "https://developer.calendly.com/api-docs/overview/rate-limits.md"
+    },
+    {
+      "title": "Personal access tokens",
+      "url": "https://developer.calendly.com/docs/authentication/how-to-authenticate-with-personal-access-tokens.md"
+    },
+    {
+      "title": "Calendly API overview (help center, plan requirements)",
+      "url": "https://calendly.com/help/calendly-api-overview"
+    },
+    {
+      "title": "Calendly developer getting started",
+      "url": "https://developer.calendly.com/getting-started"
+    }
+  ],
+  "unconfirmed": [
+    "Whether Calendly reviews Production apps. No page we opened mentions a review, listing or approval, and the absence of one in the docs is not proof that none exists.",
+    "Whether Sandbox apps can connect to real Calendly accounts or only to test data, and whether Sandbox uses a different authorization host. The authorization page gives only auth.calendly.com.",
+    "Whether a connecting user's plan or the developer's plan decides webhook access. The help center says webhooks and Scheduling API endpoints need a paid plan but does not say whose.",
+    "How long a refresh token lives if it is never used. One API page says refresh tokens do not expire until they are used. The rotation guide gives no lifetime.",
+    "Whether the August 31, 2026 rotation deadline has already made single-use refresh tokens mandatory for all older apps. The guide says the grace period will end and gives no further date.",
+    "Any cap on the number of users who can connect one Production app. No page we opened states one."
+  ],
+  "screenshots": [],
+  "checked": "21 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the Sandbox app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 30 minutes"
+    },
+    {
+      "label": "Build and test the sign-in",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 5 hours"
+    },
+    {
+      "label": "Create the Production app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "a few minutes"
+    },
+    {
+      "label": "Real users can connect",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      6,
+      8
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
+}

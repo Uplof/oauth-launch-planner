@@ -4,29 +4,29 @@
   "category": "Social media",
   "sample": false,
   "difficulty": "moderate",
-  "headline": "Signing users in and posting as them takes an afternoon with no review, but posting as a Company Page, analytics and ads sit behind a partner application.",
+  "headline": "Sign-in and member posting take an afternoon with no review. Company Page posting, analytics and ads need partner approval.",
   "firstTest": {
-    "text": "About 30 to 60 minutes to a working sign-in and member post, once a Company Page exists and verifies the app",
+    "text": "About 30-60 minutes to a working sign-in and member post, once a Company Page exists and verifies your app.",
     "proof": "community",
     "source": "https://dev.to/broke2builtai/how-to-post-to-linkedin-from-a-script-the-15-minute-oauth-walkthrough-2026-58fp"
   },
   "production": {
-    "text": "Self-serve path (sign in + post as the member): users can connect as soon as the two products are ticked. Partner path (Company Page posting, analytics, ads): only after LinkedIn approves a Development tier request, then a Standard tier request with a screen recording.",
+    "text": "Members can sign in and post after ticking two products. Page posting, analytics and ads need Development approval, then Standard tier with a screen recording.",
     "proof": "docs",
     "source": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access"
   },
   "approvalWait": {
-    "text": "None for Sign In with LinkedIn (OpenID Connect) and Share on LinkedIn. For Community Management API, LinkedIn reviews the form by hand and publishes no wait time.",
+    "text": "None for Sign In with LinkedIn and Share on LinkedIn. The Community Management API form is reviewed by hand, with no published wait time.",
     "proof": "unconfirmed",
     "source": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review"
   },
   "whoCanRegister": {
-    "text": "Any LinkedIn member can create a developer app, but the app must be linked to a LinkedIn Company Page, and a Page admin must verify the link. The Community Management API is only for registered legal organizations with commercial use cases, with a verified business email (personal emails fail vetting), and a Page super admin must have verified the app.",
+    "text": "Any member can create an app, but it must link to a Company Page whose admin verifies it. Partner access also needs a registered company.",
     "proof": "docs",
     "source": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review"
   },
   "testMode": {
-    "text": "Open products work for any LinkedIn member who consents. Access tokens last 60 days and self-serve apps get no refresh token, so users re-consent about every two months. Share on LinkedIn is capped at 150 requests per member and 100,000 per app each day (UTC). Community Management Development tier allows 500 requests per app and 100 per member by default.",
+    "text": "Any member who consents works. Tokens last 60 days with no refresh token, so users reconnect about every two months.",
     "proof": "docs",
     "source": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin"
   },
@@ -54,7 +54,7 @@
       "label": "Post, comment and react as a Company Page the user administers",
       "scope": "w_organization_social",
       "level": "partner",
-      "review": "Community Management API: Development tier request, then Standard tier with a screen recording. Legal organizations, commercial use only.",
+      "review": "Community Management API: a Development tier request, then Standard tier with a screen recording. Legal organizations and commercial use only.",
       "proof": "docs",
       "timeToLive": "unknown, manual review"
     },
@@ -72,7 +72,7 @@
       "label": "Read the user's own posts and comments",
       "scope": "r_member_social",
       "level": "partner",
-      "review": "Documented as closed. LinkedIn is not accepting access requests.",
+      "review": "Closed. LinkedIn is not accepting access requests.",
       "proof": "docs",
       "timeToLive": "not available"
     },
@@ -88,8 +88,8 @@
   ],
   "steps": [
     {
-      "title": "Have a LinkedIn Company Page ready",
-      "detail": "Create one at linkedin.com if you have none. The creator is its administrator. A placeholder Page for your product is fine for the self-serve path.",
+      "title": "Get a Company Page ready",
+      "detail": "Create one at linkedin.com if you have none; its creator is the administrator. A placeholder Page for your product is fine for the self-serve path.",
       "owner": "you",
       "time": "10 min",
       "proof": "docs",
@@ -97,63 +97,63 @@
     },
     {
       "title": "Create the developer app",
-      "detail": "Go to linkedin.com/developers/apps/new. Enter app name, pick the Company Page, add a logo and accept the terms. Do not use 'LinkedIn' or 'In' in the app name or logo.",
+      "detail": "Go to linkedin.com/developers/apps/new. Enter an app name, pick the Company Page, add a logo and accept the terms. Don't use 'LinkedIn' or 'In' in the app name or logo.",
       "owner": "you",
       "time": "5 min",
       "proof": "community",
       "link": "https://www.linkedin.com/developers/apps/new"
     },
     {
-      "title": "Get the Page admin to verify the app",
-      "detail": "App Settings tab, Verify, generate the verification URL, and send it to a Page admin (a super admin for Community Management). Until the app is verified it will not work.",
+      "title": "Get your app verified",
+      "detail": "On the App Settings tab, click Verify, generate the verification URL and send it to a Page admin (a super admin for Community Management). The app won't work until it's verified.",
       "owner": "you",
       "time": "5 min if you are the admin",
       "proof": "community",
       "link": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review"
     },
     {
-      "title": "Add the two self-serve products",
-      "detail": "Products tab: request 'Sign in with LinkedIn using OpenID Connect' and 'Share on LinkedIn'. Both are open to all developers. The Auth tab then shows openid, profile, email and w_member_social.",
+      "title": "Add two self-serve products",
+      "detail": "On the Products tab, request 'Sign in with LinkedIn using OpenID Connect' and 'Share on LinkedIn'. Both are open to all developers; the Auth tab then lists the matching permissions.",
       "owner": "you",
       "time": "2 min",
       "proof": "docs",
       "link": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access"
     },
     {
-      "title": "Register your HTTPS redirect URLs",
-      "detail": "Auth tab, add each callback URL. It must be absolute HTTPS, have no # fragment, and match the redirect_uri you send exactly. Copy the Client ID and Client Secret into your server secrets.",
+      "title": "Add the redirect address",
+      "detail": "On the Auth tab, add each callback URL: absolute HTTPS, no # fragment, matching what you send exactly. Copy the Client ID and Client Secret into your server secrets.",
       "owner": "you",
       "time": "3 min",
       "proof": "docs",
       "link": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow"
     },
     {
-      "title": "Build the consent redirect and code exchange",
-      "detail": "Send users to /oauth/v2/authorization with response_type=code, scope=openid profile email w_member_social and a random state. Check state on return. Exchange the code within 30 minutes at /oauth/v2/accessToken.",
+      "title": "Build the sign-in flow",
+      "detail": "Send users to LinkedIn's authorization page with the member permissions you need and a random state value. Check the state on return, then swap the code for a token within 30 minutes.",
       "owner": "agent",
       "time": "1 hr",
       "proof": "docs",
       "link": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow"
     },
     {
-      "title": "Store the token and plan re-consent",
-      "detail": "Save access_token and expires_in (60 days). Self-serve apps get no refresh token, so prompt the user to reconnect before expiry. Asking for a different scope later invalidates earlier tokens.",
+      "title": "Store tokens and plan reconnects",
+      "detail": "Save the token and its 60-day expiry. Self-serve apps get no refresh token, so prompt users to reconnect before it expires. Asking for a different scope later invalidates earlier tokens.",
       "owner": "agent",
       "time": "30 min",
       "proof": "docs",
       "link": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow"
     },
     {
-      "title": "Fetch the user id and publish a post",
-      "detail": "Call /v2/userinfo for the sub value, build the person URN, then POST to /v2/ugcPosts with the X-Restli-Protocol-Version: 2.0.0 header. A 201 returns the post id in X-RestLi-Id.",
+      "title": "Publish a member post",
+      "detail": "Ask LinkedIn for the member's id, then create the post with the 2.0.0 protocol version header set. A 201 reply returns the post id.",
       "owner": "agent",
       "time": "30 min",
       "proof": "docs",
       "link": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin"
     },
     {
-      "title": "Only if you need Page posting or analytics: apply for Community Management API",
-      "detail": "Create a NEW app, linked to the same verified Page, with no other products on it. Request Community Management Development tier on the Products tab, filling in legal name, address, website, privacy policy and business email.",
+      "title": "Apply for Community Management access",
+      "detail": "For Page posting or analytics only: create a NEW app linked to the same verified Page, with no other products. On its Products tab, request Development tier with your legal name, address, website, privacy policy and business email.",
       "owner": "you",
       "time": "1 hr to apply, then review wait",
       "proof": "docs",
@@ -162,7 +162,7 @@
     },
     {
       "title": "Upgrade to Standard tier",
-      "detail": "After building the integration, submit the Standard tier form with test credentials and a narrated screen recording of the full OAuth flow, posting and how member data is shown.",
+      "detail": "After building the integration, submit the Standard tier form with test credentials and a narrated screen recording. Show the full sign-in flow, posting, and how member data appears.",
       "owner": "you",
       "time": "half a day to record and submit, then review wait",
       "proof": "docs",
@@ -171,49 +171,49 @@
   ],
   "blockers": [
     {
-      "title": "No Company Page, or nobody can verify the app",
-      "fix": "Create a Page first. The app stays unusable until a Page admin approves the verification link. For Community Management the approver must be a Page super admin.",
+      "title": "No Company Page, or nobody to verify the app",
+      "fix": "Create a Page first. The app stays unusable until a Page admin approves the verification link; Community Management needs a Page super admin.",
       "proof": "community"
     },
     {
-      "title": "Agent needs to post as a Company Page or read analytics",
-      "fix": "This needs the Community Management API. It is limited to registered legal organizations with commercial use cases, a verified business email and a verified website. Plan for a review, and decide early whether the feature is worth it.",
+      "title": "Posting as a Page or reading analytics needs partner access",
+      "fix": "It's limited to registered legal organizations with commercial use, a verified business email (personal emails fail) and a verified website. Plan for a review, and decide early whether it's worth it.",
       "proof": "docs"
     },
     {
-      "title": "Community Management request is greyed out, or was rejected",
-      "fix": "Only request it from a new app that holds no other products. A rejected app cannot reapply, so create another app and submit a fresh Development tier request.",
+      "title": "The Community Management request is greyed out or rejected",
+      "fix": "Only request it from a new app that holds no other products. A rejected app can't reapply, so create another app and submit a fresh Development tier request.",
       "proof": "docs"
     },
     {
       "title": "Users get logged out every two months",
-      "fix": "Access tokens last 60 days. Programmatic refresh tokens (365 days) are only for approved Marketing Developer Platform partners. For open products, show a reconnect prompt before expiry.",
+      "fix": "Access tokens last 60 days. Only approved Marketing Developer Platform partners get 365-day refresh tokens, so for open products show a reconnect prompt before expiry.",
       "proof": "docs"
     },
     {
       "title": "Daily posting cap per user",
-      "fix": "Share on LinkedIn allows 150 requests per member per day, counted in UTC. Queue and spread agent posts, and do not retry in a loop.",
+      "fix": "Share on LinkedIn allows 150 requests per member and 100,000 per app each day (UTC). Community Management Development tier allows 500 requests per app and 100 per member by default. Queue and spread your posts, and don't retry in a loop.",
       "proof": "docs"
     },
     {
-      "title": "Agent wants to read the user's feed or their own post history",
-      "fix": "Not possible on open products. r_member_social is documented as closed and not accepting requests, so design the agent around write-only posting for members.",
+      "title": "Your agent can't read the user's feed or post history",
+      "fix": "Open products don't allow it, and LinkedIn isn't accepting requests for that permission. Design your agent around write-only member posting.",
       "proof": "docs"
     }
   ],
   "agentCan": [
-    "Write the authorization redirect, state check and code exchange",
+    "Write the sign-in redirect, the state check and the code swap",
     "Store tokens with expiry dates and schedule reconnect prompts before day 60",
-    "Fetch the member's id from userinfo and publish text, link and image posts",
-    "Handle 401, 403 and 429 responses and queue posts under the daily cap",
-    "Draft the Community Management access form answers and the screencast script"
+    "Fetch the member's id and publish text, link and image posts",
+    "Handle 401, 403 and 429 errors and queue posts under the daily cap",
+    "Draft the Community Management form answers and the screencast script"
   ],
   "youDo": [
     "Create or choose the Company Page",
-    "Create the developer app and click Verify, then get a Page admin to approve it",
+    "Create the developer app, click Verify, and get a Page admin to approve it",
     "Tick the two products on the Products tab and accept the API terms",
     "Verify your business email and submit the Community Management forms, if you need them",
-    "Record the Standard tier screencast showing the live OAuth flow",
+    "Record the Standard tier screencast showing the live sign-in flow",
     "Sign in to LinkedIn as a test member to give consent"
   ],
   "drafts": [
@@ -226,21 +226,51 @@
       "body": "1. Show the app login and click Connect LinkedIn. 2. Complete the real consent screen and show the Page being listed. 3. Write a post in the app and publish it to the Page. 4. Open LinkedIn and show the post live. 5. Add a comment as another member and show how it appears in the app, naming the profile fields we display. 6. Show the analytics screen. 7. Show Disconnect and what data is deleted. Narrate each step. Close all other windows first."
     },
     {
-      "title": "Consent explainer shown to your users before the LinkedIn screen",
+      "title": "Explainer to show users before LinkedIn's consent screen",
       "body": "[Product name] will ask LinkedIn for permission to see your name and email and to publish posts on your behalf. We only post when you approve a draft. LinkedIn will ask you to reconnect about every 60 days. You can remove access any time in LinkedIn under Settings, Data privacy, Permitted services."
     }
   ],
   "sources": [
-    { "title": "LinkedIn 3-Legged OAuth Flow", "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow" },
-    { "title": "Getting Access to LinkedIn APIs", "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access" },
-    { "title": "Refresh Tokens with OAuth 2.0", "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens" },
-    { "title": "Share on LinkedIn", "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin" },
-    { "title": "Sign In with LinkedIn using OpenID Connect", "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2" },
-    { "title": "Marketing API Quick Start", "url": "https://learn.microsoft.com/en-us/linkedin/marketing/quick-start" },
-    { "title": "Marketing API Key Concepts (permissions table)", "url": "https://learn.microsoft.com/en-us/linkedin/marketing/getting-started" },
-    { "title": "Community Management Overview", "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview" },
-    { "title": "Community Management App Review", "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review" },
-    { "title": "How to post to LinkedIn from a script (community walkthrough)", "url": "https://dev.to/broke2builtai/how-to-post-to-linkedin-from-a-script-the-15-minute-oauth-walkthrough-2026-58fp" }
+    {
+      "title": "LinkedIn 3-Legged OAuth Flow",
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow"
+    },
+    {
+      "title": "Getting Access to LinkedIn APIs",
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access"
+    },
+    {
+      "title": "Refresh Tokens with OAuth 2.0",
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens"
+    },
+    {
+      "title": "Share on LinkedIn",
+      "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin"
+    },
+    {
+      "title": "Sign In with LinkedIn using OpenID Connect",
+      "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2"
+    },
+    {
+      "title": "Marketing API Quick Start",
+      "url": "https://learn.microsoft.com/en-us/linkedin/marketing/quick-start"
+    },
+    {
+      "title": "Marketing API Key Concepts (permissions table)",
+      "url": "https://learn.microsoft.com/en-us/linkedin/marketing/getting-started"
+    },
+    {
+      "title": "Community Management Overview",
+      "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview"
+    },
+    {
+      "title": "Community Management App Review",
+      "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review"
+    },
+    {
+      "title": "How to post to LinkedIn from a script (community walkthrough)",
+      "url": "https://dev.to/broke2builtai/how-to-post-to-linkedin-from-a-script-the-15-minute-oauth-walkthrough-2026-58fp"
+    }
   ],
   "unconfirmed": [
     "How long Community Management Development and Standard tier reviews take. LinkedIn publishes no wait time in the pages we opened.",
@@ -250,5 +280,37 @@
     "Whether the 150 requests per member per day limit on Share on LinkedIn is still current. That page was last updated in 2023."
   ],
   "screenshots": [],
-  "checked": "20 Oct 2026"
+  "checked": "20 Oct 2026",
+  "timeline": [
+    {
+      "label": "Set up the app",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "about 25 minutes"
+    },
+    {
+      "label": "Build sign-in and member posting",
+      "owner": "agent",
+      "when": "Day 1",
+      "duration": "about 2 hours"
+    },
+    {
+      "label": "Members can sign in and post",
+      "owner": "you",
+      "when": "Day 1",
+      "duration": "",
+      "milestone": true
+    }
+  ],
+  "typical": {
+    "setupHours": [
+      2,
+      3
+    ],
+    "waitDays": [
+      0,
+      0
+    ],
+    "toRealUsers": "same day"
+  }
 }

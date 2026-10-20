@@ -1,1 +1,1040 @@
-[{"slug": "github", "name": "GitHub", "modes": ["OAUTH2"], "tools": 877}, {"slug": "canvas", "name": "Canvas", "modes": ["OAUTH2", "API_KEY"], "tools": 573}, {"slug": "highlevel_location", "name": "HighLevel Location", "modes": ["OAUTH2", "BEARER_TOKEN"], "tools": 554}, {"slug": "googlesuper", "name": "Google Super", "modes": ["OAUTH2", "API_KEY"], "tools": 473}, {"slug": "zendesk", "name": "Zendesk", "modes": ["OAUTH2"], "tools": 456}, {"slug": "stripe", "name": "Stripe", "modes": ["OAUTH2", "API_KEY"], "tools": 428}, {"slug": "databricks", "name": "Databricks", "modes": ["OAUTH2", "API_KEY"], "tools": 410}, {"slug": "pipedrive", "name": "Pipedrive", "modes": ["OAUTH2", "API_KEY"], "tools": 403}, {"slug": "coupa", "name": "Coupa", "modes": ["OAUTH2"], "tools": 384}, {"slug": "datadog_mcp", "name": "Datadog MCP", "modes": ["DCR_OAUTH"], "tools": 370}, {"slug": "pagerduty", "name": "PagerDuty", "modes": ["OAUTH2", "API_KEY"], "tools": 356}, {"slug": "docusign", "name": "DocuSign", "modes": ["OAUTH2"], "tools": 335}, {"slug": "trello", "name": "Trello", "modes": ["OAUTH1"], "tools": 324}, {"slug": "shopify", "name": "Shopify", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 315}, {"slug": "blackboard", "name": "Blackboard", "modes": ["OAUTH2"], "tools": 314}, {"slug": "outlook", "name": "Outlook", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 308}, {"slug": "hubspot", "name": "HubSpot", "modes": ["OAUTH2", "API_KEY"], "tools": 291}, {"slug": "box", "name": "Box", "modes": ["OAUTH2"], "tools": 284}, {"slug": "mailchimp", "name": "Mailchimp", "modes": ["OAUTH2"], "tools": 274}, {"slug": "freee", "name": "freee", "modes": ["OAUTH2"], "tools": 267}, {"slug": "zoho_books", "name": "Zoho Books", "modes": ["OAUTH2"], "tools": 265}, {"slug": "launch_darkly", "name": "LaunchDarkly", "modes": ["OAUTH2", "API_KEY"], "tools": 248}, {"slug": "crowdin", "name": "Crowdin", "modes": ["OAUTH2", "API_KEY"], "tools": 232}, {"slug": "klaviyo", "name": "Klaviyo", "modes": ["OAUTH2", "API_KEY"], "tools": 231}, {"slug": "getresponse", "name": "GetResponse", "modes": ["OAUTH2", "API_KEY"], "tools": 213}, {"slug": "sentry", "name": "Sentry", "modes": ["OAUTH2"], "tools": 209}, {"slug": "clover", "name": "Clover", "modes": ["OAUTH2"], "tools": 208}, {"slug": "salesforce", "name": "Salesforce", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 201}, {"slug": "gusto", "name": "Gusto", "modes": ["OAUTH2"], "tools": 192}, {"slug": "dialpad", "name": "Dialpad", "modes": ["OAUTH2", "API_KEY"], "tools": 192}, {"slug": "microsoft_teams", "name": "Microsoft Teams", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 178}, {"slug": "dropbox", "name": "Dropbox", "modes": ["OAUTH2"], "tools": 175}, {"slug": "servicenow", "name": "ServiceNow", "modes": ["OAUTH2", "BASIC", "S2S_OAUTH2"], "tools": 171}, {"slug": "cal", "name": "Cal", "modes": ["OAUTH2", "API_KEY"], "tools": 168}, {"slug": "clickup", "name": "ClickUp", "modes": ["OAUTH2", "API_KEY"], "tools": 163}, {"slug": "slack", "name": "Slack", "modes": ["OAUTH2"], "tools": 162}, {"slug": "longbridge_mcp", "name": "Longbridge MCP", "modes": ["DCR_OAUTH"], "tools": 161}, {"slug": "asana", "name": "Asana", "modes": ["OAUTH2"], "tools": 157}, {"slug": "discordbot", "name": "Discord Bot", "modes": ["OAUTH2"], "tools": 156}, {"slug": "borneo", "name": "Borneo", "modes": ["OAUTH2", "API_KEY"], "tools": 153}, {"slug": "disqus", "name": "Disqus", "modes": ["OAUTH2"], "tools": 148}, {"slug": "wrike", "name": "Wrike", "modes": ["OAUTH2"], "tools": 144}, {"slug": "basecamp", "name": "Basecamp", "modes": ["OAUTH2"], "tools": 141}, {"slug": "zoho_invoice", "name": "Zoho Invoice", "modes": ["OAUTH2"], "tools": 137}, {"slug": "ahrefs_mcp", "name": "Ahrefs MCP", "modes": ["DCR_OAUTH"], "tools": 135}, {"slug": "greenhouse", "name": "Greenhouse", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 134}, {"slug": "intercom", "name": "Intercom", "modes": ["OAUTH2"], "tools": 133}, {"slug": "help_scout", "name": "Help Scout", "modes": ["OAUTH2"], "tools": 129}, {"slug": "twitch", "name": "Twitch", "modes": ["OAUTH2"], "tools": 129}, {"slug": "supabase", "name": "Supabase", "modes": ["OAUTH2", "API_KEY"], "tools": 126}, {"slug": "share_point", "name": "SharePoint", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 124}, {"slug": "contentful", "name": "Contentful", "modes": ["OAUTH2", "API_KEY"], "tools": 124}, {"slug": "glide_mcp", "name": "Glide MCP", "modes": ["DCR_OAUTH"], "tools": 124}, {"slug": "gitlab", "name": "GitLab", "modes": ["OAUTH2"], "tools": 123}, {"slug": "square", "name": "Square", "modes": ["OAUTH2"], "tools": 122}, {"slug": "stack_exchange", "name": "Stack Exchange", "modes": ["OAUTH2"], "tools": 121}, {"slug": "grafana_cloud_mcp", "name": "Grafana Cloud MCP", "modes": ["DCR_OAUTH"], "tools": 118}, {"slug": "better_stack_mcp", "name": "Better Stack MCP", "modes": ["DCR_OAUTH"], "tools": 116}, {"slug": "bitbucket", "name": "Bitbucket", "modes": ["OAUTH2"], "tools": 115}, {"slug": "close_mcp", "name": "Close MCP", "modes": ["DCR_OAUTH"], "tools": 114}, {"slug": "daytona", "name": "Daytona", "modes": ["OAUTH2", "API_KEY"], "tools": 114}, {"slug": "follow_up_boss", "name": "Follow Up Boss", "modes": ["OAUTH2", "API_KEY"], "tools": 112}, {"slug": "capsule_crm", "name": "Capsule CRM", "modes": ["OAUTH2", "API_KEY"], "tools": 109}, {"slug": "imply_polaris", "name": "Imply Polaris", "modes": ["API_KEY", "S2S_OAUTH2"], "tools": 108}, {"slug": "attio", "name": "Attio", "modes": ["OAUTH2"], "tools": 105}, {"slug": "freshsales", "name": "Freshsales", "modes": ["OAUTH2", "API_KEY"], "tools": 104}, {"slug": "higgsfield_mcp", "name": "Higgsfield MCP", "modes": ["DCR_OAUTH"], "tools": 101}, {"slug": "slackbot", "name": "Slackbot", "modes": ["OAUTH2"], "tools": 101}, {"slug": "alpaca", "name": "Alpaca", "modes": ["OAUTH2", "API_KEY"], "tools": 100}, {"slug": "productboard", "name": "Productboard", "modes": ["OAUTH2", "API_KEY"], "tools": 99}, {"slug": "jira", "name": "Jira", "modes": ["OAUTH2", "API_KEY", "S2S_OAUTH2"], "tools": 98}, {"slug": "airops_mcp", "name": "AirOps MCP", "modes": ["DCR_OAUTH"], "tools": 96}, {"slug": "eventbrite", "name": "Eventbrite", "modes": ["OAUTH2"], "tools": 95}, {"slug": "zoho", "name": "Zoho", "modes": ["OAUTH2"], "tools": 95}, {"slug": "constant_contact", "name": "Constant Contact", "modes": ["OAUTH2"], "tools": 93}, {"slug": "clio_manage", "name": "Clio Manage", "modes": ["OAUTH2"], "tools": 93}, {"slug": "one_drive", "name": "OneDrive", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 93}, {"slug": "googledrive", "name": "Google Drive", "modes": ["OAUTH2"], "tools": 92}, {"slug": "zoom", "name": "Zoom", "modes": ["OAUTH2"], "tools": 90}, {"slug": "netsuite", "name": "Netsuite", "modes": ["OAUTH2"], "tools": 85}, {"slug": "halopsa", "name": "HaloPSA", "modes": ["OAUTH2"], "tools": 85}, {"slug": "brex", "name": "Brex", "modes": ["OAUTH2", "API_KEY"], "tools": 84}, {"slug": "twitter", "name": "Twitter", "modes": ["OAUTH2"], "tools": 83}, {"slug": "miro", "name": "Miro", "modes": ["OAUTH2"], "tools": 80}, {"slug": "linear_mcp", "name": "Linear MCP", "modes": ["DCR_OAUTH"], "tools": 78}, {"slug": "todoist", "name": "Todoist", "modes": ["OAUTH2"], "tools": 76}, {"slug": "freeagent", "name": "Freeagent", "modes": ["OAUTH2"], "tools": 76}, {"slug": "datadog", "name": "Datadog", "modes": ["OAUTH2", "BEARER_TOKEN", "API_KEY"], "tools": 75}, {"slug": "clockify", "name": "Clockify", "modes": ["OAUTH2", "API_KEY"], "tools": 74}, {"slug": "metaads", "name": "Meta Ads", "modes": ["OAUTH2", "API_KEY"], "tools": 72}, {"slug": "confluence", "name": "Confluence", "modes": ["OAUTH2", "API_KEY", "S2S_OAUTH2"], "tools": 70}, {"slug": "xero", "name": "Xero", "modes": ["OAUTH2"], "tools": 68}, {"slug": "google_analytics", "name": "Google Analytics", "modes": ["OAUTH2"], "tools": 67}, {"slug": "zoho_inventory", "name": "Zoho Inventory", "modes": ["OAUTH2"], "tools": 67}, {"slug": "lever", "name": "Lever", "modes": ["OAUTH2", "API_KEY"], "tools": 64}, {"slug": "googlebigquery", "name": "Google BigQuery", "modes": ["OAUTH2", "GOOGLE_SERVICE_ACCOUNT"], "tools": 63}, {"slug": "google_classroom", "name": "Google Classroom", "modes": ["OAUTH2"], "tools": 62}, {"slug": "gmail", "name": "Gmail", "modes": ["OAUTH2"], "tools": 61}, {"slug": "excel", "name": "Excel", "modes": ["OAUTH2", "S2S_OAUTH2"], "tools": 60}, {"slug": "egnyte", "name": "Egnyte", "modes": ["OAUTH2"], "tools": 60}, {"slug": "youtube", "name": "YouTube", "modes": ["OAUTH2"], "tools": 59}, {"slug": "webflow", "name": "Webflow", "modes": ["OAUTH2", "API_KEY"], "tools": 59}, {"slug": "clickup_mcp", "name": "ClickUp MCP", "modes": ["DCR_OAUTH"], "tools": 58}, {"slug": "whatsapp", "name": "WhatsApp", "modes": ["OAUTH2", "API_KEY"], "tools": 58}, {"slug": "notion", "name": "Notion", "modes": ["OAUTH2", "API_KEY"], "tools": 57}, {"slug": "harvest", "name": "Harvest", "modes": ["OAUTH2"], "tools": 57}, {"slug": "gong", "name": "Gong", "modes": ["OAUTH2", "BASIC"], "tools": 57}, {"slug": "dropbox_sign", "name": "Dropbox Sign", "modes": ["OAUTH2", "API_KEY"], "tools": 56}, {"slug": "kintone_rest", "name": "Kintone REST", "modes": ["OAUTH2"], "tools": 55}, {"slug": "zoho_bigin", "name": "Zoho Bigin", "modes": ["OAUTH2"], "tools": 54}, {"slug": "digital_ocean", "name": "DigitalOcean", "modes": ["OAUTH2", "API_KEY"], "tools": 54}, {"slug": "calendly", "name": "Calendly", "modes": ["OAUTH2"], "tools": 53}, {"slug": "kommo", "name": "Kommo", "modes": ["OAUTH2"], "tools": 53}, {"slug": "facebook", "name": "Facebook", "modes": ["OAUTH2"], "tools": 52}, {"slug": "figma", "name": "Figma", "modes": ["OAUTH2", "API_KEY"], "tools": 52}, {"slug": "adroll", "name": "AdRoll", "modes": ["OAUTH2"], "tools": 51}, {"slug": "era_context_mcp", "name": "Era Context MCP", "modes": ["DCR_OAUTH"], "tools": 51}, {"slug": "googlesheets", "name": "Google Sheets", "modes": ["OAUTH2"], "tools": 50}, {"slug": "amplitude_mcp", "name": "Amplitude MCP", "modes": ["DCR_OAUTH"], "tools": 48}, {"slug": "aircall", "name": "Aircall", "modes": ["OAUTH2", "BASIC"], "tools": 48}]
+[
+ {
+  "slug": "github",
+  "name": "GitHub",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 877
+ },
+ {
+  "slug": "canvas",
+  "name": "Canvas",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 573
+ },
+ {
+  "slug": "highlevel_location",
+  "name": "HighLevel Location",
+  "modes": [
+   "OAUTH2",
+   "BEARER_TOKEN"
+  ],
+  "tools": 554
+ },
+ {
+  "slug": "googlesuper",
+  "name": "Google Workspace (all apps)",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 473
+ },
+ {
+  "slug": "zendesk",
+  "name": "Zendesk",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 456
+ },
+ {
+  "slug": "stripe",
+  "name": "Stripe",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 428
+ },
+ {
+  "slug": "databricks",
+  "name": "Databricks",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 410
+ },
+ {
+  "slug": "pipedrive",
+  "name": "Pipedrive",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 403
+ },
+ {
+  "slug": "coupa",
+  "name": "Coupa",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 384
+ },
+ {
+  "slug": "datadog_mcp",
+  "name": "Datadog MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 370
+ },
+ {
+  "slug": "pagerduty",
+  "name": "PagerDuty",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 356
+ },
+ {
+  "slug": "docusign",
+  "name": "DocuSign",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 335
+ },
+ {
+  "slug": "trello",
+  "name": "Trello",
+  "modes": [
+   "OAUTH1"
+  ],
+  "tools": 324
+ },
+ {
+  "slug": "shopify",
+  "name": "Shopify",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 315
+ },
+ {
+  "slug": "blackboard",
+  "name": "Blackboard",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 314
+ },
+ {
+  "slug": "outlook",
+  "name": "Outlook",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 308
+ },
+ {
+  "slug": "hubspot",
+  "name": "HubSpot",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 291
+ },
+ {
+  "slug": "box",
+  "name": "Box",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 284
+ },
+ {
+  "slug": "mailchimp",
+  "name": "Mailchimp",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 274
+ },
+ {
+  "slug": "freee",
+  "name": "freee",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 267
+ },
+ {
+  "slug": "zoho_books",
+  "name": "Zoho Books",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 265
+ },
+ {
+  "slug": "launch_darkly",
+  "name": "LaunchDarkly",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 248
+ },
+ {
+  "slug": "crowdin",
+  "name": "Crowdin",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 232
+ },
+ {
+  "slug": "klaviyo",
+  "name": "Klaviyo",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 231
+ },
+ {
+  "slug": "getresponse",
+  "name": "GetResponse",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 213
+ },
+ {
+  "slug": "sentry",
+  "name": "Sentry",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 209
+ },
+ {
+  "slug": "clover",
+  "name": "Clover",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 208
+ },
+ {
+  "slug": "salesforce",
+  "name": "Salesforce",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 201
+ },
+ {
+  "slug": "gusto",
+  "name": "Gusto",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 192
+ },
+ {
+  "slug": "dialpad",
+  "name": "Dialpad",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 192
+ },
+ {
+  "slug": "microsoft_teams",
+  "name": "Microsoft Teams",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 178
+ },
+ {
+  "slug": "dropbox",
+  "name": "Dropbox",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 175
+ },
+ {
+  "slug": "servicenow",
+  "name": "ServiceNow",
+  "modes": [
+   "OAUTH2",
+   "BASIC",
+   "S2S_OAUTH2"
+  ],
+  "tools": 171
+ },
+ {
+  "slug": "cal",
+  "name": "Cal",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 168
+ },
+ {
+  "slug": "clickup",
+  "name": "ClickUp",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 163
+ },
+ {
+  "slug": "slack",
+  "name": "Slack",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 162
+ },
+ {
+  "slug": "longbridge_mcp",
+  "name": "Longbridge MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 161
+ },
+ {
+  "slug": "asana",
+  "name": "Asana",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 157
+ },
+ {
+  "slug": "discordbot",
+  "name": "Discord Bot",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 156
+ },
+ {
+  "slug": "borneo",
+  "name": "Borneo",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 153
+ },
+ {
+  "slug": "disqus",
+  "name": "Disqus",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 148
+ },
+ {
+  "slug": "wrike",
+  "name": "Wrike",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 144
+ },
+ {
+  "slug": "basecamp",
+  "name": "Basecamp",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 141
+ },
+ {
+  "slug": "zoho_invoice",
+  "name": "Zoho Invoice",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 137
+ },
+ {
+  "slug": "ahrefs_mcp",
+  "name": "Ahrefs MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 135
+ },
+ {
+  "slug": "greenhouse",
+  "name": "Greenhouse",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 134
+ },
+ {
+  "slug": "intercom",
+  "name": "Intercom",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 133
+ },
+ {
+  "slug": "help_scout",
+  "name": "Help Scout",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 129
+ },
+ {
+  "slug": "twitch",
+  "name": "Twitch",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 129
+ },
+ {
+  "slug": "supabase",
+  "name": "Supabase",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 126
+ },
+ {
+  "slug": "share_point",
+  "name": "SharePoint",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 124
+ },
+ {
+  "slug": "contentful",
+  "name": "Contentful",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 124
+ },
+ {
+  "slug": "glide_mcp",
+  "name": "Glide MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 124
+ },
+ {
+  "slug": "gitlab",
+  "name": "GitLab",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 123
+ },
+ {
+  "slug": "square",
+  "name": "Square",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 122
+ },
+ {
+  "slug": "stack_exchange",
+  "name": "Stack Exchange",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 121
+ },
+ {
+  "slug": "grafana_cloud_mcp",
+  "name": "Grafana Cloud MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 118
+ },
+ {
+  "slug": "better_stack_mcp",
+  "name": "Better Stack MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 116
+ },
+ {
+  "slug": "bitbucket",
+  "name": "Bitbucket",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 115
+ },
+ {
+  "slug": "close_mcp",
+  "name": "Close MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 114
+ },
+ {
+  "slug": "daytona",
+  "name": "Daytona",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 114
+ },
+ {
+  "slug": "follow_up_boss",
+  "name": "Follow Up Boss",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 112
+ },
+ {
+  "slug": "capsule_crm",
+  "name": "Capsule CRM",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 109
+ },
+ {
+  "slug": "imply_polaris",
+  "name": "Imply Polaris",
+  "modes": [
+   "API_KEY",
+   "S2S_OAUTH2"
+  ],
+  "tools": 108
+ },
+ {
+  "slug": "attio",
+  "name": "Attio",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 105
+ },
+ {
+  "slug": "freshsales",
+  "name": "Freshsales",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 104
+ },
+ {
+  "slug": "higgsfield_mcp",
+  "name": "Higgsfield MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 101
+ },
+ {
+  "slug": "slackbot",
+  "name": "Slackbot",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 101
+ },
+ {
+  "slug": "alpaca",
+  "name": "Alpaca",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 100
+ },
+ {
+  "slug": "productboard",
+  "name": "Productboard",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 99
+ },
+ {
+  "slug": "jira",
+  "name": "Jira",
+  "modes": [
+   "OAUTH2",
+   "API_KEY",
+   "S2S_OAUTH2"
+  ],
+  "tools": 98
+ },
+ {
+  "slug": "airops_mcp",
+  "name": "AirOps MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 96
+ },
+ {
+  "slug": "eventbrite",
+  "name": "Eventbrite",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 95
+ },
+ {
+  "slug": "zoho",
+  "name": "Zoho",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 95
+ },
+ {
+  "slug": "constant_contact",
+  "name": "Constant Contact",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 93
+ },
+ {
+  "slug": "clio_manage",
+  "name": "Clio Manage",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 93
+ },
+ {
+  "slug": "one_drive",
+  "name": "OneDrive",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 93
+ },
+ {
+  "slug": "googledrive",
+  "name": "Google Drive",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 92
+ },
+ {
+  "slug": "zoom",
+  "name": "Zoom",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 90
+ },
+ {
+  "slug": "netsuite",
+  "name": "Netsuite",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 85
+ },
+ {
+  "slug": "halopsa",
+  "name": "HaloPSA",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 85
+ },
+ {
+  "slug": "brex",
+  "name": "Brex",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 84
+ },
+ {
+  "slug": "twitter",
+  "name": "Twitter",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 83
+ },
+ {
+  "slug": "miro",
+  "name": "Miro",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 80
+ },
+ {
+  "slug": "linear_mcp",
+  "name": "Linear MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 78
+ },
+ {
+  "slug": "todoist",
+  "name": "Todoist",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 76
+ },
+ {
+  "slug": "freeagent",
+  "name": "Freeagent",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 76
+ },
+ {
+  "slug": "datadog",
+  "name": "Datadog",
+  "modes": [
+   "OAUTH2",
+   "BEARER_TOKEN",
+   "API_KEY"
+  ],
+  "tools": 75
+ },
+ {
+  "slug": "clockify",
+  "name": "Clockify",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 74
+ },
+ {
+  "slug": "metaads",
+  "name": "Meta Ads",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 72
+ },
+ {
+  "slug": "confluence",
+  "name": "Confluence",
+  "modes": [
+   "OAUTH2",
+   "API_KEY",
+   "S2S_OAUTH2"
+  ],
+  "tools": 70
+ },
+ {
+  "slug": "xero",
+  "name": "Xero",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 68
+ },
+ {
+  "slug": "google_analytics",
+  "name": "Google Analytics",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 67
+ },
+ {
+  "slug": "zoho_inventory",
+  "name": "Zoho Inventory",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 67
+ },
+ {
+  "slug": "lever",
+  "name": "Lever",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 64
+ },
+ {
+  "slug": "googlebigquery",
+  "name": "Google BigQuery",
+  "modes": [
+   "OAUTH2",
+   "GOOGLE_SERVICE_ACCOUNT"
+  ],
+  "tools": 63
+ },
+ {
+  "slug": "google_classroom",
+  "name": "Google Classroom",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 62
+ },
+ {
+  "slug": "gmail",
+  "name": "Gmail",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 61
+ },
+ {
+  "slug": "excel",
+  "name": "Excel",
+  "modes": [
+   "OAUTH2",
+   "S2S_OAUTH2"
+  ],
+  "tools": 60
+ },
+ {
+  "slug": "egnyte",
+  "name": "Egnyte",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 60
+ },
+ {
+  "slug": "youtube",
+  "name": "YouTube",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 59
+ },
+ {
+  "slug": "webflow",
+  "name": "Webflow",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 59
+ },
+ {
+  "slug": "clickup_mcp",
+  "name": "ClickUp MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 58
+ },
+ {
+  "slug": "whatsapp",
+  "name": "WhatsApp",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 58
+ },
+ {
+  "slug": "notion",
+  "name": "Notion",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 57
+ },
+ {
+  "slug": "harvest",
+  "name": "Harvest",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 57
+ },
+ {
+  "slug": "gong",
+  "name": "Gong",
+  "modes": [
+   "OAUTH2",
+   "BASIC"
+  ],
+  "tools": 57
+ },
+ {
+  "slug": "dropbox_sign",
+  "name": "Dropbox Sign",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 56
+ },
+ {
+  "slug": "kintone_rest",
+  "name": "Kintone REST",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 55
+ },
+ {
+  "slug": "zoho_bigin",
+  "name": "Zoho Bigin",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 54
+ },
+ {
+  "slug": "digital_ocean",
+  "name": "DigitalOcean",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 54
+ },
+ {
+  "slug": "calendly",
+  "name": "Calendly",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 53
+ },
+ {
+  "slug": "kommo",
+  "name": "Kommo",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 53
+ },
+ {
+  "slug": "facebook",
+  "name": "Facebook",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 52
+ },
+ {
+  "slug": "figma",
+  "name": "Figma",
+  "modes": [
+   "OAUTH2",
+   "API_KEY"
+  ],
+  "tools": 52
+ },
+ {
+  "slug": "adroll",
+  "name": "AdRoll",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 51
+ },
+ {
+  "slug": "era_context_mcp",
+  "name": "Era Context MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 51
+ },
+ {
+  "slug": "googlesheets",
+  "name": "Google Sheets",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 50
+ },
+ {
+  "slug": "amplitude_mcp",
+  "name": "Amplitude MCP",
+  "modes": [
+   "DCR_OAUTH"
+  ],
+  "tools": 48
+ },
+ {
+  "slug": "aircall",
+  "name": "Aircall",
+  "modes": [
+   "OAUTH2",
+   "BASIC"
+  ],
+  "tools": 48
+ },
+ {
+  "slug": "linkedin",
+  "name": "LinkedIn",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 0
+ },
+ {
+  "slug": "canva",
+  "name": "Canva",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 0
+ },
+ {
+  "slug": "highlevel",
+  "name": "HighLevel",
+  "modes": [
+   "OAUTH2"
+  ],
+  "tools": 0
+ }
+]
