@@ -1,142 +1,58 @@
 # OAuth Launch Planner
 
-**Live:** https://oauth-launch-planner.vercel.app
-**Source:** https://github.com/Satyamknown/oauth-launch-planner
+**Live:** https://oauth-launch-planner.vercel.app · **Source:** https://github.com/Satyamknown/oauth-launch-planner
 
-A developer building an AI agent wants it to act in their users' Gmail, GitHub, Slack or Notion. The code takes an afternoon. Getting the provider to let real users connect can take a week, three months, or never, and nobody tells you which before you start.
+A developer building an AI agent wants it to act in their users' Gmail, Slack or Notion. The code takes an afternoon. Getting the provider to let real users connect can take a day, a few weeks, or a yearly security audit, and nobody tells you which before you start. This site answers that first.
 
-This tool answers that question first. Describe your product (or name one app) and you get:
+**What you get:** describe your agent (or pick an app) and see, for each app, the total time to your first real user and how it splits into your work and the review wait. Then a day-by-day timeline, the steps (each marked *you*, *an agent can do this*, or *wait for the provider*), where people get stuck, and which permissions trigger which review. On top of that: a check of your website the way a reviewer would look at it, and a real test sign-in. **20 guides are ready.** For any other app, a research agent writes a guide live and saves it with a shareable link.
 
-- **A verdict:** how hard approval is, how long until real users can connect, and whether a review stands in the way.
-- **A launch plan:** the slowest step first, every step marked *agent does this*, *you do this* or *wait for the provider*.
-- **The permissions your agent needs**, and the review level each one triggers. Untick "read email" and watch a 10-week security audit drop to a 2-week review.
-- **Blockers and fixes**, **paperwork drafts** (scope justifications, form values, demo video script), a **readiness check** of your website the way a reviewer would look at it, a **test sign-in**, and the **evidence**.
-- **A timeline:** day by day, what you do, what an agent does, and how long you wait on the provider. A chart compares all 20 apps.
-- **A proof label on every claim:** *tested* (I did it), *official docs* (linked), *community* (forum or blog), or *not confirmed*.
+## Scope, and why
 
-For an app without a guide, a **live research agent** searches the provider's docs, writes the guide, fact-checks the key claims against their source pages, and saves it with a shareable link.
+I focused on the part developers can't see coming: **approval**, not the OAuth code. Three things decide the timeline, and the docs scatter them across many pages:
 
-## The problem, in the developer's words
-
-A typical story: *"I built the Gmail integration in a day. Then Google said my app needs verification, and the `gmail.readonly` scope needs a security assessment. Nobody told me that before I picked the scope."*
-
-The pain is not the OAuth code. It is three things the provider docs spread across a dozen pages:
-
-1. **Which permissions trigger which review.** Gmail send-only is a scope review of about 3–5 business days. Gmail read is a restricted scope: yearly third-party security audit.
-2. **How long each step takes**, and which step is slow enough to start on day one.
-3. **What blocks you in the meantime.** Google testing mode caps you at 100 users over the app's lifetime, and refresh tokens die after 7 days.
+1. **Permissions decide difficulty, not the app.** Gmail send-only is a review of a few business days. Gmail read adds a yearly security audit.
+2. **One slow step decides the launch date**, so it has to start on day one.
+3. **Test mode has limits that bite.** Google allows 100 test users ever, and refresh tokens die after 7 days.
 
 ## Key decisions
 
-| Decision | Why |
+- **Total time first, then the breakdown.** The first question is "can I launch this month?".
+- **Describe your product, not pick scopes.** People think in features; the planner maps features to apps and permissions.
+- **A proof label on every claim:** *tested* (I did it), *official docs* (linked), *community*, or *not confirmed*. Provider rules change, so you need to see what is proven.
+- **Test the real path myself.** I registered my own test apps on Google, GitHub, Slack and Notion, signed in through each, and kept every app and screenshot.
+- **Agents do the legwork, with guard rails.** Research agents wrote the 16 researched guides from official docs. A checker reopens each source. A script rejects any researched claim marked *tested*. Live research must find the exact app or stop.
+
+## How my thinking changed
+
+| I first thought | It turned out |
 |---|---|
-| Entry is "describe your product", not a list of apps | Developers think in product features ("reads support emails, logs tickets"), not in OAuth scopes. The planner maps features to apps, actions and permissions. |
-| Verdict first | The first question is "can I launch this month?". Everything else is detail under it. |
-| Actions decide difficulty, not the app | Gmail is easy or very hard depending on one scope. The permissions picker makes that visible and lets you trade a feature for weeks. |
-| Proof label on every line | Provider rules change. A guide is only useful if you can see which parts were tried, which are cited, and which are guesses. |
-| 20 guides, 4 tested by hand | Gmail, GitHub, Slack and Notion are tested end to end. The other 16 (HubSpot, Salesforce, Zoom, Google Workspace, Outlook, Calendly, Canvas, Canva, HighLevel, Shopify, Dropbox, Figma, Jira, Asana, LinkedIn, X) are researched from official docs, every claim labelled. Together they cover every shape of path: instant, self-serve, review, security audit, admin-only, partners only. |
-| Real setup attempts, kept | Test apps on Google, GitHub, Slack and Notion were created and signed in through, every step screenshotted. The apps are kept as proof. |
-| A checker after the writer | The research agent's first draft is a claim, not a fact. A second pass reopens each source and downgrades what it cannot confirm. |
-| Built for coding agents too | Every guide is JSON at `/api/plan`, and an MCP endpoint at `/api/mcp` lets Claude Code or Cursor fetch a plan inside the editor. |
+| The hard part is the setup steps. | Setup is minutes to hours. The **review** decides the date, and it depends on which permissions you ask for. |
+| Each app has one difficulty. | Gmail is easy or very hard depending on a single permission. So the guide lets you untick features and watch the review get lighter. |
+| Provider docs are reliable enough. | Testing corrected 3 claims. GitHub tokens now expire by default. Slack tokens never expire unless you opt in. Notion's form asked for none of the fields third-party guides listed. |
+| One AI research pass is enough. | It drifted. Asked for "uplof.me", it researched a different product (Upland) and saved it. Now the agent must say "not found", and a name check stops look-alikes before saving. |
+| More detail makes a better guide. | Readers wanted the answer first. I cut the copy to plain words and put total time, timeline and steps at the top. |
 
 ## What I checked
 
-**Hands-on (tested):**
+- **Tested by hand (4 apps):** Gmail, GitHub, Slack and Notion. I created the app, signed in through my own site, and recorded the permissions granted and the token lifetimes. The evidence page lists every test and correction: https://oauth-launch-planner.vercel.app/evidence
+- **Researched (16 apps):** official docs first, every claim labelled, anything not confirmed listed per guide.
+- **Live research runs:** Calendly, HighLevel, Canvas, Zoom and Trello. For Zoom, the checker downgraded all 4 key claims because their pages didn't support them.
 
-- **Gmail, own Google OAuth app.**
-  - `gmail.send` is filed as sensitive and `gmail.readonly` as restricted.
-  - Testing mode needs no verification and allows 100 users over the app's lifetime.
-  - My sign-in got a refresh token that expires in 604,799 s (7 days).
-  - A non-test user is blocked with `Error 403: access_denied` before any consent screen.
-- **GitHub, own OAuth app.**
-  - Registered in about a minute with no review; the client ID shows at once.
-  - My sign-in got an 8-hour access token and a 182-day refresh token.
-  - The consent screen shows users the app's age and user count.
-- **Slack, own app in a new free workspace.**
-  - About 10 minutes to an installed app, including making the workspace; no review at any step.
-  - Public distribution is one self-check box and a click; any workspace could install at once.
-  - My sign-in got all 8 bot scopes and 1 user scope; neither token expires unless you opt in to token rotation.
-- **Notion, own public OAuth connection.**
-  - On a brand-new account the Create button stays greyed out, with no message, until a workspace exists.
-  - Installable in any workspace from creation, with no review; the user picks which pages to share.
-  - My sign-in got a refresh token; no access-token lifetime was stated.
+## Limitations
 
-**What testing corrected:**
-- GitHub: the research said OAuth tokens are long-lived by default. Token expiry is now on by default.
-- Slack: the docs talk about 12-hour tokens. That only applies after opting in to token rotation; by default tokens don't expire.
-- Notion: third-party guides said the form asks for a website, privacy policy, terms and support email. It asked for none of them.
-
-The evidence page records each correction.
-
-**Live research runs (20 Oct):**
-
-| App | Time | Result |
-|---|---|---|
-| Calendly | 75 s | Guide saved |
-| HighLevel | 92 s | 10 official sources; checker confirmed 4 of 4 key claims |
-| Canvas | 122 s | Rated *gated* (an admin must issue your key); checker skipped (free AI allowance ran out), page says so |
-| Zoom | – | Checker downgraded all 4 key claims to *not confirmed*: their cited pages did not support them |
-
-The evidence page (`/evidence`) lists every test, timing and correction.
-
-## Limits
-
-- **Four of 20 guides are hands-on tested** (Gmail, GitHub, Slack, Notion). The other 16 are researched only; LinkedIn and X would need partner approval or a paid tier to test.
-- **Timelines are planning estimates**, worked out from each guide's own step times and published review waits; where a provider publishes no wait, the chart shows it as not published.
-- **Review times are what providers publish**, not measured. Real waits vary.
-- **Live research runs on free AI tiers** (Groq, with Gemini as backup). A run uses roughly 150–200K tokens across its searches, so the free daily allowance covers only a handful of new runs; saved guides cost nothing. Each visitor gets 3 new research runs a day; saved and library guides are always free.
-- **The readiness check reads your public pages**; it cannot judge branding or whether your privacy policy is legally sufficient.
-- **Generated guides are first drafts.** They carry their proof labels and a banner, and say whether the fact check ran.
-
-## Roadmap
-
-1. **Measured approval times.** Record when an app is registered and when its first non-test user connects. Real waits replace published ones.
-2. **Developer reports.** "It took 9 days" / "rejected because…", stored per provider and scope.
-3. **Weekly re-check.** Re-run the checker on every saved guide and alert developers when a provider changes its rules.
-4. **The guide at the moment of pain.** Show it inside the screen where developers paste a client ID and secret.
-5. **Paperwork help.** Fill provider forms through the browser and draft the security-assessment answers.
-
-**Success measures:** time from first visit to first real-user connection; share of developers who reach production; OAuth-related support tickets per new integration.
-
-## How it works
-
-```
-Browser (React)  ──>  /api/plan-from-description   features → apps, actions, permissions
-                 ──>  /api/guide, /api/plan        saved guides (bundled + Vercel Blob)
-                 ──>  /api/research  (SSE)         search ×2 → write → wait → check → save
-                 ──>  /api/readiness               fetches your site like a reviewer
-                 ──>  /oauth/start, /oauth/github  real test sign-ins (tokens never shown)
-Coding agents    ──>  /api/mcp                     list_guides, get_oauth_plan, check_readiness, research_app
-```
-
-- **Frontend:** Vite, React, TypeScript, Tailwind, shadcn/ui.
-- **Server:** Vercel Node functions in `api/`.
-- **Guides:** `src/data/guides/*.json` (bundled) and Vercel Blob (researched).
-- **AI:** Groq `gpt-oss` with built-in browser search, falling back to Gemini with Google Search grounding. If `ANTHROPIC_API_KEY` is set, Claude with web search and web fetch is used instead.
-
-ARCHITECTURE.md (in the parent project folder) maps every piece.
+- Only 4 of 20 guides are hands-on tested. LinkedIn and X would need partner approval or a paid tier to test.
+- Review times are what providers publish, not measured. Timelines are planning estimates built from each guide's own step times.
+- Live research runs on free AI tiers (Groq, then Gemini as backup). A new app takes 1–5 minutes. Each visitor gets 3 new runs a day, and saved guides are always free. If the free AI is slow, the fact check is skipped and the guide says so.
+- The website check reads public pages. It can't judge whether a privacy policy is legally enough.
 
 ## Run it locally
 
 ```bash
 npm install
-npx vercel link                # or create .env.local yourself
-npx vercel env pull .env.local
-npx vercel dev                 # site + api on http://localhost:3000
+npx vercel link && npx vercel env pull .env.local
+npx vercel dev
 ```
 
-Environment variables (all optional except one AI key for live research):
+Set one AI key: `GROQ_API_KEY` (free), with `GEMINI_API_KEY` as backup, or `ANTHROPIC_API_KEY`. `BLOB_READ_WRITE_TOKEN` saves researched guides. The test sign-ins need `client_id`/`client_secret` (Google), `github_secret`, `slack_secret`, and `notion_client_id`/`notion_secret`. No secrets are in the repo.
 
-| Name | Used for |
-|---|---|
-| `GROQ_API_KEY` (or `groq`) | Live research and the planner, free tier |
-| `GEMINI_API_KEY` | Backup AI when Groq's daily allowance runs out |
-| `ANTHROPIC_API_KEY` | Uses Claude instead of the free tiers |
-| `BLOB_READ_WRITE_TOKEN` | Saves researched guides and visitor run counts |
-| `RESEARCH_RUNS_PER_DAY` | Per-visitor cap on new research runs (default 3) |
-| `client_id`, `client_secret` | Google test sign-in |
-| `github_secret` | GitHub test sign-in |
-| `slack_secret` | Slack test sign-in |
-| `notion_client_id`, `notion_secret` | Notion test sign-in |
-
-Deploy: `npx vercel deploy --prod`.
+**Stack:** Vite, React, TypeScript, Tailwind and shadcn/ui on Vercel. Server functions are in `api/`. Guides are in `src/data/guides/*.json`, plus Vercel Blob for live research. Coding agents can fetch any plan as JSON (`/api/plan`) or over MCP (`/api/mcp`).

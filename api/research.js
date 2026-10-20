@@ -96,6 +96,7 @@ const urlsIn = (text) => [...new Set((text.match(/https?:\/\/[^\s)\]】>"']+/g) 
 
 // Free path: Groq's gpt-oss-120b with built-in browser search. Search → write → check.
 async function researchFree(res, name) {
+  const t0 = Date.now(); // the function is cut off at 300 s, so the fact check must fit in what is left
   // Two focused searches give better sources than one broad one.
   const RULES = `Research ONLY a product named exactly "${name}". If you cannot find a real product with that name that offers an API or OAuth sign-in for outside developers, reply with the single word NOT_FOUND and nothing else. Never research a different product with a similar name. ` +
     'Use the provider\'s official developer docs first. Write compact bullet notes. After every fact put the source URL in parentheses, ' +
@@ -138,16 +139,23 @@ async function researchFree(res, name) {
     .map((k) => ({ path: k, text: guide[k].text, source: guide[k].source }));
   const corrections = [];
   guide.factCheck = 'none';
-  if (claims.length) {
+  const spent = (Date.now() - t0) / 1000;
+  if (claims.length && spent > 170) {
+    guide.factCheck = 'skipped';
+    sse(res, 'step', { id: 'checked', text: 'Fact check skipped to finish in time (the free AI was slow). Claims keep the label from the notes.' });
+  } else if (claims.length) {
     sse(res, 'step', { id: 'check', text: `Checking ${claims.length} key claims against their sources` });
     for (const c of claims) sse(res, 'activity', { phase: 'check', kind: 'read', text: c.source });
     try {
       // Free tier: tokens per minute are tight after two searches, so pause before checking.
-      sse(res, 'step', { id: 'pause', text: 'Waiting 30 seconds for the free AI allowance to refill' });
-      await new Promise((r) => setTimeout(r, 30000));
-      const check = await aiSearch(
+      const pause = spent > 110 ? 10 : 30;
+      sse(res, 'step', { id: 'pause', text: `Waiting ${pause} seconds for the free AI allowance to refill` });
+      await new Promise((r) => setTimeout(r, pause * 1000));
+      const budget = Math.max(20, 270 - (Date.now() - t0) / 1000) * 1000;
+      const timeout = new Promise((_, no) => setTimeout(() => no(new Error('it ran out of time')), budget));
+      const check = await Promise.race([timeout, aiSearch(
         'You are a strict fact checker. For each claim, look at its source page and decide whether the page supports the claim. ' +
-        'Reply with ONLY JSON: {"results":[{"path":"...","supported":true|false,"note":"short reason"}]}\n\n' + JSON.stringify(claims), 2000);
+        'Reply with ONLY JSON: {"results":[{"path":"...","supported":true|false,"note":"short reason"}]}\n\n' + JSON.stringify(claims), 2000)]);
       const results = lastJson(check.text)?.results || [];
       for (const r of results) {
         if (r && r.supported === false && guide[r.path]) {

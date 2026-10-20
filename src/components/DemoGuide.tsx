@@ -67,6 +67,9 @@ export function DemoGuide() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [i, setI] = useState<number | null>(null)
+  // First visit: a bright banner asks people to take the tour, until they start it or close it.
+  const [nudge, setNudge] = useState(() => { try { return localStorage.getItem("tour-seen") !== "1" } catch { return true } })
+  const seen = () => { setNudge(false); try { localStorage.setItem("tour-seen", "1") } catch { /* storage blocked */ } }
   const stop = i === null ? null : TOUR[i]
   const rect = useTarget(stop, pathname)
 
@@ -76,6 +79,7 @@ export function DemoGuide() {
     if (TOUR[n].path !== pathname) navigate(TOUR[n].path)
   }
   const start = () => {
+    seen()
     const here = TOUR.findIndex((s) => s.path === pathname)
     go(here >= 0 ? here : 0)
   }
@@ -99,6 +103,17 @@ export function DemoGuide() {
 
   return (
     <>
+      {nudge && i === null && (
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-sm border-2 border-amber-400 bg-amber-300 px-4 py-3 text-zinc-950 shadow-sm">
+          <Compass className="size-5 shrink-0" />
+          <div className="grid min-w-0 flex-1">
+            <span className="font-semibold">New here? Take the 2-minute tour.</span>
+            <span className="text-sm text-zinc-800">It walks you through every part of the site and points at what matters.</span>
+          </div>
+          <Button size="sm" onClick={start} className="bg-zinc-950 text-white hover:bg-zinc-800">Take the tour <ArrowRight className="size-3.5" /></Button>
+          <button onClick={seen} aria-label="Hide this banner" className="text-zinc-700 hover:text-zinc-950"><X className="size-4" /></button>
+        </div>
+      )}
       <div className="mb-4 flex justify-end">
         <button onClick={start} className="inline-flex items-center gap-1.5 rounded-sm border bg-white px-3 py-1 text-xs text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900">
           <Compass className="size-3.5" /> Take the tour

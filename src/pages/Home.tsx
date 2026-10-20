@@ -118,6 +118,15 @@ export default function Home() {
         </Card>
       </section>
 
+      <section className="grid gap-3 rounded-sm border bg-white p-5" aria-label="What an OAuth app is">
+        <h2 className="font-semibold">What's an OAuth app, and why does approval matter?</h2>
+        <ol className="grid gap-3 text-sm text-zinc-700 sm:grid-cols-3">
+          <li className="grid content-start gap-1"><span className="text-xs font-semibold text-zinc-500">1 · You register</span>You create an app with the provider (Google, Slack, Notion) and get a client ID and secret. That app stands for your product.</li>
+          <li className="grid content-start gap-1"><span className="text-xs font-semibold text-zinc-500">2 · Your users connect</span>They click "Connect", see the provider's screen with your app's name and the access it wants, and say yes.</li>
+          <li className="grid content-start gap-1"><span className="text-xs font-semibold text-zinc-500">3 · The provider decides who can</span>Until the provider approves your app, often only you or a few test users can connect. That approval is the slow, unclear part this site plans for you.</li>
+        </ol>
+      </section>
+
       <section className="grid gap-4 sm:grid-cols-3">
         {[
           { Icon: ShieldCheck, t: "Verdict first", d: "Do you need your own OAuth app, and how hard is approval for what your agent actually does?" },

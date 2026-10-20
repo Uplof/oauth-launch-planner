@@ -140,7 +140,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
         <div className="flex items-start gap-2 rounded-md border border-violet-200 bg-violet-50 px-3 py-2 text-sm text-violet-900">
           <Sparkles className="mt-0.5 size-4" />
           Written live by the research agent on {app.checked}.{" "}
-          {generated.factCheck === "skipped" ? "The fact check didn't run (the free AI allowance ran out), so the key claims are unchecked."
+          {generated.factCheck === "skipped" ? "The fact check didn't run (the free AI was busy or slow), so the key claims are unchecked."
             : generated.factCheck === "none" ? "No key claim had a source page, so there was nothing to check."
             : generated.corrections?.length ? `The checker marked ${generated.corrections.length} claim(s) as not confirmed.`
             : "The checker confirmed the key claims against their sources."}
