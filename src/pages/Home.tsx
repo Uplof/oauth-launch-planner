@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { APPS, isTested } from "@/data/apps"
 import { TimeChart } from "@/components/Timeline"
+import { totalText } from "@/lib/time"
 import library from "@/data/library.json"
 import { AppLogo, DifficultyBadge } from "@/components/bits"
 import { planFromDescription, savePlan } from "@/lib/api"
@@ -43,70 +44,71 @@ export default function Home() {
 
   return (
     <div className="grid gap-12">
-      <section className="grid gap-6 pt-4">
-        <div className="grid max-w-3xl gap-3">
-          <h1 className="text-balance text-4xl font-semibold tracking-tight">Know your OAuth path before you build.</h1>
-          <p className="text-lg text-zinc-600">
-            Describe your agent. Get a verdict for every app it connects to: how hard approval is, how long it takes, what to start today, and what an agent can do for you.
-          </p>
+      <section className="mx-auto grid w-full max-w-3xl gap-8 pt-6 text-center">
+        <div className="grid gap-3">
+          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">Know your OAuth path before you build.</h1>
+          <p className="text-lg text-zinc-600">Describe your AI agent. See how long each app takes to approve, and what to do first.</p>
         </div>
 
-        <Card className="max-w-3xl" data-tour="describe">
-          <CardContent className="pt-6">
-            <Tabs defaultValue="describe">
-              <TabsList>
-                <TabsTrigger value="describe"><Sparkles className="size-4" /> Describe your product</TabsTrigger>
-                <TabsTrigger value="lookup"><Search className="size-4" /> Look up one app</TabsTrigger>
+        <Card className="border-zinc-300 text-left shadow-[0_24px_60px_-20px_rgba(24,24,27,0.35)] ring-1 ring-zinc-900/5" data-tour="describe">
+          <CardContent className="p-4 sm:p-6">
+            <Tabs defaultValue="describe" className="gap-4">
+              <TabsList className="grid h-11 w-full grid-cols-2">
+                <TabsTrigger value="describe" className="h-full text-sm"><Sparkles className="size-4" /> Describe your agent</TabsTrigger>
+                <TabsTrigger value="lookup" className="h-full text-sm"><Search className="size-4" /> Look up one app</TabsTrigger>
               </TabsList>
-              <TabsContent value="describe" className="grid gap-3 pt-3">
-                <Textarea id="desc" rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} className="resize-none text-base" placeholder="What does your agent do, and which apps does it use?" />
-                <div className="flex flex-wrap gap-2">
+              <TabsContent value="describe" className="grid gap-4">
+                <Textarea id="desc" rows={4} value={desc} onChange={(e) => setDesc(e.target.value)} className="min-h-32 resize-none p-4 text-lg leading-relaxed md:text-lg" placeholder="What does your agent do, and which apps does it use?" />
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-medium text-zinc-500">Try:</span>
                   {EXAMPLES.map((ex) => (
-                    <button key={ex} type="button" onClick={() => setDesc(ex)} className="rounded-sm border bg-white px-3 py-1 text-left text-xs text-zinc-600 hover:bg-zinc-50">
-                      {ex.length > 60 ? ex.slice(0, 58) + "…" : ex}
+                    <button key={ex} type="button" onClick={() => setDesc(ex)} className="rounded-sm border bg-zinc-50 px-3 py-1 text-left text-xs text-zinc-700 hover:border-zinc-400 hover:bg-white">
+                      {ex.length > 48 ? ex.slice(0, 46) + "…" : ex}
                     </button>
                   ))}
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs text-zinc-500">The planner works out the apps, the permissions and the reviews they trigger.</p>
-                  <Button onClick={build} disabled={found !== null}>{found ? (found.length ? "Building your plan…" : "Reading your product…") : "Build my launch plan"} <ArrowRight className="size-4" /></Button>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+                  <p className="text-sm text-zinc-500">The planner finds the apps, the permissions and the reviews.</p>
+                  <Button size="lg" onClick={build} disabled={found !== null}>{found ? (found.length ? "Building your plan…" : "Reading your agent…") : "Build my launch plan"} <ArrowRight className="size-4" /></Button>
                 </div>
                 {error && (
-                  <div className="grid gap-2 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                  <div className="grid gap-2 rounded-sm border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
                     <span>{error}</span>
                     <Link to="/plan/demo" className="w-fit font-medium underline">See the example plan instead</Link>
                   </div>
                 )}
                 {found && (
-                  <div className="grid gap-1.5 rounded-md border bg-zinc-50 p-3 text-sm">
+                  <div className="grid gap-1.5 rounded-sm border bg-zinc-50 p-3 text-sm">
                     <span className="text-xs font-medium text-zinc-500">Found in your description</span>
                     {found.map((f) => <span key={f} className="flex items-center gap-2"><Sparkles className="size-3.5 text-violet-600" />{f}</span>)}
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="lookup" className="pt-3">
-                <Command className="rounded-lg border">
-                  <CommandInput value={query} onValueChange={setQuery} placeholder="Type an app name or website, e.g. Trello or trello.com" />
-                  <CommandList className="max-h-72">
+              <TabsContent value="lookup">
+                <Command className="rounded-sm border [&_[data-slot=command-input-wrapper]]:h-14 [&_[data-slot=command-input-wrapper]]:px-4">
+                  <CommandInput value={query} onValueChange={setQuery} className="text-base" placeholder="Type an app name or website, e.g. Trello or trello.com" />
+                  <CommandList className="max-h-80">
                     <CommandEmpty>
-                      <div className="grid gap-2 py-2">
-                        <span>{query.trim() ? `No guide for “${query.trim()}” yet.` : "Not in the library yet."}</span>
-                        <Button size="sm" variant="outline" onClick={() => nav(`/generate/${encodeURIComponent(query.trim() || "trello")}`)} className="mx-auto">Research it live <Sparkles className="size-3.5" /></Button>
+                      <div className="grid gap-3 py-4">
+                        <span>{query.trim() ? `No guide for “${query.trim()}” yet.` : "No guide for that app yet."}</span>
+                        <Button size="sm" onClick={() => nav(`/generate/${encodeURIComponent(query.trim() || "trello")}`)} className="mx-auto">Research {query.trim() ? `“${query.trim()}”` : "it"} live <Sparkles className="size-3.5" /></Button>
+                        <span className="text-xs text-zinc-500">The research agent writes a guide in 1-5 minutes.</span>
                       </div>
                     </CommandEmpty>
-                    <CommandGroup heading="Researched and tested">
+                    <CommandGroup heading={`Ready guides (${APPS.length})`}>
                       {APPS.map((a) => (
-                        <CommandItem key={a.slug} value={a.name} onSelect={() => nav(`/apps/${a.slug}`)}>
-                          <AppLogo slug={a.slug} name={a.name} size={16} /> {a.name}
-                          <span className="ml-auto"><DifficultyBadge d={a.difficulty} /></span>
+                        <CommandItem key={a.slug} value={a.name} onSelect={() => nav(`/apps/${a.slug}`)} className="gap-3 py-2.5">
+                          <AppLogo slug={a.slug} name={a.name} size={18} />
+                          <span className="flex flex-1 items-center gap-2"><span className="font-medium">{a.name}</span>{isTested(a) && <span className="text-xs text-emerald-700">tested</span>}</span>
+                          <span className="ml-auto flex items-center gap-3 text-xs text-zinc-500">{totalText(a)} <DifficultyBadge d={a.difficulty} /></span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
-                    <CommandGroup heading="Generate a guide live">
+                    <CommandGroup heading="No guide yet: research live">
                       {(library as { slug: string; name: string }[]).filter((l) => !APPS.some((a) => a.slug === l.slug)).slice(0, 40).map((l) => (
-                        <CommandItem key={l.slug} value={l.name} onSelect={() => nav(`/generate/${l.slug}`)}>
-                          <AppLogo slug={l.slug} name={l.name} size={16} /> {l.name}
-                          <span className="ml-auto text-xs text-zinc-500">research live</span>
+                        <CommandItem key={l.slug} value={l.name} onSelect={() => nav(`/generate/${l.slug}`)} className="gap-3 py-2.5">
+                          <AppLogo slug={l.slug} name={l.name} size={18} /> <span className="flex-1">{l.name}</span>
+                          <span className="text-xs text-zinc-500">research live</span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
