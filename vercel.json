@@ -8,20 +8,16 @@
   },
   "rewrites": [
     {
-      "source": "/oauth/github/start",
-      "destination": "/api/oauth/github/start"
-    },
-    {
-      "source": "/oauth/github/callback",
-      "destination": "/api/oauth/github/callback"
-    },
-    {
       "source": "/oauth/start",
-      "destination": "/api/oauth/start"
+      "destination": "/api/oauth?p=google&s=start"
     },
     {
       "source": "/oauth/callback",
-      "destination": "/api/oauth/callback"
+      "destination": "/api/oauth?p=google&s=callback"
+    },
+    {
+      "source": "/oauth/:p/:s",
+      "destination": "/api/oauth?p=:p&s=:s"
     },
     {
       "source": "/((?!api/|evidence/|assets/).*)",
