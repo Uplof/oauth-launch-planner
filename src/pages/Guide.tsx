@@ -33,6 +33,14 @@ function Tile({ icon: Icon, label, claim }: { icon: typeof Rocket; label: string
   )
 }
 
+// Real test apps we registered and kept as proof; each start link runs a live OAuth sign-in.
+const SIGN_IN_TESTS: Record<string, { start: string; note: string; result?: string }> = {
+  gmail: { start: "/oauth/start", result: "/evidence/gmail-granted.webp", note: "Runs against our test app “OAuth Planner Test” (testing mode). Only listed test users get through; everyone else sees Google's Error 403." },
+  github: { start: "/oauth/github/start", result: "/evidence/github-granted.webp", note: "Runs against our OAuth app “OAuth Planner Test”. Any GitHub account can sign in; nothing is stored." },
+  slack: { start: "/oauth/slack/start", note: "Runs against our Slack app “OAuth Planner Test”, publicly distributed, so any workspace can install it. You need to be allowed to install apps in your workspace." },
+  notion: { start: "/oauth/notion/start", result: "/evidence/notion-granted.webp", note: "Runs against our public Notion connection “OAuth Planner Test”. You pick which pages it may see; nothing is stored." },
+}
+
 export default function Guide() {
   const { slug = "" } = useParams()
   const [remote, setRemote] = useState<ReturnType<typeof loadGuide>>(null)
@@ -304,14 +312,14 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
               <CardDescription>See exactly what your users see and what {app.name} gives back: permissions granted, token lifetime, refresh token expiry.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3">
-              {app.slug === "gmail" ? (
+              {SIGN_IN_TESTS[app.slug] ? (
                 <>
-                  <p className="text-sm text-zinc-600">Runs against our test app “OAuth Planner Test” (testing mode). Only listed test users get through; everyone else sees Google's Error 403.</p>
-                  <Button asChild className="w-fit"><a href="/oauth/start">Start test sign-in <ExternalLink className="size-4" /></a></Button>
-                  <img src="/evidence/gmail-granted.webp" alt="Result of our test sign-in" className="max-w-xl rounded-md border" />
+                  <p className="text-sm text-zinc-600">{SIGN_IN_TESTS[app.slug].note}</p>
+                  <Button asChild className="w-fit"><a href={SIGN_IN_TESTS[app.slug].start}>Start test sign-in <ExternalLink className="size-4" /></a></Button>
+                  {SIGN_IN_TESTS[app.slug].result && <img src={SIGN_IN_TESTS[app.slug].result} alt={`Result of our ${app.name} test sign-in`} className="max-w-xl rounded-md border" />}
                 </>
               ) : (
-                <p className="text-sm text-zinc-600">Not wired up for {app.name} yet.</p>
+                <p className="text-sm text-zinc-600">No test app for {app.name}. This guide is from research only, so its claims carry docs, community or not-confirmed labels.</p>
               )}
             </CardContent>
           </Card>
