@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { ArrowRight, Sparkles, Search, Clock, ShieldCheck, Bot } from "lucide-react"
+import { ArrowRight, BadgeCheck, BookOpen, Clock, Search, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
@@ -120,55 +120,42 @@ export default function Home() {
         </Card>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
-        {[
-          { Icon: ShieldCheck, t: "Verdict first", d: "Do you need your own OAuth app, and how hard is approval for what your agent actually does?" },
-          { Icon: Clock, t: "A dated launch plan", d: "The slowest step starts today. See what you can build while you wait for review." },
-          { Icon: Bot, t: "Agent or you", d: "Every step says whether an agent can do it for you or it needs a human." },
-        ].map(({ Icon, t, d }) => (
-          <div key={t} className="grid gap-1.5">
-            <Icon className="size-5 text-zinc-700" />
-            <h3 className="font-medium">{t}</h3>
-            <p className="text-sm text-zinc-600">{d}</p>
+      <section className="mx-auto grid w-full max-w-5xl gap-3">
+        <Tabs defaultValue="guides" className="gap-4" data-tour="guides">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <TabsList className="h-10">
+              <TabsTrigger value="guides" className="h-full px-4"><BookOpen className="size-4" /> Guides ({APPS.length})</TabsTrigger>
+              <TabsTrigger value="time" className="h-full px-4" data-tour="chart"><Clock className="size-4" /> How long each takes</TabsTrigger>
+            </TabsList>
+            <Button variant="ghost" size="sm" asChild><Link to="/library">Full library <ArrowRight className="size-4" /></Link></Button>
           </div>
-        ))}
-      </section>
 
-      <section className="grid gap-4" data-tour="guides">
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="text-xl font-semibold">Guides</h2>
-            <p className="text-sm text-zinc-600">Picked to cover every kind of path, from instant to partners only.</p>
-          </div>
-          <Button variant="ghost" asChild><Link to="/library">All apps <ArrowRight className="size-4" /></Link></Button>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {APPS.map((a) => (
-            <Link key={a.slug} to={`/apps/${a.slug}`}>
-              <Card className="h-full transition hover:shadow-md">
-                <CardHeader className="gap-3">
-                  <div className="flex items-center gap-3">
-                    <AppLogo slug={a.slug} name={a.name} />
-                    <div className="grid">
-                      <CardTitle>{a.name}</CardTitle>
-                      <span className="text-xs text-zinc-500">{a.category}{a.sample ? " · sample" : isTested(a) ? " · tested" : " · researched"}</span>
-                    </div>
-                    <DifficultyBadge d={a.difficulty} className="ml-auto" />
-                  </div>
-                  <CardDescription className="text-zinc-700">{a.headline}</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
+          <TabsContent value="guides">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {APPS.map((a) => (
+                <Link key={a.slug} to={`/apps/${a.slug}`} className="group grid gap-2 rounded-sm border bg-white p-3 transition hover:border-zinc-400 hover:shadow-md">
+                  <span className="flex items-center gap-2.5">
+                    <AppLogo slug={a.slug} name={a.name} size={18} />
+                    <span className="min-w-0 flex-1 truncate font-medium">{a.name}</span>
+                    {isTested(a) && <BadgeCheck className="size-4 shrink-0 text-emerald-600" aria-label="Tested by me" />}
+                  </span>
+                  <span className="flex items-center justify-between gap-2 text-sm">
+                    <span className="text-zinc-600">{totalText(a)}</span>
+                    <DifficultyBadge d={a.difficulty} />
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <p className="pt-3 text-xs text-zinc-500"><BadgeCheck className="mr-1 inline size-3.5 text-emerald-600" />Tested by me with a real test app. The rest are researched from official docs.</p>
+          </TabsContent>
 
-      <section className="grid gap-4">
-        <div>
-          <h2 className="text-xl font-semibold">How long each app takes</h2>
-          <p className="text-sm text-zinc-600">From a blank form to your first real user, fastest first. Your work in violet, the provider's review in amber.</p>
-        </div>
-        <div className="rounded-xl border bg-white p-4" data-tour="chart"><TimeChart apps={APPS} /></div>
+          <TabsContent value="time">
+            <div className="rounded-sm border bg-white p-4">
+              <p className="pb-3 text-sm text-zinc-600">From a blank form to your first real user, fastest first. Your work in violet, the review wait in amber.</p>
+              <TimeChart apps={APPS} />
+            </div>
+          </TabsContent>
+        </Tabs>
       </section>
     </div>
   )

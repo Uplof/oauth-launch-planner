@@ -47,7 +47,7 @@ async function call(name, args = {}) {
 async function handle(msg) {
   const { id, method, params } = msg || {};
   if (method === 'initialize') {
-    return ok(id, { protocolVersion: params?.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'oauth-launch-planner', version: '1.0.0' } });
+    return ok(id, { protocolVersion: params?.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'greenlight', version: '1.0.0' } });
   }
   if (method === 'notifications/initialized' || method?.startsWith('notifications/')) return null;
   if (method === 'ping') return ok(id, {});
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method === 'GET') {
     res.setHeader('Content-Type', 'application/json');
-    return res.status(200).send(JSON.stringify({ name: 'oauth-launch-planner', transport: 'POST JSON-RPC to this URL', tools: TOOLS.map((t) => t.name) }));
+    return res.status(200).send(JSON.stringify({ name: 'greenlight', transport: 'POST JSON-RPC to this URL', tools: TOOLS.map((t) => t.name) }));
   }
   if (req.method !== 'POST') return res.status(405).end();
   const body = req.body && typeof req.body === 'object' ? req.body : JSON.parse(req.body || '{}');

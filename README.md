@@ -1,6 +1,8 @@
-# OAuth Launch Planner
+# Greenlight
 
-**Live:** https://oauth-launch-planner.vercel.app · **Source:** https://github.com/Uplof/oauth-launch-planner
+Know your OAuth path before you build.
+
+**Live:** https://greenlight-oauth.vercel.app · **Source:** https://github.com/Uplof/oauth-launch-planner
 
 A developer building an AI agent wants it to act in their users' Gmail, Slack or Notion. The code takes an afternoon. Getting the provider to let real users connect can take a day, a few weeks, or a yearly security audit, and nobody tells you which before you start. This site answers that first.
 

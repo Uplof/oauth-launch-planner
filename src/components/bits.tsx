@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { APPS, isTested, type Difficulty, type Owner, type Proof } from "@/data/apps"
-import { Bot, CircleDashed, FlaskConical, BookOpen, Users, User, Building2, BadgeCheck } from "lucide-react"
+import { Bot, CircleDashed, FlaskConical, BookOpen, Users, User, Building2, BadgeCheck, Check } from "lucide-react"
 
 const PROOF: Record<Proof, { label: string; tip: string; cls: string; Icon: typeof FlaskConical }> = {
   tested: { label: "Tested", tip: "I did this myself and recorded it", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", Icon: FlaskConical },
@@ -95,8 +95,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-30 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
           <Link to="/" className="flex items-center gap-2 font-semibold">
-            <span className="grid size-7 place-items-center rounded-md bg-zinc-900 text-xs text-white">OL</span>
-            OAuth Launch Planner
+            <span className="grid size-7 place-items-center rounded-sm bg-emerald-600 text-white"><Check className="size-4" strokeWidth={3} /></span>
+            Greenlight
           </Link>
           <nav className="hidden items-center gap-1 text-sm sm:flex">
             {nav.map((n) => (

@@ -13,8 +13,8 @@ interface Stop {
 // The walk-through: one stop per part of the product, in reading order across the pages.
 const TOUR: Stop[] = [
   { path: "/", target: "describe", title: "Start here", line: "Describe your AI agent in one sentence, or look up a single app." },
-  { path: "/", target: "guides", title: "20 ready guides", line: "Each card says how hard approval is. Tested ones I signed into myself." },
-  { path: "/", target: "chart", title: "How long each app takes", line: "From a blank form to your first real user. Your work in violet, the review wait in amber." },
+  { path: "/", target: "guides", title: "20 ready guides", line: "Each tile shows the total time and how hard approval is. A green tick means I tested it myself." },
+  { path: "/", target: "chart", title: "How long each app takes", line: "Open this tab to compare all 20 apps, from a blank form to the first real user." },
   { path: "/plan/demo", target: "plan-verdict", title: "Your launch plan", line: "One verdict for every app your agent needs." },
   { path: "/plan/demo", target: "plan-timeline", title: "What to start first", line: "The slowest review starts on day one, so nothing waits on it later." },
   { path: "/apps/gmail", target: "total", title: "One app's guide", line: "Total time first, then how it splits into your work and the review wait." },

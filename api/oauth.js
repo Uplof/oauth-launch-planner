@@ -16,8 +16,16 @@ const ROUTES = {
   notion: { start: notionStart, callback: notionCallback },
 };
 
+// The test apps are registered with the providers under this address, so a sign-in must start and end here.
+const HOME = 'oauth-launch-planner.vercel.app';
+
 export default function handler(req, res) {
-  const route = ROUTES[String(req.query.p || '')]?.[String(req.query.s || '')];
+  const p = String(req.query.p || ''), s = String(req.query.s || '');
+  if (s === 'start' && req.headers.host && req.headers.host !== HOME && !req.headers.host.startsWith('localhost')) {
+    res.writeHead(302, { Location: `https://${HOME}${p === 'google' ? '/oauth/start' : `/oauth/${p}/start`}` });
+    return res.end();
+  }
+  const route = ROUTES[p]?.[s];
   if (!route) { res.status(404).send('Unknown sign-in test'); return; }
   return route(req, res);
 }
