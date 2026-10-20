@@ -34,7 +34,7 @@ The pain is not the OAuth code. It is three things the provider docs spread acro
 | Actions decide difficulty, not the app | Gmail is easy or very hard depending on one scope. The permissions picker makes that visible and lets you trade a feature for weeks. |
 | Proof label on every line | Provider rules change. A guide is only useful if you can see which parts were tried, which are cited, and which are guesses. |
 | Six deep guides, one per kind of path | GitHub (instant), Slack (self-serve, optional marketplace review), Notion (public integration), Gmail (security review), LinkedIn (approved partners only), X (paid access tiers). Together they cover the shapes most providers take. |
-| Real setup attempts, kept | Gmail and GitHub test apps were created and signed in through, every step screenshotted. The apps are kept as proof. |
+| Real setup attempts, kept | Test apps on Google, GitHub, Slack and Notion were created and signed in through, every step screenshotted. The apps are kept as proof. |
 | A checker after the writer | The research agent's first draft is a claim, not a fact. A second pass reopens each source and downgrades what it cannot confirm. |
 | Built for coding agents too | Every guide is JSON at `/api/plan`, and an MCP endpoint at `/api/mcp` lets Claude Code or Cursor fetch a plan inside the editor. |
 
@@ -51,8 +51,21 @@ The pain is not the OAuth code. It is three things the provider docs spread acro
   - Registered in about a minute with no review; the client ID shows at once.
   - Our sign-in got an 8-hour access token and a 182-day refresh token.
   - The consent screen shows users the app's age and user count.
+- **Slack, own app in a new free workspace.**
+  - About 10 minutes to an installed app, including making the workspace; no review at any step.
+  - Public distribution is one self-check box and a click; any workspace could install at once.
+  - Our sign-in got all 8 bot scopes and 1 user scope; neither token expires unless you opt in to token rotation.
+- **Notion, own public OAuth connection.**
+  - On a brand-new account the Create button stays greyed out, with no message, until a workspace exists.
+  - Installable in any workspace from creation, with no review; the user picks which pages to share.
+  - Our sign-in got a refresh token; no access-token lifetime was stated.
 
-**What testing corrected:** the research said GitHub OAuth tokens are long-lived by default. Testing showed token expiry is now on by default. The guide and the evidence page record the correction.
+**What testing corrected:**
+- GitHub: the research said OAuth tokens are long-lived by default. Token expiry is now on by default.
+- Slack: the docs talk about 12-hour tokens. That only applies after opting in to token rotation; by default tokens don't expire.
+- Notion: third-party guides said the form asks for a website, privacy policy, terms and support email. It asked for none of them.
+
+The evidence page records each correction.
 
 **Live research runs (20 Oct):**
 
@@ -67,7 +80,7 @@ The evidence page (`/evidence`) lists every test, timing and correction.
 
 ## Limits
 
-- **Two of six guides are hands-on tested** (Gmail, GitHub). Slack and Notion are next; LinkedIn and X stay docs-only (partner and paid access).
+- **Four of six guides are hands-on tested** (Gmail, GitHub, Slack, Notion). LinkedIn and X stay docs-only, because real access needs partner approval or a paid tier.
 - **Review times are what providers publish**, not measured. Real waits vary.
 - **Live research runs on free AI tiers** (Groq, with Gemini as backup). A run uses roughly 150–200K tokens across its searches, so the free daily allowance covers only a handful of new runs; saved guides cost nothing. Each visitor gets 3 new research runs a day; saved and library guides are always free.
 - **The readiness check reads your public pages**; it cannot judge branding or whether your privacy policy is legally sufficient.
@@ -121,5 +134,7 @@ Environment variables (all optional except one AI key for live research):
 | `RESEARCH_RUNS_PER_DAY` | Per-visitor cap on new research runs (default 3) |
 | `client_id`, `client_secret` | Google test sign-in |
 | `github_secret` | GitHub test sign-in |
+| `slack_secret` | Slack test sign-in |
+| `notion_client_id`, `notion_secret` | Notion test sign-in |
 
 Deploy: `npx vercel deploy --prod`.
