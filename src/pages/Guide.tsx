@@ -16,6 +16,7 @@ import { getApp, isTested, type Action, type Claim } from "@/data/apps"
 import { AppLogo, DifficultyBadge, LevelBadge, OwnerChip, ProofBadge, SampleNote } from "@/components/bits"
 import { checkReadiness, loadGuide, type ReadinessResult } from "@/lib/api"
 import { GuideTimeline } from "@/components/Timeline"
+import { setupText, totalText, waitText } from "@/lib/time"
 import { Loader2, Sparkles } from "lucide-react"
 
 const RANK = { basic: 0, sensitive: 1, restricted: 2, partner: 3 } as const
@@ -146,8 +147,19 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
         </div>
       )}
 
-      <section className="grid gap-4 rounded-xl border bg-white p-5 shadow-sm">
-        <p className="text-balance text-xl font-semibold leading-snug sm:text-2xl">{app.headline}</p>
+      <section className="grid gap-5 rounded-xl border bg-white p-5 shadow-sm">
+        <div className="grid gap-1">
+          <span className="text-sm text-zinc-500">Total time, from start to your first real user</span>
+          <span className="text-4xl font-semibold tracking-tight">{totalText(app)}</span>
+          {app.typical && (
+            <span className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-sm text-zinc-600">
+              <span><b className="font-medium text-zinc-900">{setupText(app.typical.setupHours)}</b> of your work</span>
+              <span><b className="font-medium text-zinc-900">{waitText(app)}</b>{app.typical.waitDays && app.typical.waitDays[1] > 0 ? " waiting for review" : ""}</span>
+              {agentSteps > 0 && <span>an agent can do <b className="font-medium text-zinc-900">{agentSteps} of {app.steps.length}</b> steps</span>}
+            </span>
+          )}
+        </div>
+        <p className="max-w-3xl text-base leading-relaxed text-zinc-700">{app.headline}</p>
         <div className="grid gap-3 sm:grid-cols-3">
           <Fact icon={TestTube2} label="Try it yourself" claim={app.firstTest} />
           <Fact icon={Rocket} label="Real users can connect" claim={app.production} />
@@ -159,7 +171,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
         <section className="grid gap-3">
           <div>
             <h2 className="text-lg font-semibold">Your timeline</h2>
-            <p className="text-sm text-zinc-500">{app.typical ? `Typical: ${app.typical.toRealUsers} to real users.` : "What happens when, and who you wait on."}</p>
+            <p className="text-sm text-zinc-500">What happens when, and who you wait on.</p>
           </div>
           <GuideTimeline phases={app.timeline} />
         </section>
