@@ -6,29 +6,26 @@
   "difficulty": "easy",
   "headline": "Easy: create a public connection with Any workspace scope and any Notion user can install it. Marketplace listing (5-10 business days) is optional.",
   "firstTest": {
-    "text": "About 15 minutes. Create a public connection in the developer portal, add a redirect URI, choose capabilities, then run the OAuth flow with your own workspace.",
-    "proof": "docs",
-    "source": "https://developers.notion.com/guides/get-started/public-connections.md"
+    "text": "About 5 minutes of clicks once the account has a workspace: New connection, pick OAuth, add a redirect URI, create, then sign in. A brand-new account needs its onboarding finished first, or the Create button stays greyed out with no message.",
+    "proof": "tested"
   },
   "production": {
-    "text": "Same day, per Notion's guides. A public connection works through its OAuth flow without being listed. Marketplace listing is optional.",
-    "proof": "docs",
+    "text": "Same day. Our OAuth connection was installable in any workspace ('Public') from the moment it was created; no listing or review was needed for our test sign-in. Marketplace listing is optional.",
+    "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
   "approvalWait": {
-    "text": "None documented for installing a public connection. Marketplace listing: email response within 5-10 business days, and a Notion security review.",
-    "proof": "docs",
+    "text": "None to install a public connection: our test sign-in worked minutes after creating it. Marketplace listing: email response within 5-10 business days, and a Notion security review.",
+    "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
   "whoCanRegister": {
-    "text": "Create it in the Notion developer portal. Third-party guides show a Website, Privacy Policy URL, Terms of Use URL and contact email on the form. Notion's own pages list only name, workspace, redirect URIs, scope and capabilities.",
-    "proof": "community",
-    "source": "https://docs.ampersand.ai/provider-guides/notion"
+    "text": "Any Notion user with a workspace. The New connection form asks only for a name, API token or OAuth, installable-in and redirect URIs; it did not ask for a website, privacy policy or terms. Creating it means agreeing to Notion's Developer Terms.",
+    "proof": "tested"
   },
   "testMode": {
-    "text": "Internal connections use a static token for one workspace, with each page shared by hand. Public connections use OAuth, and each user authorizes and picks pages. Installation scope is fixed at creation.",
-    "proof": "docs",
-    "source": "https://developers.notion.com/guides/get-started/overview.md"
+    "text": "There is no separate test mode: an OAuth connection is live for any workspace at once. On consent the user picks a workspace and which pages to share (top-level pages are pre-ticked). Our sign-in returned an access token with no stated lifetime and a refresh token.",
+    "proof": "tested"
   },
   "actions": [
     {
@@ -37,7 +34,7 @@
       "scope": "Capability: Read content",
       "level": "basic",
       "review": "None to install. Marketplace listing needs a security review.",
-      "proof": "docs",
+      "proof": "tested",
       "timeToLive": "same day"
     },
     {
@@ -46,7 +43,7 @@
       "scope": "Capability: Update content",
       "level": "basic",
       "review": "None to install. Marketplace listing needs a security review.",
-      "proof": "docs",
+      "proof": "tested",
       "timeToLive": "same day"
     },
     {
@@ -55,7 +52,7 @@
       "scope": "Capability: Insert content",
       "level": "basic",
       "review": "None to install. Marketplace listing needs a security review.",
-      "proof": "docs",
+      "proof": "tested",
       "timeToLive": "same day"
     },
     {
@@ -64,7 +61,7 @@
       "scope": "Capability: Read comments / Insert comments",
       "level": "basic",
       "review": "None to install",
-      "proof": "docs",
+      "proof": "tested",
       "timeToLive": "same day"
     },
     {
@@ -72,34 +69,34 @@
       "label": "See who the users are",
       "scope": "User capability: no user info, or user info without email, or with email",
       "level": "basic",
-      "review": "None to install. Pick the lowest option you need.",
-      "proof": "docs",
+      "review": "None to install. Note: new connections start with 'user info including email' switched on; pick the lowest option you need.",
+      "proof": "tested",
       "timeToLive": "same day"
     }
   ],
   "steps": [
     {
       "title": "Open the developer portal",
-      "detail": "Sign in to Notion and open the Developer portal. Click Create new connection.",
+      "detail": "Profile, Integrations now opens Developer tools, Connections (integrations are now called connections), next to Workers, personal access tokens and MCP tokens.",
       "owner": "you",
       "time": "2 min",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
       "title": "Pick Public and installation scope",
-      "detail": "Choose Any workspace to let any Notion user install. Selected workspaces only limits it and blocks Marketplace. You can't change this later.",
+      "detail": "Choose OAuth, not API token: an API token is limited to 1 workspace and can't go on the Marketplace. With OAuth, Installable in defaults to Any workspace.",
       "owner": "you",
       "time": "2 min",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
-      "title": "Fill the organization fields",
-      "detail": "Third-party guides show Website, Privacy Policy URL, Terms of Use URL, contact email and an icon on this form. Notion's official pages don't list them. Have all four ready.",
+      "title": "Organization fields (not needed to create)",
+      "detail": "Third-party guides say the form asks for a website, privacy policy, terms and support email. Our form didn't: name, auth method, installable-in and redirect URIs were enough. Expect them for a Marketplace listing instead.",
       "owner": "you",
       "time": "15 min",
-      "proof": "community",
+      "proof": "tested",
       "link": "https://docs.ampersand.ai/provider-guides/notion"
     },
     {
@@ -107,15 +104,15 @@
       "detail": "OAuth domain & URIs section. Add your callback URI. Notion lists it as required for a public connection.",
       "owner": "you",
       "time": "5 min",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
       "title": "Choose capabilities",
-      "detail": "Pick Read, Update or Insert content, comment options, and a user-info level (none, without email, with email). Take the least you need.",
+      "detail": "After creating, the connection page lists content (read, update, insert, all on by default), comments (off by default) and user info (default: including email). Changes save on their own.",
       "owner": "you",
       "time": "5 min",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/reference/capabilities"
     },
     {
@@ -123,23 +120,23 @@
       "detail": "Configuration tab. Store the secret server-side.",
       "owner": "you",
       "time": "2 min",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/public-connections.md"
     },
     {
       "title": "Build the OAuth flow",
-      "detail": "Send users to api.notion.com/v1/oauth/authorize with client_id, redirect_uri, response_type=code, owner=user, and state. Exchange the code at /v1/oauth/token with Basic auth. Save the access and refresh tokens, bot_id and workspace.",
+      "detail": "Send users to api.notion.com/v1/oauth/authorize with owner=user, then exchange the code at /v1/oauth/token with Basic auth. Our exchange returned an access token and a refresh token.",
       "owner": "agent",
       "time": "1-2 hours",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/docs/authorization"
     },
     {
       "title": "Handle the page picker",
-      "detail": "Users choose which pages to share. If your agent finds nothing, the user shared too little. Show an 'add more pages' action.",
+      "detail": "Users choose pages on the consent screen; top-level pages are pre-ticked and 'People' appears when you ask for user info. Our test shared 3 pages or databases.",
       "owner": "agent",
       "time": "1 hour",
-      "proof": "docs",
+      "proof": "tested",
       "link": "https://developers.notion.com/guides/get-started/overview.md"
     },
     {
@@ -164,9 +161,9 @@
       "proof": "docs"
     },
     {
-      "title": "Form asks for privacy policy, terms, support email",
-      "fix": "Third-party setup guides list these fields. Publish a real privacy policy and terms page and a monitored support email before you start.",
-      "proof": "community"
+      "title": "Create connection is greyed out",
+      "fix": "Happens on a new account with no workspace yet; the form gives no reason. Finish Notion's onboarding to create a workspace, then try again.",
+      "proof": "tested"
     },
     {
       "title": "Marketplace listing rejected",
@@ -246,10 +243,31 @@
     }
   ],
   "unconfirmed": [
-    "Which organization fields (company name, website, privacy policy, terms, support email) the form actually enforces. Notion's pages don't list them; third-party guides disagree on company name and one says placeholders were accepted.",
-    "Whether any review gates a public connection before other workspaces can install. One caption says the Authorization URL appears after the connection is submitted for review, but the Overview says only Marketplace listing needs the security review.",
-    "Access token and refresh token lifetimes. The refresh endpoint is documented without durations."
+    "Answered by our test: the creation form enforced no organization fields (no website, privacy policy, terms or support email). Whether a Marketplace listing asks for them was not tested.",
+    "Answered by our test: no review gates a public connection. The Authorization URL was shown as soon as the connection was created, and our sign-in worked minutes later.",
+    "Still open: how long tokens live. Our sign-in returned a refresh token but no stated lifetime for the access token, and the docs give no durations."
   ],
-  "screenshots": [],
-  "checked": "20 Oct 2026"
+  "screenshots": [
+    {
+      "src": "/evidence/notion-02-new-connection.jpg",
+      "caption": "New connection: API token (1 workspace, no Marketplace) or OAuth (any workspace)"
+    },
+    {
+      "src": "/evidence/notion-05-create-disabled.jpg",
+      "caption": "New account with no workspace: Create connection stays greyed out, no message"
+    },
+    {
+      "src": "/evidence/notion-11-capabilities-default.jpg",
+      "caption": "Default capabilities: all content on, comments off, user info with email"
+    },
+    {
+      "src": "/evidence/notion-consent.webp",
+      "caption": "What users see: pick a workspace and the pages to share"
+    },
+    {
+      "src": "/evidence/notion-granted.webp",
+      "caption": "Our test sign-in: 3 pages shared, refresh token returned"
+    }
+  ],
+  "checked": "21 Oct 2026"
 }
