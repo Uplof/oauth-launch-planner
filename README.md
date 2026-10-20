@@ -1,6 +1,7 @@
 # OAuth Launch Planner
 
 **Live:** https://oauth-launch-planner.vercel.app
+**Source:** https://github.com/Satyamknown/oauth-launch-planner
 
 A developer building an AI agent wants it to act in their users' Gmail, GitHub, Slack or Notion. The code takes an afternoon. Getting the provider to let real users connect can take a week, three months, or never, and nobody tells you which before you start.
 
