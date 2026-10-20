@@ -1,0 +1,255 @@
+{
+  "slug": "notion",
+  "name": "Notion",
+  "category": "Productivity",
+  "sample": false,
+  "difficulty": "easy",
+  "headline": "Easy: create a public connection with Any workspace scope and any Notion user can install it. Marketplace listing (5-10 business days) is optional.",
+  "firstTest": {
+    "text": "About 15 minutes. Create a public connection in the developer portal, add a redirect URI, choose capabilities, then run the OAuth flow with your own workspace.",
+    "proof": "docs",
+    "source": "https://developers.notion.com/guides/get-started/public-connections.md"
+  },
+  "production": {
+    "text": "Same day, per Notion's guides. A public connection works through its OAuth flow without being listed. Marketplace listing is optional.",
+    "proof": "docs",
+    "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
+  },
+  "approvalWait": {
+    "text": "None documented for installing a public connection. Marketplace listing: email response within 5-10 business days, and a Notion security review.",
+    "proof": "docs",
+    "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
+  },
+  "whoCanRegister": {
+    "text": "Create it in the Notion developer portal. Third-party guides show a Website, Privacy Policy URL, Terms of Use URL and contact email on the form. Notion's own pages list only name, workspace, redirect URIs, scope and capabilities.",
+    "proof": "community",
+    "source": "https://docs.ampersand.ai/provider-guides/notion"
+  },
+  "testMode": {
+    "text": "Internal connections use a static token for one workspace, with each page shared by hand. Public connections use OAuth, and each user authorizes and picks pages. Installation scope is fixed at creation.",
+    "proof": "docs",
+    "source": "https://developers.notion.com/guides/get-started/overview.md"
+  },
+  "actions": [
+    {
+      "id": "read-content",
+      "label": "Read pages and databases",
+      "scope": "Capability: Read content",
+      "level": "basic",
+      "review": "None to install. Marketplace listing needs a security review.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "update-content",
+      "label": "Edit existing pages",
+      "scope": "Capability: Update content",
+      "level": "basic",
+      "review": "None to install. Marketplace listing needs a security review.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "insert-content",
+      "label": "Create new pages and rows",
+      "scope": "Capability: Insert content",
+      "level": "basic",
+      "review": "None to install. Marketplace listing needs a security review.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "comments",
+      "label": "Read and add comments",
+      "scope": "Capability: Read comments / Insert comments",
+      "level": "basic",
+      "review": "None to install",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "user-info",
+      "label": "See who the users are",
+      "scope": "User capability: no user info, or user info without email, or with email",
+      "level": "basic",
+      "review": "None to install. Pick the lowest option you need.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Open the developer portal",
+      "detail": "Sign in to Notion and open the Developer portal. Click Create new connection.",
+      "owner": "you",
+      "time": "2 min",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/public-connections.md"
+    },
+    {
+      "title": "Pick Public and installation scope",
+      "detail": "Choose Any workspace to let any Notion user install. Selected workspaces only limits it and blocks Marketplace. You can't change this later.",
+      "owner": "you",
+      "time": "2 min",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/public-connections.md"
+    },
+    {
+      "title": "Fill the organization fields",
+      "detail": "Third-party guides show Website, Privacy Policy URL, Terms of Use URL, contact email and an icon on this form. Notion's official pages don't list them. Have all four ready.",
+      "owner": "you",
+      "time": "15 min",
+      "proof": "community",
+      "link": "https://docs.ampersand.ai/provider-guides/notion"
+    },
+    {
+      "title": "Add redirect URIs",
+      "detail": "OAuth domain & URIs section. Add your callback URI. Notion lists it as required for a public connection.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/public-connections.md"
+    },
+    {
+      "title": "Choose capabilities",
+      "detail": "Pick Read, Update or Insert content, comment options, and a user-info level (none, without email, with email). Take the least you need.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "title": "Copy client ID and secret",
+      "detail": "Configuration tab. Store the secret server-side.",
+      "owner": "you",
+      "time": "2 min",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/public-connections.md"
+    },
+    {
+      "title": "Build the OAuth flow",
+      "detail": "Send users to api.notion.com/v1/oauth/authorize with client_id, redirect_uri, response_type=code, owner=user, and state. Exchange the code at /v1/oauth/token with Basic auth. Save the access and refresh tokens, bot_id and workspace.",
+      "owner": "agent",
+      "time": "1-2 hours",
+      "proof": "docs",
+      "link": "https://developers.notion.com/docs/authorization"
+    },
+    {
+      "title": "Handle the page picker",
+      "detail": "Users choose which pages to share. If your agent finds nothing, the user shared too little. Show an 'add more pages' action.",
+      "owner": "agent",
+      "time": "1 hour",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/overview.md"
+    },
+    {
+      "title": "Optional: list on the Marketplace",
+      "detail": "Needs Any workspace scope, a listing with name, description, category, tags, images and logo. Notion reviews every submission and replies by email in 5-10 business days.",
+      "owner": "you",
+      "time": "1-2 weeks",
+      "proof": "docs",
+      "link": "https://developers.notion.com/guides/get-started/marketplace-listing.md",
+      "slow": true
+    }
+  ],
+  "blockers": [
+    {
+      "title": "Created with 'Selected workspaces only'",
+      "fix": "Scope can't be changed later. Create a new connection with Any workspace.",
+      "proof": "docs"
+    },
+    {
+      "title": "Agent sees no pages",
+      "fix": "Notion grants access only to pages the user picks in the OAuth page picker. Prompt users to share more pages, or offer a template to duplicate.",
+      "proof": "docs"
+    },
+    {
+      "title": "Form asks for privacy policy, terms, support email",
+      "fix": "Third-party setup guides list these fields. Publish a real privacy policy and terms page and a monitored support email before you start.",
+      "proof": "community"
+    },
+    {
+      "title": "Marketplace listing rejected",
+      "fix": "Notion emails the reason. Update the listing and resubmit. The connection must be public with Any workspace scope.",
+      "proof": "docs"
+    },
+    {
+      "title": "Access token stops working",
+      "fix": "A refresh flow exists and returns a new access and refresh token. The docs opened here give no lifetimes, so refresh on 401 and save the new pair every time.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the OAuth flow and token refresh",
+    "Choose the minimum capability set from the actions the agent needs",
+    "Build the page-picker handling and 'share more pages' prompt",
+    "Draft the privacy policy and listing copy",
+    "Prepare the Marketplace listing assets list"
+  ],
+  "youDo": [
+    "Create the connection while signed in to Notion",
+    "Publish a privacy policy, terms page and support email",
+    "Copy the client secret into your secrets store",
+    "Submit the Marketplace listing if you want one",
+    "Customers pick the pages to share"
+  ],
+  "drafts": [
+    {
+      "title": "Connection description",
+      "body": "[Product] connects your AI assistant to the Notion pages you choose. It can read, and when you ask, update or add pages. It never sees pages you don't share."
+    },
+    {
+      "title": "Marketplace listing blurb",
+      "body": "Ask [Product] about your Notion workspace and have it take notes and create pages for you. You pick the pages it can reach. Remove access any time in Notion settings."
+    },
+    {
+      "title": "Support email auto-reply",
+      "body": "Thanks for writing to [Product] support. We reply within [N] business days. If your agent can't see a page, open it in Notion, choose Add connections, and select [Product]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Notion: Authorization (OAuth flow)",
+      "url": "https://developers.notion.com/docs/authorization"
+    },
+    {
+      "title": "Notion: Authorization guide",
+      "url": "https://developers.notion.com/guides/get-started/authorization.md"
+    },
+    {
+      "title": "Notion: Overview of connection types",
+      "url": "https://developers.notion.com/guides/get-started/overview.md"
+    },
+    {
+      "title": "Notion: Public connections",
+      "url": "https://developers.notion.com/guides/get-started/public-connections.md"
+    },
+    {
+      "title": "Notion: List on the Marketplace",
+      "url": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
+    },
+    {
+      "title": "Notion: Connection capabilities",
+      "url": "https://developers.notion.com/reference/capabilities"
+    },
+    {
+      "title": "Notion: Refresh a token",
+      "url": "https://developers.notion.com/reference/refresh-a-token.md"
+    },
+    {
+      "title": "Google Gemini Enterprise: Notion configuration",
+      "url": "https://docs.cloud.google.com/gemini/enterprise/docs/connectors/notion/config"
+    },
+    {
+      "title": "Ampersand: Notion provider guide",
+      "url": "https://docs.ampersand.ai/provider-guides/notion"
+    }
+  ],
+  "unconfirmed": [
+    "Which organization fields (company name, website, privacy policy, terms, support email) the form actually enforces. Notion's pages don't list them; third-party guides disagree on company name and one says placeholders were accepted.",
+    "Whether any review gates a public connection before other workspaces can install. One caption says the Authorization URL appears after the connection is submitted for review, but the Overview says only Marketplace listing needs the security review.",
+    "Access token and refresh token lifetimes. The refresh endpoint is documented without durations."
+  ],
+  "screenshots": [],
+  "checked": "20 Oct 2026"
+}

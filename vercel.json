@@ -1,0 +1,31 @@
+{
+  "framework": "vite",
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 300,
+      "includeFiles": "src/data/guides/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/oauth/github/start",
+      "destination": "/api/oauth/github/start"
+    },
+    {
+      "source": "/oauth/github/callback",
+      "destination": "/api/oauth/github/callback"
+    },
+    {
+      "source": "/oauth/start",
+      "destination": "/api/oauth/start"
+    },
+    {
+      "source": "/oauth/callback",
+      "destination": "/api/oauth/callback"
+    },
+    {
+      "source": "/((?!api/|evidence/|assets/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

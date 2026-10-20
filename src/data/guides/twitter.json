@@ -1,0 +1,252 @@
+{
+  "slug": "twitter",
+  "name": "X (Twitter)",
+  "category": "Social media",
+  "sample": false,
+  "difficulty": "moderate",
+  "headline": "No app review is documented, so you can go live fast, but every API call now costs money on pay-per-use credits, and refresh tokens rotate.",
+  "firstTest": {
+    "text": "About 30 minutes to a working sign-in and first post, once credits are bought",
+    "proof": "docs",
+    "source": "https://docs.x.com/x-api/getting-started/getting-access"
+  },
+  "production": {
+    "text": "Pay-per-use is the current model for new developers. Docs describe no approval step: sign up at console.x.com, create an app, fund credits. Higher volume than the pay-per-use read cap needs an Enterprise plan.",
+    "proof": "docs",
+    "source": "https://docs.x.com/x-api/getting-started/pricing"
+  },
+  "approvalWait": {
+    "text": "None documented. The sign-up and app pages we opened do not mention approval, review or a wait.",
+    "proof": "unconfirmed",
+    "source": "https://docs.x.com/x-api/getting-started/getting-access"
+  },
+  "whoCanRegister": {
+    "text": "Anyone with an X account: sign in at console.x.com, accept the Developer Agreement and Policy, describe how you will use the API, then create an app with a name, description and use case.",
+    "proof": "docs",
+    "source": "https://docs.x.com/x-api/getting-started/getting-access"
+  },
+  "testMode": {
+    "text": "There is no free test tier. Credits are bought up front and deducted per request: a post costs $0.015, a post containing a URL costs $0.20, reading a post costs $0.005. Per-user limit on creating posts is 100 per 15 minutes and 10,000 per 24 hours per app.",
+    "proof": "docs",
+    "source": "https://docs.x.com/x-api/getting-started/pricing"
+  },
+  "actions": [
+    {
+      "id": "read-profile",
+      "label": "Sign the user in and read their profile",
+      "scope": "users.read tweet.read",
+      "level": "basic",
+      "review": "None documented.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "post",
+      "label": "Publish a post for the user",
+      "scope": "tweet.write",
+      "level": "basic",
+      "review": "None documented. Billed per post.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "read-posts",
+      "label": "Read posts and timelines",
+      "scope": "tweet.read",
+      "level": "basic",
+      "review": "None documented. Billed per post returned.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "stay-connected",
+      "label": "Keep the connection alive without asking the user again",
+      "scope": "offline.access",
+      "level": "basic",
+      "review": "None. Adds a refresh token to the token response.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "dms",
+      "label": "Read and send direct messages",
+      "scope": "dm.read dm.write",
+      "level": "sensitive",
+      "review": "No separate review is documented. We marked it sensitive because it reads private messages.",
+      "proof": "unconfirmed",
+      "timeToLive": "same day"
+    },
+    {
+      "id": "engage",
+      "label": "Like and follow on the user's behalf",
+      "scope": "like.write follows.write",
+      "level": "basic",
+      "review": "None documented. Follow and unfollow have a lower per-user limit of 50 per 15 minutes.",
+      "proof": "docs",
+      "timeToLive": "same day"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Sign in to the Developer Console",
+      "detail": "Go to console.x.com with the X account that will own the app. Accept the Developer Agreement and Policy.",
+      "owner": "you",
+      "time": "3 min",
+      "proof": "docs",
+      "link": "https://console.x.com"
+    },
+    {
+      "title": "Describe how you will use the API",
+      "detail": "Complete the profile prompt. Say who your users are, that they connect their own X account, and what the agent does with it. The docs give no minimum length.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/x-api/getting-started/getting-access"
+    },
+    {
+      "title": "Create the app",
+      "detail": "Dashboard, New App. Enter a name, description and use case. Save every key and secret straight away: they show once, and regenerating invalidates the old ones.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/x-api/getting-started/getting-access"
+    },
+    {
+      "title": "Buy credits and set a spend limit",
+      "detail": "Add a payment method in the Console and buy credits. Pay-per-use has no subscription and no minimum. New pay-per-use accounts may get one-time bonus credits from 2 Oct 2026, but X says the incentives are still rolling out.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "community",
+      "link": "https://opentweet.io/x-api-pricing"
+    },
+    {
+      "title": "Turn on OAuth 2.0 and add exact callback URLs",
+      "detail": "In the app settings, enable OAuth 2.0 user authentication. Choose confidential (web app or bot, gets a client secret) or public (native or single-page app). Every redirect_uri you send must match a saved callback URL exactly.",
+      "owner": "you",
+      "time": "5 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/authorization-code"
+    },
+    {
+      "title": "Build the PKCE consent redirect",
+      "detail": "Send users to https://x.com/i/oauth2/authorize with a code challenge, state and scope=tweet.read tweet.write users.read offline.access.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "docs",
+      "link": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/authorization-code"
+    },
+    {
+      "title": "Exchange the code fast",
+      "detail": "POST to https://api.x.com/2/oauth2/token within 30 seconds of getting the code. Confidential clients use Basic auth with the client secret. Public clients put client_id in the body.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/authorization-code"
+    },
+    {
+      "title": "Store tokens and refresh safely",
+      "detail": "Access tokens last 2 hours. Refresh with grant_type=refresh_token. Community reports say each refresh returns a new refresh token and kills the old one, so save the new pair every time and never refresh the same user in parallel.",
+      "owner": "agent",
+      "time": "1 hr",
+      "proof": "community",
+      "link": "https://opentweet.io/how-to/fix-x-oauth-refresh-token-expired"
+    },
+    {
+      "title": "Post and respect limits",
+      "detail": "POST /2/tweets as the user. Stay under 100 per user per 15 minutes. Check the credit balance before long runs, because each post and each read is billed.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/x-api/fundamentals/rate-limits"
+    },
+    {
+      "title": "Handle disconnects",
+      "detail": "Call /2/oauth2/revoke when a user disconnects. On a 400 invalid_request during refresh, ask the user to reconnect.",
+      "owner": "agent",
+      "time": "30 min",
+      "proof": "docs",
+      "link": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/user-access-token"
+    }
+  ],
+  "blockers": [
+    {
+      "title": "No free tier any more",
+      "fix": "Plan a budget. Sources report the Free tier ended on 6 Feb 2026, apart from free access for public-utility apps, and legacy free users got a one-time $10 voucher. Add a payment method before you test.",
+      "proof": "community"
+    },
+    {
+      "title": "Basic and Pro tier status is unclear",
+      "fix": "Do not build around them. One report says Basic and Pro stay available with an opt-in to pay-per-use. Another says Basic moved to pay-per-use after 1 June 2026 and Pro after 1 September 2026. Check the Developer Console for what your account shows.",
+      "proof": "community"
+    },
+    {
+      "title": "Posts with links cost much more",
+      "fix": "A post containing a URL is billed at $0.20, against $0.015 for a plain post. Cap link posts in the agent, or put the link in a follow-up the user adds.",
+      "proof": "docs"
+    },
+    {
+      "title": "Refresh fails with invalid_request",
+      "fix": "Usually the refresh token was already used, the user revoked the app, or the secret was regenerated. Re-read your token store for a newer token, serialise refreshes per user, and only then ask the user to reconnect.",
+      "proof": "community"
+    },
+    {
+      "title": "No refresh token in the response",
+      "fix": "You left offline.access out of the scope list. Without it the user must reconnect every 2 hours.",
+      "proof": "docs"
+    },
+    {
+      "title": "Reads are capped on pay-per-use",
+      "fix": "Pay-per-use allows 3 million post reads per monthly cycle. Past that, X points you to an Enterprise plan with no published price.",
+      "proof": "docs"
+    }
+  ],
+  "agentCan": [
+    "Write the PKCE flow, state check and 30-second code exchange",
+    "Store access and refresh tokens, and refresh before the 2-hour expiry with one refresh at a time per user",
+    "Post, read and engage within the per-user limits",
+    "Track per-call cost and stop the agent when credits run low",
+    "Draft the developer profile and app use-case text"
+  ],
+  "youDo": [
+    "Sign in at console.x.com and accept the Developer Agreement and Policy",
+    "Create the app and store the keys somewhere safe",
+    "Add a payment method, buy credits and set a spend limit",
+    "Enter the callback URLs and choose confidential or public client",
+    "Sign in to X as a test user to give consent"
+  ],
+  "drafts": [
+    {
+      "title": "How you will use the API (developer profile)",
+      "body": "We are building [product name], an assistant that helps [type of user] manage their own X account. Each user connects their own account through the standard X sign-in and consent screen. With their permission the assistant drafts posts, publishes the ones the user approves, and shows how those posts performed. We do not scrape, we do not post without the user's approval, we do not sell X data, and users can disconnect at any time. We store only the tokens needed to act for each connected user."
+    },
+    {
+      "title": "App description and use case",
+      "body": "Description: [Product name] lets you plan and publish posts to X from one place, with an AI assistant that drafts text for you to approve. Use case: user-authorized posting and basic analytics. Scopes used: tweet.read, tweet.write, users.read and offline.access, so scheduled posts keep working without asking you to sign in every two hours."
+    },
+    {
+      "title": "Consent explainer shown to your users before the X screen",
+      "body": "[Product name] will ask X for permission to read your profile and posts and to publish posts for you. We only publish after you approve a draft. You can disconnect here at any time, or remove access in X under Settings, Security and account access, Connected apps."
+    }
+  ],
+  "sources": [
+    { "title": "X API pay-per-usage pricing", "url": "https://docs.x.com/x-api/getting-started/pricing" },
+    { "title": "X API: About the API", "url": "https://docs.x.com/x-api/getting-started/about-x-api" },
+    { "title": "X API: Getting access", "url": "https://docs.x.com/x-api/getting-started/getting-access" },
+    { "title": "OAuth 2.0 Authorization Code Flow with PKCE", "url": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/authorization-code" },
+    { "title": "OAuth 2.0 user access token", "url": "https://docs.x.com/resources/fundamentals/authentication/oauth-2-0/user-access-token" },
+    { "title": "X API rate limits", "url": "https://docs.x.com/x-api/fundamentals/rate-limits" },
+    { "title": "Roboin: X shifts API to pay-per-use (secondary)", "url": "https://roboin.io/article/en/2026/02/08/x-transitions-api-to-pay-per-use-model-ending-free-plan/" },
+    { "title": "OpenTweet: X API pricing, checked 10 Oct 2026 (vendor page)", "url": "https://opentweet.io/x-api-pricing" },
+    { "title": "OpenTweet: OAuth refresh token expired (vendor page)", "url": "https://opentweet.io/how-to/fix-x-oauth-refresh-token-expired" }
+  ],
+  "unconfirmed": [
+    "Whether X reviews apps or use-case descriptions. The docs pages we opened mention neither approval nor a wait, and give no minimum length for the description.",
+    "Refresh token lifetime. Official pages do not state one. A vendor page says unused refresh tokens eventually expire but gives no number.",
+    "Whether refresh tokens rotate. Only a vendor page says each refresh issues a new one and voids the old one. Treat it as true when coding.",
+    "The status of the Basic and Pro tiers. Reports conflict and the pricing page we opened only describes pay-per-use and Enterprise.",
+    "Whether the posting limits (100 per 15 minutes per user, 10,000 per 24 hours per app) apply unchanged to pay-per-use accounts. The rate limits page does not split limits by plan.",
+    "Which scopes, if any, need extra approval. The scope page lists them with no review notes."
+  ],
+  "screenshots": [],
+  "checked": "20 Oct 2026"
+}
