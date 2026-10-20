@@ -17,15 +17,6 @@
   "tools": 573
  },
  {
-  "slug": "highlevel_location",
-  "name": "HighLevel Location",
-  "modes": [
-   "OAUTH2",
-   "BEARER_TOKEN"
-  ],
-  "tools": 554
- },
- {
   "slug": "googlesuper",
   "name": "Google Workspace (all apps)",
   "modes": [

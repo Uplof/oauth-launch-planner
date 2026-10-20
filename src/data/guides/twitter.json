@@ -16,7 +16,7 @@
     "source": "https://docs.x.com/x-api/getting-started/pricing"
   },
   "approvalWait": {
-    "text": "None documented. The sign-up and app pages we opened mention no approval, review or wait.",
+    "text": "None documented. The sign-up and app pages I opened mention no approval, review or wait.",
     "proof": "unconfirmed",
     "source": "https://docs.x.com/x-api/getting-started/getting-access"
   },
@@ -72,7 +72,7 @@
       "label": "Read and send direct messages",
       "scope": "dm.read dm.write",
       "level": "sensitive",
-      "review": "No separate review documented. We marked it sensitive because it reads private messages.",
+      "review": "No separate review documented. I marked it sensitive because it reads private messages.",
       "proof": "unconfirmed",
       "timeToLive": "same day"
     },
@@ -267,10 +267,10 @@
     }
   ],
   "unconfirmed": [
-    "Whether X reviews apps or use-case descriptions. The docs pages we opened mention neither approval nor a wait, and give no minimum length for the description.",
+    "Whether X reviews apps or use-case descriptions. The docs pages I opened mention neither approval nor a wait, and give no minimum length for the description.",
     "Refresh token lifetime. Official pages do not state one. A vendor page says unused refresh tokens eventually expire but gives no number.",
     "Whether refresh tokens rotate. Only a vendor page says each refresh issues a new one and voids the old one. Treat it as true when coding.",
-    "The status of the Basic and Pro tiers. Reports conflict and the pricing page we opened only describes pay-per-use and Enterprise.",
+    "The status of the Basic and Pro tiers. Reports conflict and the pricing page I opened only describes pay-per-use and Enterprise.",
     "Whether the posting limits (100 per 15 minutes per user, 10,000 per 24 hours per app) apply unchanged to pay-per-use accounts. The rate limits page does not split limits by plan.",
     "Which scopes, if any, need extra approval. The scope page lists them with no review notes."
   ],

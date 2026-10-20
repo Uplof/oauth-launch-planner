@@ -71,7 +71,7 @@ export default async function handler(req, res) {
   const rows = asked.map((s) => `<tr><th>${esc(LABELS[s] || s)}</th><td class="${granted.has(s) ? 'ok' : 'no'}">${granted.has(s) ? 'Granted' : 'Not granted'}</td></tr>`).join('');
   const days = (sec) => (sec ? `${Math.round(sec / 86400 * 10) / 10} days (${sec} s)` : 'not stated');
 
-  res.status(200).send(page('What Google granted', `<h1>What Google granted our test app</h1>
+  res.status(200).send(page('What Google granted', `<h1>What Google granted my test app</h1>
 <table>${rows}
 <tr><th>Access token lifetime</th><td>${t.expires_in ? Math.round(t.expires_in / 60) + ' minutes' : 'not stated'}</td></tr>
 <tr><th>Refresh token returned</th><td>${t.refresh_token ? 'Yes' : 'No'}</td></tr>

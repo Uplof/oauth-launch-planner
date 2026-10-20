@@ -80,7 +80,7 @@
   "steps": [
     {
       "title": "Sign up as a developer",
-      "detail": "Go to the HighLevel Marketplace and sign in to your developer account. Signup steps and cost weren't documented on the pages we opened.",
+      "detail": "Go to the HighLevel Marketplace and sign in to your developer account. Signup steps and cost weren't documented on the pages I opened.",
       "owner": "you",
       "time": "10 min",
       "proof": "docs",
@@ -264,7 +264,7 @@
   ],
   "unconfirmed": [
     "The current public review wait. The 10 business days is from a 2023 changelog post. The 7 to 14 business day range is a third-party blog. The current guidelines page gives no timeline.",
-    "How developer account signup works and whether it costs anything. The pages we opened do not say.",
+    "How developer account signup works and whether it costs anything. The pages I opened do not say.",
     "Whether the Agency Pro plan requirement for OAuth applies to you as the developer, to installing users, or both. The help centre says OAuth needs Advanced API access on Agency Pro.",
     "Whether reviewers get test credentials. The guidelines only require the Loom demo and a complete, testable app.",
     "What response a rate-limited call gets. The rate limit page lists headers but does not describe a 429 reply.",

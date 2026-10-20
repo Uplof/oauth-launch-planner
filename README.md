@@ -12,7 +12,7 @@ This tool answers that question first. Describe your product (or name one app) a
 - **The permissions your agent needs**, and the review level each one triggers. Untick "read email" and watch a 10-week security audit drop to a 2-week review.
 - **Blockers and fixes**, **paperwork drafts** (scope justifications, form values, demo video script), a **readiness check** of your website the way a reviewer would look at it, a **test sign-in**, and the **evidence**.
 - **A timeline:** day by day, what you do, what an agent does, and how long you wait on the provider. A chart compares all 20 apps.
-- **A proof label on every claim:** *tested* (we did it), *official docs* (linked), *community* (forum or blog), or *not confirmed*.
+- **A proof label on every claim:** *tested* (I did it), *official docs* (linked), *community* (forum or blog), or *not confirmed*.
 
 For an app without a guide, a **live research agent** searches the provider's docs, writes the guide, fact-checks the key claims against their source pages, and saves it with a shareable link.
 
@@ -39,27 +39,27 @@ The pain is not the OAuth code. It is three things the provider docs spread acro
 | A checker after the writer | The research agent's first draft is a claim, not a fact. A second pass reopens each source and downgrades what it cannot confirm. |
 | Built for coding agents too | Every guide is JSON at `/api/plan`, and an MCP endpoint at `/api/mcp` lets Claude Code or Cursor fetch a plan inside the editor. |
 
-## What we checked
+## What I checked
 
 **Hands-on (tested):**
 
 - **Gmail, own Google OAuth app.**
   - `gmail.send` is filed as sensitive and `gmail.readonly` as restricted.
   - Testing mode needs no verification and allows 100 users over the app's lifetime.
-  - Our sign-in got a refresh token that expires in 604,799 s (7 days).
+  - My sign-in got a refresh token that expires in 604,799 s (7 days).
   - A non-test user is blocked with `Error 403: access_denied` before any consent screen.
 - **GitHub, own OAuth app.**
   - Registered in about a minute with no review; the client ID shows at once.
-  - Our sign-in got an 8-hour access token and a 182-day refresh token.
+  - My sign-in got an 8-hour access token and a 182-day refresh token.
   - The consent screen shows users the app's age and user count.
 - **Slack, own app in a new free workspace.**
   - About 10 minutes to an installed app, including making the workspace; no review at any step.
   - Public distribution is one self-check box and a click; any workspace could install at once.
-  - Our sign-in got all 8 bot scopes and 1 user scope; neither token expires unless you opt in to token rotation.
+  - My sign-in got all 8 bot scopes and 1 user scope; neither token expires unless you opt in to token rotation.
 - **Notion, own public OAuth connection.**
   - On a brand-new account the Create button stays greyed out, with no message, until a workspace exists.
   - Installable in any workspace from creation, with no review; the user picks which pages to share.
-  - Our sign-in got a refresh token; no access-token lifetime was stated.
+  - My sign-in got a refresh token; no access-token lifetime was stated.
 
 **What testing corrected:**
 - GitHub: the research said OAuth tokens are long-lived by default. Token expiry is now on by default.
@@ -114,7 +114,7 @@ Coding agents    ──>  /api/mcp                     list_guides, get_oauth_pl
 - **Guides:** `src/data/guides/*.json` (bundled) and Vercel Blob (researched).
 - **AI:** Groq `gpt-oss` with built-in browser search, falling back to Gemini with Google Search grounding. If `ANTHROPIC_API_KEY` is set, Claude with web search and web fetch is used instead.
 
-The architecture page (`/architecture`) maps every piece.
+ARCHITECTURE.md (in the parent project folder) maps every piece.
 
 ## Run it locally
 

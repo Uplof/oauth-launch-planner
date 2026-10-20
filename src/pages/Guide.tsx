@@ -40,12 +40,12 @@ function ProofDot({ proof, source }: { proof: Claim["proof"]; source?: string })
   return <span className="w-fit scale-90 origin-left"><ProofBadge proof={proof} source={source} /></span>
 }
 
-// Real test apps we registered and kept as proof; each start link runs a live OAuth sign-in.
+// Real test apps I registered and kept as proof; each start link runs a live OAuth sign-in.
 const SIGN_IN_TESTS: Record<string, { start: string; note: string; result?: string }> = {
-  gmail: { start: "/oauth/start", result: "/evidence/gmail-granted.webp", note: "Runs against our test app “OAuth Planner Test” (testing mode). Only listed test users get through; everyone else sees Google's Error 403." },
-  github: { start: "/oauth/github/start", result: "/evidence/github-granted.webp", note: "Runs against our OAuth app “OAuth Planner Test”. Any GitHub account can sign in; nothing is stored." },
-  slack: { start: "/oauth/slack/start", note: "Runs against our Slack app “OAuth Planner Test”, publicly distributed, so any workspace can install it. You need to be allowed to install apps in your workspace." },
-  notion: { start: "/oauth/notion/start", result: "/evidence/notion-granted.webp", note: "Runs against our public Notion connection “OAuth Planner Test”. You pick which pages it may see; nothing is stored." },
+  gmail: { start: "/oauth/start", result: "/evidence/gmail-granted.webp", note: "Runs against my test app “OAuth Planner Test” (testing mode). Only listed test users get through; everyone else sees Google's Error 403." },
+  github: { start: "/oauth/github/start", result: "/evidence/github-granted.webp", note: "Runs against my OAuth app “OAuth Planner Test”. Any GitHub account can sign in; nothing is stored." },
+  slack: { start: "/oauth/slack/start", note: "Runs against my Slack app “OAuth Planner Test”, publicly distributed, so any workspace can install it. You need to be allowed to install apps in your workspace." },
+  notion: { start: "/oauth/notion/start", result: "/evidence/notion-granted.webp", note: "Runs against my public Notion connection “OAuth Planner Test”. You pick which pages it may see; nothing is stored." },
 }
 
 export default function Guide() {
@@ -114,7 +114,7 @@ export default function Guide() {
             <h1 className="text-3xl font-semibold tracking-tight">{app.name}</h1>
             <DifficultyBadge d={app.difficulty} />
           </div>
-          <p className="text-sm text-zinc-500">{tested ? "Tested by us" : "Researched"} · checked {app.checked}</p>
+          <p className="text-sm text-zinc-500">{tested ? "Tested by me" : "Researched"} · checked {app.checked}</p>
         </div>
         <div className="ml-auto flex gap-2">
           <Button variant="outline" size="sm" onClick={() => copy(window.location.href)}><Share2 className="size-4" /> Share</Button>
@@ -147,7 +147,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
         </div>
       )}
 
-      <section className="grid gap-5 rounded-xl border bg-white p-5 shadow-sm">
+      <section className="grid gap-5 rounded-xl border bg-white p-5 shadow-sm" data-tour="total">
         <div className="grid gap-1">
           <span className="text-sm text-zinc-500">Total time, from start to your first real user</span>
           <span className="text-4xl font-semibold tracking-tight">{totalText(app)}</span>
@@ -168,7 +168,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
       </section>
 
       {app.timeline && app.timeline.length > 0 && (
-        <section className="grid gap-3">
+        <section className="grid gap-3" data-tour="timeline">
           <div>
             <h2 className="text-lg font-semibold">Your timeline</h2>
             <p className="text-sm text-zinc-500">What happens when, and who you wait on.</p>
@@ -179,7 +179,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
 
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="grid min-w-0 gap-6">
-          <section className="grid gap-4">
+          <section className="grid gap-4" data-tour="steps">
             <div>
               <h2 className="text-lg font-semibold">How to do it</h2>
               <p className="text-sm text-zinc-500">{app.steps.length} steps{agentSteps ? ` · an agent can do ${agentSteps} of them` : ""}</p>
@@ -187,7 +187,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             <ol className="grid gap-3">
               {app.steps.map((s, i) => (
                 <li key={s.title} className={`grid grid-cols-[28px_minmax(0,1fr)] gap-3 rounded-lg border bg-white p-4 ${s.slow ? "border-rose-200" : ""}`}>
-                  <span className={`grid size-7 place-items-center rounded-full text-sm font-semibold tabular-nums ${s.slow ? "bg-rose-100 text-rose-700" : "bg-zinc-100 text-zinc-700"}`}>{i + 1}</span>
+                  <span className={`grid size-7 place-items-center rounded-sm text-sm font-semibold tabular-nums ${s.slow ? "bg-rose-100 text-rose-700" : "bg-zinc-100 text-zinc-700"}`}>{i + 1}</span>
                   <div className="grid min-w-0 gap-1.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-medium">{s.title}</span>
@@ -206,7 +206,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             </ol>
           </section>
 
-          <section className="grid gap-3">
+          <section className="grid gap-3" data-tour="blockers">
             <h2 className="text-lg font-semibold">Where people get stuck</h2>
             <div className="grid gap-2">
               {app.blockers.map((b) => (
@@ -222,7 +222,7 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             </div>
           </section>
 
-          <section className="grid gap-3">
+          <section className="grid gap-3" data-tour="permissions">
             <div>
               <h2 className="text-lg font-semibold">What will your agent do?</h2>
               <p className="text-sm text-zinc-500">What you ask for decides how strict the review is. Untick what you don't need.</p>
@@ -329,13 +329,13 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
         </div>
 
         <aside className="grid gap-4 lg:sticky lg:top-20">
-          <div className={`grid gap-3 rounded-xl border p-4 ${tested ? "border-emerald-200 bg-emerald-50/60" : "bg-white"}`}>
+          <div data-tour="proof" className={`grid gap-3 rounded-xl border p-4 ${tested ? "border-emerald-200 bg-emerald-50/60" : "bg-white"}`}>
             <div className="flex items-center gap-2 font-semibold">
               {tested ? <BadgeCheck className="size-5 text-emerald-600" /> : <BookOpen className="size-5 text-sky-600" />}
-              {tested ? "We tested this ourselves" : "Researched from official docs"}
+              {tested ? "I tested this myself" : "Researched from official docs"}
             </div>
             <p className="text-sm text-zinc-600">
-              {tested ? "We built a real test app, signed in through it and kept every screenshot." : `${app.sources.length} sources, every claim labelled. Not tested hands-on yet.`}
+              {tested ? "I built a real test app, signed in through it and kept every screenshot." : `${app.sources.length} sources, every claim labelled. Not tested hands-on yet.`}
             </p>
             {tested && app.screenshots.length > 0 && (
               <div className="grid grid-cols-3 gap-1.5">
@@ -347,9 +347,9 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             <Button size="sm" variant={tested ? "default" : "outline"} onClick={showProof}>{tested ? `See all ${app.screenshots.length} screenshots` : "See the sources"}</Button>
           </div>
 
-          <div className="grid gap-2.5 rounded-xl border bg-white p-4">
+          <div className="grid gap-2.5 rounded-xl border bg-white p-4" data-tour="check-site">
             <span className="flex items-center gap-2 font-semibold"><Globe className="size-4 text-sky-600" /> Check your site</span>
-            <p className="text-sm text-zinc-600">Would {app.name}'s reviewers approve it today? We check your home page, privacy policy, terms and contact.</p>
+            <p className="text-sm text-zinc-600">Would {app.name}'s reviewers approve it today? It checks your home page, privacy policy, terms and contact.</p>
             <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); runCheck() }}>
               <Input id="site" aria-label="Your website" placeholder="yourproduct.com" value={site} onChange={(e) => setSite(e.target.value)} />
               <Button type="submit" size="sm" disabled={checking}>{checking ? <Loader2 className="size-4 animate-spin" /> : "Check"}</Button>
@@ -363,16 +363,16 @@ get_oauth_plan({ app: "${app.slug}", needs: [${picked.map((p) => `"${p}"`).join(
             )}
           </div>
 
-          <div className="grid gap-2.5 rounded-xl border bg-white p-4">
+          <div className="grid gap-2.5 rounded-xl border bg-white p-4" data-tour="sign-in">
             <span className="flex items-center gap-2 font-semibold"><PlugZap className="size-4 text-violet-600" /> Try a real sign-in</span>
             {SIGN_IN_TESTS[app.slug] ? (
               <>
-                <p className="text-sm text-zinc-600">Sign in through our own {app.name} test app. You'll see exactly what your users see, and what access {app.name} gives back.</p>
+                <p className="text-sm text-zinc-600">Sign in through my own {app.name} test app. You'll see exactly what your users see, and what access {app.name} gives back.</p>
                 <Button asChild size="sm" variant="outline"><a href={SIGN_IN_TESTS[app.slug].start}>Start the sign-in <ExternalLink className="size-3.5" /></a></Button>
                 <span className="text-xs text-zinc-500">{SIGN_IN_TESTS[app.slug].note}</span>
               </>
             ) : (
-              <p className="text-sm text-zinc-600">Not available for {app.name} yet. We have real test apps for Gmail, GitHub, Slack and Notion.</p>
+              <p className="text-sm text-zinc-600">Not available for {app.name} yet. I have real test apps for Gmail, GitHub, Slack and Notion.</p>
             )}
           </div>
         </aside>

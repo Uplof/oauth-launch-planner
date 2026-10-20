@@ -1,4 +1,4 @@
-// Starts a Notion OAuth test with our own public connection "OAuth Planner Test".
+// Starts a Notion OAuth test with my own public connection "OAuth Planner Test".
 // The client ID is public by design; it and the secret live in Vercel as `notion_client_id` and `notion_secret`.
 import crypto from 'node:crypto';
 

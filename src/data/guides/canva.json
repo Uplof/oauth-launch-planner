@@ -268,10 +268,10 @@
     "The access token lifetime. Canva's docs say 'a short period'. The four hour figure is from a vendor article.",
     "Whether draft integrations have a user or call cap. 'Own team only' comes from vendor pages, not Canva docs.",
     "How long a refresh token lasts. Canva docs only say each one is single use.",
-    "The exact Developer Portal menu label for submitting. The Canva submission page we opened is written around apps inside Canva. The 'Submit for review' wording for Connect integrations comes from a search summary, so check the Portal.",
+    "The exact Developer Portal menu label for submitting. The Canva submission page I opened is written around apps inside Canva. The 'Submit for review' wording for Connect integrations comes from a search summary, so check the Portal.",
     "Which plans can use which Connect endpoints. Only a vendor page says analytics and autofill are Enterprise-limited. No official plan table was found.",
-    "Rate limits for the Connect APIs. None are published on the pages we opened. One vendor page says exports are 75 per user per 5 minutes.",
-    "Whether MFA is needed for the Developer Portal. The pages we opened do not mention it."
+    "Rate limits for the Connect APIs. None are published on the pages I opened. One vendor page says exports are 75 per user per 5 minutes.",
+    "Whether MFA is needed for the Developer Portal. The pages I opened do not mention it."
   ],
   "screenshots": [],
   "checked": "21 Oct 2026",

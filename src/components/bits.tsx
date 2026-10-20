@@ -7,10 +7,10 @@ import { APPS, isTested, type Difficulty, type Owner, type Proof } from "@/data/
 import { Bot, CircleDashed, FlaskConical, BookOpen, Users, User, Building2, BadgeCheck } from "lucide-react"
 
 const PROOF: Record<Proof, { label: string; tip: string; cls: string; Icon: typeof FlaskConical }> = {
-  tested: { label: "Tested", tip: "We did this ourselves and recorded it", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", Icon: FlaskConical },
+  tested: { label: "Tested", tip: "I did this myself and recorded it", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", Icon: FlaskConical },
   docs: { label: "Official docs", tip: "An official provider page says so", cls: "bg-sky-50 text-sky-700 border-sky-200", Icon: BookOpen },
   community: { label: "Community", tip: "Forums, vendors or reports from other developers", cls: "bg-amber-50 text-amber-800 border-amber-200", Icon: Users },
-  unconfirmed: { label: "Not confirmed", tip: "Best estimate we could not confirm", cls: "bg-zinc-50 text-zinc-600 border-zinc-200", Icon: CircleDashed },
+  unconfirmed: { label: "Not confirmed", tip: "Best estimate I could not confirm", cls: "bg-zinc-50 text-zinc-600 border-zinc-200", Icon: CircleDashed },
 }
 
 export function ProofBadge({ proof, source }: { proof: Proof; source?: string }) {
@@ -87,9 +87,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const nav = [
     { to: "/", label: "Plan" },
     { to: "/library", label: "Library" },
-    { to: "/evidence", label: "How we check" },
+    { to: "/evidence", label: "How I check" },
     { to: "/agents", label: "For coding agents" },
-    { to: "/architecture", label: "Architecture" },
   ]
   return (
     <div className="min-h-svh bg-zinc-50/60">
@@ -123,7 +122,7 @@ function ProofButton() {
   if (pathname.startsWith("/evidence")) return null
   const tested = APPS.filter(isTested).length
   return (
-    <Link to="/evidence" className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm shadow-lg hover:bg-emerald-50" style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}>
+    <Link to="/evidence" className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-sm border border-emerald-200 bg-white px-4 py-2 text-sm shadow-lg hover:bg-emerald-50" style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}>
       <BadgeCheck className="size-4 text-emerald-600" />
       <span><b>{tested} apps tested by hand</b> · See the proof</span>
     </Link>

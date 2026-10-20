@@ -273,9 +273,9 @@
   ],
   "unconfirmed": [
     "How long Microsoft takes to verify a new Cloud Partner Program account. The publisher verification pages say only that developers who already meet the requirements can be verified in minutes.",
-    "Which tenants actually have user consent disabled. Microsoft's default allows user consent for permissions that do not need admin consent, but each admin can change it, and we found no figure for how many do.",
-    "Whether personal Microsoft account users consent entirely on their own with no tenant policy in the way. The docs show a consent dialog for a Microsoft account user and list the mail and calendar permissions as supported for personal accounts. We found no page that says tenant consent policies never apply.",
-    "The exact portal wording for adding delegated permissions and client secrets. The pages we opened describe them but not the menu names.",
+    "Which tenants actually have user consent disabled. Microsoft's default allows user consent for permissions that do not need admin consent, but each admin can change it, and I found no figure for how many do.",
+    "Whether personal Microsoft account users consent entirely on their own with no tenant policy in the way. The docs show a consent dialog for a Microsoft account user and list the mail and calendar permissions as supported for personal accounts. I found no page that says tenant consent policies never apply.",
+    "The exact portal wording for adding delegated permissions and client secrets. The pages I opened describe them but not the menu names.",
     "Whether step-up consent applies to your app if it is registered single-tenant. The docs describe it for newly registered multitenant apps used by users outside the tenant where the app is registered."
   ],
   "screenshots": [],

@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   res.setHeader('Set-Cookie', 'slack_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
   if (!t.ok) return res.status(200).send(page('Token exchange failed', `<h1>Token exchange failed</h1><p><code>${esc(t.error || 'unknown')}</code></p>`));
   const u = t.authed_user || {};
-  res.status(200).send(page('What Slack granted', `<h1>What Slack granted our test app</h1>${rows([
+  res.status(200).send(page('What Slack granted', `<h1>What Slack granted my test app</h1>${rows([
     ['Workspace', t.team?.name || '(not stated)'],
     ['Bot permissions asked', BOT_SCOPES],
     ['Bot permissions granted', t.scope || '(none)'],

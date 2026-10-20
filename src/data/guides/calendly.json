@@ -266,12 +266,12 @@
     }
   ],
   "unconfirmed": [
-    "Whether Calendly reviews Production apps. No page we opened mentions a review, listing or approval, and the absence of one in the docs is not proof that none exists.",
+    "Whether Calendly reviews Production apps. No page I opened mentions a review, listing or approval, and the absence of one in the docs is not proof that none exists.",
     "Whether Sandbox apps can connect to real Calendly accounts or only to test data, and whether Sandbox uses a different authorization host. The authorization page gives only auth.calendly.com.",
     "Whether a connecting user's plan or the developer's plan decides webhook access. The help center says webhooks and Scheduling API endpoints need a paid plan but does not say whose.",
     "How long a refresh token lives if it is never used. One API page says refresh tokens do not expire until they are used. The rotation guide gives no lifetime.",
     "Whether the August 31, 2026 rotation deadline has already made single-use refresh tokens mandatory for all older apps. The guide says the grace period will end and gives no further date.",
-    "Any cap on the number of users who can connect one Production app. No page we opened states one."
+    "Any cap on the number of users who can connect one Production app. No page I opened states one."
   ],
   "screenshots": [],
   "checked": "21 Oct 2026",

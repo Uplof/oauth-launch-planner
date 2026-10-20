@@ -35,7 +35,7 @@ export default function Agents() {
         <p className="text-zinc-600">The same plan as data, so Claude Code, Cursor or your own agent can read it and do the agent-doable steps.</p>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card><CardHeader><CardTitle>JSON API</CardTitle><CardDescription>One call per app.</CardDescription></CardHeader><CardContent><pre className="overflow-x-auto rounded-md bg-zinc-950 p-4 text-xs text-zinc-100">{API}</pre></CardContent></Card>
+        <Card data-tour="agents"><CardHeader><CardTitle>JSON API</CardTitle><CardDescription>One call per app.</CardDescription></CardHeader><CardContent><pre className="overflow-x-auto rounded-md bg-zinc-950 p-4 text-xs text-zinc-100">{API}</pre></CardContent></Card>
         <Card><CardHeader><CardTitle>MCP server</CardTitle><CardDescription>Add once; your agent gets three tools.</CardDescription></CardHeader><CardContent><pre className="overflow-x-auto rounded-md bg-zinc-950 p-4 text-xs text-zinc-100">{MCP}</pre></CardContent></Card>
       </div>
     </div>

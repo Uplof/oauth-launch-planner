@@ -247,9 +247,9 @@
     }
   ],
   "unconfirmed": [
-    "The exact Admin screen path and the Enforce Scopes toggle label. The web search showed them, but we could not open the Instructure help article, so the guide only states the documented fields (redirect URIs, scopes, require_scopes).",
-    "The exact scope strings for each endpoint. The docs give the url:VERB|path pattern. We did not open the endpoint pages, so the three example strings follow the pattern and are not checked.",
-    "Whether PKCE is supported. The OAuth pages we opened do not mention it.",
+    "The exact Admin screen path and the Enforce Scopes toggle label. The web search showed them, but I could not open the Instructure help article, so the guide only states the documented fields (redirect URIs, scopes, require_scopes).",
+    "The exact scope strings for each endpoint. The docs give the url:VERB|path pattern. I did not open the endpoint pages, so the three example strings follow the pattern and are not checked.",
+    "Whether PKCE is supported. The OAuth pages I opened do not mention it.",
     "Whether a free educator account (Canvas Lite) can create API keys or tokens. The Canvas Lite page does not say, and the Instructure community threads would not open.",
     "How to join the Instructure partner program, what it costs now, and how long a global key request takes. The only price is $2,000 from one old forum post.",
     "Instructure's published school approval time. None found. The 6 to 12 month figure is one university's own policy, not Instructure's."

@@ -1,6 +1,6 @@
 // POST /api/plan-from-description  { "description": "An AI assistant that reads support emails in Gmail..." }
 // Claude reads the product description and returns the apps it connects to and what it does in each,
-// matched to our guides where we have them. The screen then builds the launch plan from those guides.
+// matched to my guides where I have them. The screen then builds the launch plan from those guides.
 import Anthropic from '@anthropic-ai/sdk';
 import { client, MODEL, FALLBACK, KEY_MISSING, textOf } from './_lib/claude.js';
 import { listGuides, planFor, send } from './_lib/guides.js';

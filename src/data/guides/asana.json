@@ -168,7 +168,7 @@
     },
     {
       "title": "An organization admin requires approval or blocks the app",
-      "fix": "Admins can require Super Admin approval for new connections and can block apps. Users see a block screen or approval request, so send the admin your listing details and the permissions you ask for. Which plans get these controls is not stated in the pages we opened.",
+      "fix": "Admins can require Super Admin approval for new connections and can block apps. Users see a block screen or approval request, so send the admin your listing details and the permissions you ask for. Which plans get these controls is not stated in the pages I opened.",
       "proof": "docs"
     },
     {
@@ -259,9 +259,9 @@
     }
   ],
   "unconfirmed": [
-    "Whether granular scopes reached general availability. The April 2025 forum post said July 2025, but the thread does not confirm it. The OAuth docs still describe Full permissions (the default scope) as supported, and we found no page announcing it is being retired.",
+    "Whether granular scopes reached general availability. The April 2025 forum post said July 2025, but the thread does not confirm it. The OAuth docs still describe Full permissions (the default scope) as supported, and I found no page announcing it is being retired.",
     "Which Asana plans give organization admins the approve and block controls. The help page lists several plans without saying who gets what.",
-    "Admin approval wording, such as the exact screens and where requests go. The help page we opened is a video summary. Detail came only from search summaries, which we did not open.",
+    "Admin approval wording, such as the exact screens and where requests go. The help page I opened is a video summary. Detail came only from search summaries, which I did not open.",
     "Whether Asana does any review or abuse check when you choose Any workspace. The distribution page describes none, but it does not rule one out.",
     "Time to a first working sign-in. No source states it.",
     "Whether the refresh token ever expires without use. The docs say it works for as long as the user has authorized the app."

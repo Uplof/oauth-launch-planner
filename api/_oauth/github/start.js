@@ -1,4 +1,4 @@
-// Starts a GitHub OAuth test with our own OAuth app "OAuth Planner Test" (owner: Uplof).
+// Starts a GitHub OAuth test with my own OAuth app "OAuth Planner Test" (owner: Uplof).
 // The client ID is public by design (it appears in every authorize URL); the secret lives in Vercel.
 import crypto from 'node:crypto';
 

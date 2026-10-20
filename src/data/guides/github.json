@@ -6,7 +6,7 @@
   "difficulty": "easy",
   "headline": "Easy: no review on either path. Waits depend on each customer's org owner installing or approving it.",
   "firstTest": {
-    "text": "About 2 minutes: register our own OAuth app, generate a secret, and sign in.",
+    "text": "About 2 minutes: register my own OAuth app, generate a secret, and sign in.",
     "proof": "tested"
   },
   "production": {
@@ -24,7 +24,7 @@
     "source": "https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app"
   },
   "testMode": {
-    "text": "No sandbox, no user caps. Both app types expire tokens by default: our test got an 8-hour access token and a 182-day refresh token.",
+    "text": "No sandbox, no user caps. Both app types expire tokens by default: my test got an 8-hour access token and a 182-day refresh token.",
     "proof": "tested"
   },
   "actions": [
@@ -266,7 +266,7 @@
     },
     {
       "src": "/evidence/github-granted.webp",
-      "caption": "Our test: 8-hour access token, 182-day refresh token"
+      "caption": "My test: 8-hour access token, 182-day refresh token"
     }
   ],
   "checked": "20 Oct 2026",

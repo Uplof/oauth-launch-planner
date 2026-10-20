@@ -37,7 +37,7 @@ export default function Library() {
       <div className="grid gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">Library</h1>
         <p className="max-w-3xl text-zinc-600">
-          {APPS.length} apps with a ready guide, fastest first. Any other app: click it and our agent researches it live.
+          {APPS.length} apps with a ready guide, fastest first. Any other app: click it and the research agent looks it up live.
         </p>
       </div>
       <div className="flex flex-wrap items-center gap-3">
@@ -45,15 +45,15 @@ export default function Library() {
           <Search className="absolute left-2.5 top-2.5 size-4 text-zinc-400" />
           <Input id="q" className="pl-8" placeholder="Search apps" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
-        <ToggleGroup type="single" value={f} onValueChange={(v) => v && setF(v)} variant="outline">
+        <ToggleGroup data-tour="library-filters" type="single" value={f} onValueChange={(v) => v && setF(v)} variant="outline">
           <ToggleGroupItem value="all">All</ToggleGroupItem>
           <ToggleGroupItem value="guide">Has a guide</ToggleGroupItem>
-          <ToggleGroupItem value="tested">Tested by us</ToggleGroupItem>
+          <ToggleGroupItem value="tested">Tested by me</ToggleGroupItem>
           <ToggleGroupItem value="live">Research live</ToggleGroupItem>
         </ToggleGroup>
         <span className="ml-auto text-sm text-zinc-500">{rows.length} apps · {guides} with a guide</span>
       </div>
-      <div className="overflow-x-auto rounded-lg border bg-white">
+      <div className="overflow-x-auto rounded-lg border bg-white" data-tour="library-table">
         <Table className="min-w-[980px]">
           <TableHeader>
             <TableRow>

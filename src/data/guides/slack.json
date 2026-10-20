@@ -15,7 +15,7 @@
     "source": "https://docs.slack.dev/app-management/distribution"
   },
   "approvalWait": {
-    "text": "None for unlisted apps; ours was instant. Marketplace: up to 10 business days preliminary review, then up to 10 weeks functional review for new apps.",
+    "text": "None for unlisted apps; mine was instant. Marketplace: up to 10 business days preliminary review, then up to 10 weeks functional review for new apps.",
     "proof": "tested",
     "source": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide"
   },
@@ -24,7 +24,7 @@
     "proof": "tested"
   },
   "testMode": {
-    "text": "Our tokens came with no expiry and no refresh token. Rotation is opt-in (12-hour tokens). New installs of unlisted apps get 1 history request per minute.",
+    "text": "My tokens came with no expiry and no refresh token. Rotation is opt-in (12-hour tokens). New installs of unlisted apps get 1 history request per minute.",
     "proof": "tested",
     "source": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps"
   },
@@ -52,7 +52,7 @@
       "label": "Read private channels and DMs",
       "scope": "groups:history, im:history, mpim:history",
       "level": "sensitive",
-      "review": "Marketplace review questions broad data-access scopes. The same rate limit applies if unlisted. Adding them showed no warning, and they were granted at once in our test install.",
+      "review": "Marketplace review questions broad data-access scopes. The same rate limit applies if unlisted. Adding them showed no warning, and they were granted at once in my test install.",
       "proof": "tested",
       "timeToLive": "same day unlisted; weeks if listing"
     },
@@ -86,7 +86,7 @@
     },
     {
       "title": "Add scopes",
-      "detail": "In step 2 of the wizard, search for and add bot scopes and user scopes. Each shows a plain-English line. We added 8 bot scopes and 1 user scope with no warnings.",
+      "detail": "In step 2 of the wizard, search for and add bot scopes and user scopes. Each shows a plain-English line. I added 8 bot scopes and 1 user scope with no warnings.",
       "owner": "you",
       "time": "10 min",
       "proof": "tested",
@@ -102,7 +102,7 @@
     },
     {
       "title": "Build the sign-in flow",
-      "detail": "Send users to Slack's authorize page, asking for bot scopes and user scopes separately. Then swap the one-time code for tokens. Our sign-in returned every scope we asked for.",
+      "detail": "Send users to Slack's authorize page, asking for bot scopes and user scopes separately. Then swap the one-time code for tokens. My sign-in returned every scope I asked for.",
       "owner": "agent",
       "time": "1-2 hours",
       "proof": "tested",
@@ -110,7 +110,7 @@
     },
     {
       "title": "Decide on token rotation",
-      "detail": "Opt in only after saving a redirect address. Without it our tokens never expired; with it, access lasts 12 hours, refresh tokens are single use, and you can't turn it off.",
+      "detail": "Opt in only after saving a redirect address. Without it my tokens never expired; with it, access lasts 12 hours, refresh tokens are single use, and you can't turn it off.",
       "owner": "you",
       "time": "15 min",
       "proof": "tested",
@@ -278,7 +278,7 @@
     },
     {
       "src": "/evidence/slack-granted.webp",
-      "caption": "Our test sign-in: every scope granted; bot and user tokens don't expire"
+      "caption": "My test sign-in: every scope granted; bot and user tokens don't expire"
     }
   ],
   "checked": "21 Oct 2026",

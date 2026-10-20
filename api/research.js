@@ -67,17 +67,44 @@ function clean(g, name) {
   };
 }
 
+// "uplof.me" -> ["uplof"], "https://www.zoom.us" -> ["zoom"], "Google Calendar API" -> ["google", "calendar", "api"].
+const words = (x) => String(x || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '')
+  .replace(/\.(com|io|me|co|app|ai|dev|net|org|so|us|in|tech|xyz)(\.[a-z]{2})?$/, '').split(/[^a-z0-9]+/).filter(Boolean);
+// The guide must be about the app that was asked for, not a look-alike the model drifted to.
+// Whole words only: "canva" is not "Canvas LMS", but "gohighlevel" is "HighLevel".
+export const sameApp = (asked, got) => {
+  const a = words(asked), g = words(got);
+  if (!a.length || !g.length) return false;
+  if (a.join('') === g.join('')) return true;
+  return a.every((w) => g.includes(w)) || a.some((w) => g.some((x) => x.length >= 4 && w.includes(x) && w.length - x.length <= 4));
+};
+const notFound = (name, other) => Object.assign(new AIError(
+  other ? `Couldn't find an app called “${name}”. The closest match was “${other}”. Check the spelling, or type the app's exact name.`
+    : `Couldn't find an app called “${name}” with an API or OAuth sign-in. Check the spelling, or type the app's exact name.`, 404), { code: 'not_found' });
+
+// For website input, make sure the site exists before spending a research run on it.
+async function siteExists(name) {
+  if (!/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/.*)?$/i.test(name)) return true; // a plain app name, nothing to check
+  const host = name.replace(/^https?:\/\//i, '').replace(/\/.*$/, '');
+  try {
+    const r = await fetch(`https://${host}`, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(6000) });
+    return r.status < 500;
+  } catch { return false; }
+}
+
 const urlsIn = (text) => [...new Set((text.match(/https?:\/\/[^\s)\]】>"']+/g) || []).map((u) => u.replace(/[.,;]+$/, '')))];
 
 // Free path: Groq's gpt-oss-120b with built-in browser search. Search → write → check.
 async function researchFree(res, name) {
   // Two focused searches give better sources than one broad one.
-  const RULES = 'Use the provider\'s official developer docs first. Write compact bullet notes. After every fact put the source URL in parentheses, ' +
+  const RULES = `Research ONLY a product named exactly "${name}". If you cannot find a real product with that name that offers an API or OAuth sign-in for outside developers, reply with the single word NOT_FOUND and nothing else. Never research a different product with a similar name. ` +
+    'Use the provider\'s official developer docs first. Write compact bullet notes. After every fact put the source URL in parentheses, ' +
     'and only use URLs of pages you actually opened in your search results; never guess a URL. Write "not found" for anything you could not find.';
   sse(res, 'step', { id: 'research', text: `Searching ${name}'s developer docs: app setup and permissions` });
   const a = await aiSearch(
     `How does a developer register an OAuth app with ${name} so other people's accounts can connect (for an AI agent product)? ` +
     'Cover: where to create the app, who can register, required fields (homepage, privacy policy, redirect URL), the permissions/scopes an agent typically needs, and token lifetimes. ' + RULES, 3000);
+  if (/^\W*NOT_FOUND/i.test(a.text) || a.text.trim().length < 80) throw notFound(name);
   sse(res, 'step', { id: 'research2', text: `Searching ${name}'s review and publishing rules` });
   const b = await aiSearch(
     `For ${name} OAuth apps: what review, verification or marketplace approval is needed before any user can connect, published review wait times, ` +
@@ -93,12 +120,15 @@ async function researchFree(res, name) {
   sse(res, 'step', { id: 'write', text: 'Writing the guide from the notes' });
   console.log('[research] notes chars', notes.text.length);
   const raw = await aiJson(
-    'You turn research notes into a guide. Use ONLY facts in the notes; copy their source URLs into "source" fields and into "sources". ' +
+    `You turn research notes into a guide for the app "${name}". "name" must be that app's real name. If the notes are about a different product, reply {"name":"NOT_FOUND"}. ` +
+    'Use ONLY facts in the notes; copy their source URLs into "source" fields and into "sources". ' +
     'Anything the notes do not support gets proof "unconfirmed" and a line in "unconfirmed". Reply with the guide as JSON only.\n\nGuide format:\n' + GUIDE_FORMAT,
     `App: ${name}\n\nResearch notes:\n${notes.text}`,
     7000);
   console.log('[research] guide keys', Object.keys(raw || {}).join(','));
   if (REQUIRED.some((k) => !(k in raw))) throw new AIError('The guide came back incomplete. Try again.', 502);
+  if (raw?.name === 'NOT_FOUND') throw notFound(name);
+  if (!sameApp(name, raw?.name)) throw notFound(name, raw?.name);
   const guide = clean(raw, name);
   guide.sources = (guide.sources || []).filter((x) => /^https?:\/\//.test(x?.url || ''));
   if (!guide.sources.length) guide.sources = urlsIn(notes.text).slice(0, 8).map((url) => ({ title: new URL(url).hostname, url }));
@@ -155,6 +185,7 @@ export default async function handler(req, res) {
   if (saved) { sse(res, 'step', { id: 'saved', text: `Found a saved guide from ${saved.checked}` }); sse(res, 'done', { guide: saved, fromStore: true }); return res.end(); }
   const c = hasAI() ? null : client();
   if (!hasAI() && !c) { sse(res, 'error', { message: KEY_MISSING }); return res.end(); }
+  if (!(await siteExists(name))) { sse(res, 'error', { message: `Couldn't reach “${name}”. Check the address, or type the app's name instead.`, code: 'not_found' }); return res.end(); }
   const left = await takeRun(req);
   if (left < 0) { sse(res, 'error', { message: `You have used today’s ${DAILY_RUNS} new research runs. Saved guides in the library still open instantly; try a new app tomorrow.`, code: 'limit' }); return res.end(); }
 
@@ -218,7 +249,7 @@ export default async function handler(req, res) {
       : e instanceof Anthropic.APIError ? `AI request failed (${e.status}).`
       : `Research failed: ${e.message}`;
     console.log('[research] failed', e?.status, e?.message);
-    sse(res, 'error', { message });
+    sse(res, 'error', { message, ...(e?.code ? { code: e.code } : {}) });
   } finally {
     clearInterval(keepAlive);
     res.end();

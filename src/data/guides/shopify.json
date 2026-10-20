@@ -272,8 +272,8 @@
     "How long App Store review and protected customer data review take today. Shopify's docs publish no wait time. The only figure, 5 to 10 business days, is a staff forum reply from Oct 2023, and developers on the thread report longer.",
     "Whether read_orders and read_customers are formally listed as protected customer data scopes. The scopes page does not say so. It only states the general rule that protected data is withheld from non-development stores until approved.",
     "Whether a custom distribution app still needs protected customer data approval before it can read customer names and emails on a real merchant store. The docs say the data is returned only once approved, but do not spell out the custom case.",
-    "Whether custom install links are single use or expire. The page we opened does not say.",
-    "Whether you need a paid or verified Partner account at sign-up. The pages we opened say only that dev stores need a Partner account or a merchant store with developer permissions.",
+    "Whether custom install links are single use or expire. The page I opened does not say.",
+    "Whether you need a paid or verified Partner account at sign-up. The pages I opened say only that dev stores need a Partner account or a merchant store with developer permissions.",
     "Exact bucket sizes for GraphQL rate limits. The page gives points per second per plan only."
   ],
   "screenshots": [],

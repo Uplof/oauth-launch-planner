@@ -291,9 +291,9 @@
   "unconfirmed": [
     "Calendar scope sensitivity. Google's Calendar auth page lists the scopes but gives no category. Only a third-party guide (Nylas) names calendar, calendar.readonly, calendar.events and calendar.events.readonly as sensitive and not restricted. Check the labels the console shows when you add them.",
     "Whether one restricted scope puts the whole app, rather than only that scope, through the review. Google says an app requesting a restricted scope must meet the extra requirements. It does not say in those words that every other scope in the app is dragged along.",
-    "Cost of the security assessment, and how long it takes on top of 'several weeks'. The pages we opened state no fee and no assessor timeline.",
-    "How long the sensitive review takes in practice. Google says typically 3-5 business days. We found no source on delays when reviewers ask for changes.",
-    "Whether a user who consents to a subset of the scopes still counts toward the 100-user cap before verification. No page we opened says."
+    "Cost of the security assessment, and how long it takes on top of 'several weeks'. The pages I opened state no fee and no assessor timeline.",
+    "How long the sensitive review takes in practice. Google says typically 3-5 business days. I found no source on delays when reviewers ask for changes.",
+    "Whether a user who consents to a subset of the scopes still counts toward the 100-user cap before verification. No page I opened says."
   ],
   "screenshots": [],
   "checked": "21 Oct 2026",

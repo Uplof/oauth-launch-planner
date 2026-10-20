@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, Navigate, useParams } from "react-router-dom"
 import { CheckCircle2, Loader2, ArrowRight, TriangleAlert, Search, FileText, RotateCcw } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -42,21 +42,15 @@ export default function Generate() {
       const data = (e as MessageEvent).data
       const d = data ? JSON.parse(data) : null
       setError(d?.message ?? "The connection dropped. Try again.")
-      setLimited(d?.code === "limit")
+      setLimited(d?.code === "limit" || d?.code === "not_found")
       es.close()
     })
     const tick = setInterval(() => setElapsed(Math.round((Date.now() - started.current) / 1000)), 1000)
     return () => { es.close(); clearInterval(tick) }
   }, [name, run, existing])
 
-  if (existing) {
-    return (
-      <div className="mx-auto grid max-w-3xl gap-3">
-        <h1 className="text-2xl font-semibold">{existing.name} already has a guide</h1>
-        <Button asChild className="w-fit"><Link to={`/apps/${existing.slug}`}>Open the guide <ArrowRight className="size-4" /></Link></Button>
-      </div>
-    )
-  }
+  // Apps with a guide never get re-researched: go straight to the guide.
+  if (existing) return <Navigate to={`/apps/${existing.slug}`} replace />
 
   const searches = lines.filter((l) => l.kind === "search").length
   const reads = lines.filter((l) => l.kind === "read").length

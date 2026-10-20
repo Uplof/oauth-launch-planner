@@ -287,7 +287,7 @@
     "How long Marketplace review takes. Zoom's review page gives no wait time. The 5 to 7 business day figure is from a third-party guide only.",
     "How many outside testers a beta app may have. The sharing page says 'limited' and gives no number for beta apps.",
     "Whether an unlisted app needs the same full review as a listed one. The docs say an unlisted app needs full metadata or it will fail review, but give no separate timing.",
-    "Whether user:read:user is still the current granular scope name. It appears in an example token response, not on the scope list page section we read. The scope reference page is very long and we read only its first part.",
+    "Whether user:read:user is still the current granular scope name. It appears in an example token response, not on the scope list page section I read. The scope reference page is very long and I read only its first part.",
     "Whether the :admin suffix rule (cannot mix admin and non-admin scopes) is current. It comes from a third-party connector guide.",
     "Whether admin pre-approval workspaces exist for all accounts or are a per-account setting. Only a third-party guide describes it.",
     "Whether the free-developer-account upgrade applies to every app or only to some. The rejection page lists it without detail."

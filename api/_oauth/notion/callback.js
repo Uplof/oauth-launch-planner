@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     const d = await s.json();
     if (s.ok) pages = `${d.results?.length ?? 0}${d.has_more ? '+' : ''} pages or databases shared`;
   } catch { /* report without the count */ }
-  res.status(200).send(page('What Notion granted', `<h1>What Notion granted our test connection</h1>${rows([
+  res.status(200).send(page('What Notion granted', `<h1>What Notion granted my test connection</h1>${rows([
     ['Workspace', t.workspace_name || '(not stated)'],
     ['Owner type', t.owner?.type || '(not stated)'],
     ['Access granted', pages],

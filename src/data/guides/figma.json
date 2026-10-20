@@ -254,9 +254,9 @@
   ],
   "unconfirmed": [
     "How long a public OAuth app review takes. Figma publishes no wait time. The 5 to 10 business days figure is only reported second-hand by forum posters, and staff say timelines vary with volume. Threads dated March to July 2026 show waits of two weeks to over a month.",
-    "What Figma's app review guidelines actually check. We read the process pages but did not open the guidelines text, so we cannot list the criteria.",
+    "What Figma's app review guidelines actually check. I read the process pages but did not open the guidelines text, so I cannot list the criteria.",
     "The mapping of rate limit values to plans. The Tier 1 to 3 pages show three numbers for Dev and Full seats across four plan columns (Starter, Professional, Organization, Enterprise). The numbers above are not tied to a plan.",
-    "The exact refresh endpoint and parameters. The OAuth apps page we opened confirms refresh tokens are reusable and access tokens last 90 days by default, but we did not read the endpoint reference.",
+    "The exact refresh endpoint and parameters. The OAuth apps page I opened confirms refresh tokens are reusable and access tokens last 90 days by default, but I did not read the endpoint reference.",
     "Whether the reviewer-testing problem in the forum is fixed. Staff said the reviewer uses a dedicated service account, but other threads report rejections for the same reason."
   ],
   "screenshots": [],

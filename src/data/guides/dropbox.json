@@ -245,10 +245,10 @@
   ],
   "unconfirmed": [
     "The exact access token lifetime in Dropbox's own docs. The OAuth page says only 'short-lived' and says to read expires_in. The 4 hour figure comes from a sample response (expires_in 14400) in a third-party library's docs.",
-    "Whether a user cap of 50 applies in development. The developer guide says 500 users can link, with a two-week approval deadline once 50 have linked. We treat 50 as the practical limit.",
-    "Whether sharing.read and files.content.write need any extra review. The Dropbox pages we opened list no per-scope review. The sharing.read description comes from third-party docs.",
-    "Whether the Dropbox pages list the full scope table. We could not open the API reference page that lists every scope, so only the scopes named in the Dropbox blog posts and the third-party descriptions are shown.",
-    "Who can create an app. The App Console page we opened showed only a login prompt, and no page we opened states any account requirement.",
+    "Whether a user cap of 50 applies in development. The developer guide says 500 users can link, with a two-week approval deadline once 50 have linked. I treat 50 as the practical limit.",
+    "Whether sharing.read and files.content.write need any extra review. The Dropbox pages I opened list no per-scope review. The sharing.read description comes from third-party docs.",
+    "Whether the Dropbox pages list the full scope table. I could not open the API reference page that lists every scope, so only the scopes named in the Dropbox blog posts and the third-party descriptions are shown.",
+    "Who can create an app. The App Console page I opened showed only a login prompt, and no page I opened states any account requirement.",
     "Whether 'a few business days' is still the real turnaround today. The support page states it but is undated."
   ],
   "screenshots": [],

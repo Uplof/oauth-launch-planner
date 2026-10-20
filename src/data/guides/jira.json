@@ -272,7 +272,7 @@
     "The exact access token lifetime. Atlassian's pages show an expires_in field but give no number. Developers report about one hour, but no official page or opened thread states 3600 seconds, so read expires_in at runtime.",
     "The exact Distribution tab fields. The official OAuth page lists only the Sharing toggle. Vendor name, privacy policy and personal data declaration come from a forum thread and a third-party setup guide.",
     "Whether the personal data declaration must be Yes for typical issue and comment access, and whether the Personal Data Reporting API is then mandatory. Forum answers conflict.",
-    "The site admin control for user-installed 3LO apps. We could open only the title of the Atlassian community post, so menu labels and exact behaviour come from search summaries and need checking in admin.atlassian.com.",
+    "The site admin control for user-installed 3LO apps. I could open only the title of the Atlassian community post, so menu labels and exact behaviour come from search summaries and need checking in admin.atlassian.com.",
     "Whether a new Forge app is needed to remove the unreviewed warning. The docs say only Forge apps can be submitted to the Marketplace from 17 Sep 2025.",
     "Time to a first working sign-in. No source states it."
   ],

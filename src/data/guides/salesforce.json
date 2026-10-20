@@ -260,13 +260,13 @@
     }
   ],
   "unconfirmed": [
-    "AppExchange security review cost and wait. Salesforce's own pages returned an access error when we tried to open them. One community source says Salesforce publishes no fixed SLA. We give no fee or week count.",
-    "Whether the September 2025 'uninstalled app' restriction applies the same way to External Client Apps as to Connected Apps. The sources we opened describe Connected Apps.",
+    "AppExchange security review cost and wait. Salesforce's own pages returned an access error when I tried to open them. One community source says Salesforce publishes no fixed SLA. I give no fee or week count.",
+    "Whether the September 2025 'uninstalled app' restriction applies the same way to External Client Apps as to Connected Apps. The sources I opened describe Connected Apps.",
     "Whether a packaged External Client App gives every installing org the same Consumer Key and secret. A community thread asks this and has no answer.",
-    "Whether a packaged app installed from outside AppExchange shows customers a warning. We could not open a page that confirms it.",
+    "Whether a packaged app installed from outside AppExchange shows customers a warning. I could not open a page that confirms it.",
     "The exact access token lifetime. The docs say the session timeout controls it and give no number.",
-    "Whether Developer Edition signup is free and unlimited. We could not open Salesforce's signup page.",
-    "Spring '26 and Winter '26 dates come from vendor guides, not Salesforce release notes, which we could not open. One search result said Connected App support ends in Winter '27. We could not confirm it and did not include it.",
+    "Whether Developer Edition signup is free and unlimited. I could not open Salesforce's signup page.",
+    "Spring '26 and Winter '26 dates come from vendor guides, not Salesforce release notes, which I could not open. One search result said Connected App support ends in Winter '27. I could not confirm it and did not include it.",
     "The official scope reference page returned an access error, so scope descriptions come from vendor setup guides."
   ],
   "screenshots": [],

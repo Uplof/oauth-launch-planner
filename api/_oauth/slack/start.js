@@ -1,4 +1,4 @@
-// Starts a Slack OAuth test with our own app "OAuth Planner Test" (workspace uplof.me, app A0CAQ98UQ9L).
+// Starts a Slack OAuth test with my own app "OAuth Planner Test" (workspace uplof.me, app A0CAQ98UQ9L).
 // The client ID is public by design; the secret lives in Vercel as `slack_secret`.
 import crypto from 'node:crypto';
 

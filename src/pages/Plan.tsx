@@ -94,7 +94,7 @@ export default function Plan() {
         {live?.summary && <p className="text-sm text-zinc-600">{live.summary}</p>}
       </div>
 
-      <Card className="border-zinc-900/10 shadow-sm">
+      <Card className="border-zinc-900/10 shadow-sm" data-tour="plan-verdict">
         <CardHeader>
           <CardDescription className="text-xs font-medium uppercase tracking-wider">Verdict</CardDescription>
           <CardTitle className="text-balance text-2xl leading-snug">{headline}</CardTitle>
@@ -120,7 +120,7 @@ export default function Plan() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card data-tour="plan-timeline">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><CalendarClock className="size-5" /> Timeline</CardTitle>
           <CardDescription>Bars show the wait for each provider's review, starting today. Build and pilot in parallel.</CardDescription>
@@ -155,7 +155,7 @@ export default function Plan() {
       </Card>
 
       <div className="grid gap-4">
-        <h2 className="text-xl font-semibold">Per app</h2>
+        <h2 className="text-xl font-semibold" data-tour="plan-apps">Per app</h2>
         {rows.map((r) => (
           <Card key={r.slug}>
             <CardHeader className="flex flex-row flex-wrap items-center gap-3">

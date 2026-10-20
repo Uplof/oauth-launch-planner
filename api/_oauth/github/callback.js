@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   const t = await r.json();
   res.setHeader('Set-Cookie', 'gh_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
   if (t.error) return res.status(200).send(page('Token exchange failed', `<h1>Token exchange failed</h1><p><code>${esc(t.error)}</code> ${esc(t.error_description || '')}</p>`));
-  res.status(200).send(page('What GitHub granted', `<h1>What GitHub granted our test app</h1><table>
+  res.status(200).send(page('What GitHub granted', `<h1>What GitHub granted my test app</h1><table>
 <tr><th>Permissions asked</th><td>read:user, public_repo</td></tr>
 <tr><th>Permissions granted</th><td>${esc(t.scope || '(none listed)')}</td></tr>
 <tr><th>Access token lifetime</th><td>${human(t.expires_in)}</td></tr>

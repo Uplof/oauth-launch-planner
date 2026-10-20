@@ -10,12 +10,12 @@
     "proof": "tested"
   },
   "production": {
-    "text": "Same day. Our OAuth connection was public and installable in any workspace from creation; sign-in needed no listing or review. Marketplace is optional.",
+    "text": "Same day. My OAuth connection was public and installable in any workspace from creation; sign-in needed no listing or review. Marketplace is optional.",
     "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
   "approvalWait": {
-    "text": "None to install a public connection; our sign-in worked in minutes. Marketplace: an email reply in 5-10 business days plus a security review.",
+    "text": "None to install a public connection; my sign-in worked in minutes. Marketplace: an email reply in 5-10 business days plus a security review.",
     "proof": "tested",
     "source": "https://developers.notion.com/guides/get-started/marketplace-listing.md"
   },
@@ -24,7 +24,7 @@
     "proof": "tested"
   },
   "testMode": {
-    "text": "No test mode: the connection is live for any workspace. Our sign-in gave an access token with no stated lifetime, plus a refresh token.",
+    "text": "No test mode: the connection is live for any workspace. My sign-in gave an access token with no stated lifetime, plus a refresh token.",
     "proof": "tested"
   },
   "actions": [
@@ -93,7 +93,7 @@
     },
     {
       "title": "Skip the organization fields",
-      "detail": "Third-party guides say the form asks for a website, privacy policy, terms and support email, but ours only needed a name, auth method, install scope and redirect addresses. Expect those fields for a Marketplace listing instead.",
+      "detail": "Third-party guides say the form asks for a website, privacy policy, terms and support email, but mine only needed a name, auth method, install scope and redirect addresses. Expect those fields for a Marketplace listing instead.",
       "owner": "you",
       "time": "15 min",
       "proof": "tested",
@@ -125,7 +125,7 @@
     },
     {
       "title": "Build the sign-in flow",
-      "detail": "Send users to Notion's authorize page as the user, then swap the one-time code for tokens using your client ID and secret. Our exchange returned an access token and a refresh token.",
+      "detail": "Send users to Notion's authorize page as the user, then swap the one-time code for tokens using your client ID and secret. My exchange returned an access token and a refresh token.",
       "owner": "agent",
       "time": "1-2 hours",
       "proof": "tested",
@@ -133,7 +133,7 @@
     },
     {
       "title": "Handle the page picker",
-      "detail": "Users choose pages on the consent screen. Top-level pages are pre-ticked, and 'People' appears when you ask for user info. Our test shared 3 pages or databases.",
+      "detail": "Users choose pages on the consent screen. Top-level pages are pre-ticked, and 'People' appears when you ask for user info. My test shared 3 pages or databases.",
       "owner": "agent",
       "time": "1 hour",
       "proof": "tested",
@@ -172,7 +172,7 @@
     },
     {
       "title": "The access token stops working",
-      "fix": "A refresh flow returns a new access token and refresh token. The docs we read give no lifetimes, so refresh on a 401 error and save both new tokens each time.",
+      "fix": "A refresh flow returns a new access token and refresh token. The docs I read give no lifetimes, so refresh on a 401 error and save both new tokens each time.",
       "proof": "docs"
     }
   ],
@@ -243,9 +243,9 @@
     }
   ],
   "unconfirmed": [
-    "Answered by our test: the creation form enforced no organization fields (no website, privacy policy, terms or support email). Whether a Marketplace listing asks for them was not tested.",
-    "Answered by our test: no review gates a public connection. The Authorization URL was shown as soon as the connection was created, and our sign-in worked minutes later.",
-    "Still open: how long tokens live. Our sign-in returned a refresh token but no stated lifetime for the access token, and the docs give no durations."
+    "Answered by my test: the creation form enforced no organization fields (no website, privacy policy, terms or support email). Whether a Marketplace listing asks for them was not tested.",
+    "Answered by my test: no review gates a public connection. The Authorization URL was shown as soon as the connection was created, and my sign-in worked minutes later.",
+    "Still open: how long tokens live. My sign-in returned a refresh token but no stated lifetime for the access token, and the docs give no durations."
   ],
   "screenshots": [
     {
@@ -266,7 +266,7 @@
     },
     {
       "src": "/evidence/notion-granted.webp",
-      "caption": "Our test sign-in: 3 pages shared, refresh token returned"
+      "caption": "My test sign-in: 3 pages shared, refresh token returned"
     }
   ],
   "checked": "21 Oct 2026",

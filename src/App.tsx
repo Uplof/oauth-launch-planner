@@ -10,7 +10,6 @@ import Library from "@/pages/Library"
 import Generate from "@/pages/Generate"
 import Evidence from "@/pages/Evidence"
 import Agents from "@/pages/Agents"
-import Architecture from "@/pages/Architecture"
 
 function ScrollTop() {
   const { pathname } = useLocation()
@@ -34,7 +33,6 @@ export default function App() {
             <Route path="/generate/:slug" element={<Generate />} />
             <Route path="/evidence" element={<Evidence />} />
             <Route path="/agents" element={<Agents />} />
-            <Route path="/architecture" element={<Architecture />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Shell>

@@ -1,4 +1,4 @@
-// Starts a Google OAuth test with our own OAuth app ("OAuth Planner Test").
+// Starts a Google OAuth test with my own OAuth app ("OAuth Planner Test").
 // Asks for sign-in plus two Gmail permissions so the consent screen shows both review levels.
 import crypto from 'node:crypto';
 

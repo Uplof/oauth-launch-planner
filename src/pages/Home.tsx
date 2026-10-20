@@ -22,6 +22,7 @@ export default function Home() {
   const nav = useNavigate()
   const [desc, setDesc] = useState(EXAMPLES[0])
   const [found, setFound] = useState<string[] | null>(null)
+  const [query, setQuery] = useState("")
   const [error, setError] = useState<string | null>(null)
 
   // A1: Claude reads the sentence, finds the apps and actions, and the plan opens.
@@ -50,7 +51,7 @@ export default function Home() {
           </p>
         </div>
 
-        <Card className="max-w-3xl">
+        <Card className="max-w-3xl" data-tour="describe">
           <CardContent className="pt-6">
             <Tabs defaultValue="describe">
               <TabsList>
@@ -61,13 +62,13 @@ export default function Home() {
                 <Textarea id="desc" rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} className="resize-none text-base" placeholder="What does your agent do, and which apps does it use?" />
                 <div className="flex flex-wrap gap-2">
                   {EXAMPLES.map((ex) => (
-                    <button key={ex} type="button" onClick={() => setDesc(ex)} className="rounded-full border bg-white px-3 py-1 text-left text-xs text-zinc-600 hover:bg-zinc-50">
+                    <button key={ex} type="button" onClick={() => setDesc(ex)} className="rounded-sm border bg-white px-3 py-1 text-left text-xs text-zinc-600 hover:bg-zinc-50">
                       {ex.length > 60 ? ex.slice(0, 58) + "…" : ex}
                     </button>
                   ))}
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs text-zinc-500">We work out the apps, the permissions and the reviews they trigger.</p>
+                  <p className="text-xs text-zinc-500">The planner works out the apps, the permissions and the reviews they trigger.</p>
                   <Button onClick={build} disabled={found !== null}>{found ? (found.length ? "Building your plan…" : "Reading your product…") : "Build my launch plan"} <ArrowRight className="size-4" /></Button>
                 </div>
                 {error && (
@@ -85,12 +86,12 @@ export default function Home() {
               </TabsContent>
               <TabsContent value="lookup" className="pt-3">
                 <Command className="rounded-lg border">
-                  <CommandInput placeholder="Type an app name or website, e.g. Zoom or zoom.us" />
+                  <CommandInput value={query} onValueChange={setQuery} placeholder="Type an app name or website, e.g. Trello or trello.com" />
                   <CommandList className="max-h-72">
                     <CommandEmpty>
                       <div className="grid gap-2 py-2">
-                        <span>Not in the library yet.</span>
-                        <Button size="sm" variant="outline" onClick={() => nav("/generate/zoom")} className="mx-auto">Research it live <Sparkles className="size-3.5" /></Button>
+                        <span>{query.trim() ? `No guide for “${query.trim()}” yet.` : "Not in the library yet."}</span>
+                        <Button size="sm" variant="outline" onClick={() => nav(`/generate/${encodeURIComponent(query.trim() || "trello")}`)} className="mx-auto">Research it live <Sparkles className="size-3.5" /></Button>
                       </div>
                     </CommandEmpty>
                     <CommandGroup heading="Researched and tested">
@@ -131,7 +132,7 @@ export default function Home() {
         ))}
       </section>
 
-      <section className="grid gap-4">
+      <section className="grid gap-4" data-tour="guides">
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-xl font-semibold">Guides</h2>
@@ -165,7 +166,7 @@ export default function Home() {
           <h2 className="text-xl font-semibold">How long each app takes</h2>
           <p className="text-sm text-zinc-600">From a blank form to your first real user, fastest first. Your work in violet, the provider's review in amber.</p>
         </div>
-        <div className="rounded-xl border bg-white p-4"><TimeChart apps={APPS} /></div>
+        <div className="rounded-xl border bg-white p-4" data-tour="chart"><TimeChart apps={APPS} /></div>
       </section>
     </div>
   )

@@ -264,13 +264,13 @@
     }
   ],
   "unconfirmed": [
-    "How long it takes to a first working sign-in. No source states a time, so the first test estimate is ours.",
+    "How long it takes to a first working sign-in. No source states a time, so the first test estimate is mine.",
     "Whether the 25-install cap counts uninstalled or test installs. The changelog does not say.",
     "How long a refresh token lasts. The docs give no lifetime.",
-    "Whether a free developer account is enough to build and test. The pages we opened do not state a cost.",
+    "Whether a free developer account is enough to build and test. The pages I opened do not state a cost.",
     "Whether the private OAuth allowlist (10 or 100 customers) is a separate path from the 25-install cap in practice. The changelog lists both but does not explain how an app chooses.",
-    "Who exactly may install. The older OAuth guide says a Super Admin, while the current pages say users with the required permissions. We could not reconcile them.",
-    "The 60-install certification threshold and 6-month wait come only from a community blog. We could not open HubSpot's own changelog page for it."
+    "Who exactly may install. The older OAuth guide says a Super Admin, while the current pages say users with the required permissions. I could not reconcile them.",
+    "The 60-install certification threshold and 6-month wait come only from a community blog. I could not open HubSpot's own changelog page for it."
   ],
   "screenshots": [],
   "checked": "21 Oct 2026",
