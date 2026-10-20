@@ -2,6 +2,7 @@
   "slug": "slack",
   "name": "Slack",
   "category": "Communication",
+  "blurb": "Post and read messages in workspaces",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: no review to ship, but unlisted apps get 1 channel-history request per minute.",

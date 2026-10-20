@@ -2,6 +2,7 @@
   "slug": "canva",
   "name": "Canva",
   "category": "Design",
+  "blurb": "Create and export users' designs",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: test on your team in an afternoon; other users connect only after a Canva review with no published wait.",

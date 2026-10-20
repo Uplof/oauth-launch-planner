@@ -62,6 +62,7 @@ export interface AppGuide {
   slug: string
   name: string
   category: string
+  blurb?: string // what the app lets an agent do, in a few words
   sample: boolean
   difficulty: Difficulty
   headline: string

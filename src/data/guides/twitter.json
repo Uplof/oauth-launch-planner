@@ -2,6 +2,7 @@
   "slug": "twitter",
   "name": "X (Twitter)",
   "category": "Social media",
+  "blurb": "Post and read for users on X",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: no app review is documented, but every call costs credits and refresh tokens rotate.",

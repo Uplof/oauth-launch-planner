@@ -131,16 +131,18 @@ export default function Home() {
           </div>
 
           <TabsContent value="guides">
+            <p className="pb-3 text-sm text-zinc-600">Step-by-step guides to get your app approved by each provider, so your agent can connect to your users' accounts. Each shows the total time to your first real user.</p>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {APPS.map((a) => (
-                <Link key={a.slug} to={`/apps/${a.slug}`} className="group grid gap-2 rounded-sm border bg-white p-3 transition hover:border-zinc-400 hover:shadow-md">
+                <Link key={a.slug} to={`/apps/${a.slug}`} className="group grid content-start gap-2 rounded-sm border bg-white p-3 transition hover:border-zinc-400 hover:shadow-md">
                   <span className="flex items-center gap-2.5">
                     <AppLogo slug={a.slug} name={a.name} size={18} />
                     <span className="min-w-0 flex-1 truncate font-medium">{a.name}</span>
                     {isTested(a) && <BadgeCheck className="size-4 shrink-0 text-emerald-600" aria-label="Tested by me" />}
                   </span>
-                  <span className="flex items-center justify-between gap-2 text-sm">
-                    <span className="text-zinc-600">{totalText(a)}</span>
+                  {a.blurb && <span className="text-sm leading-snug text-zinc-600">{a.blurb}</span>}
+                  <span className="flex items-center justify-between gap-2 border-t pt-2 text-sm">
+                    <span className="font-medium text-zinc-800">{totalText(a)}</span>
                     <DifficultyBadge d={a.difficulty} />
                   </span>
                 </Link>

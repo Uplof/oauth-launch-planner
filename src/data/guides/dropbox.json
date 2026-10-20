@@ -2,6 +2,7 @@
   "slug": "dropbox",
   "name": "Dropbox",
   "category": "File storage",
+  "blurb": "Read and save users' files",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: test today, but Dropbox reviews only after 50 users link, and the app freezes if unapproved after two weeks.",

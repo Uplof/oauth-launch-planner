@@ -86,7 +86,7 @@ export default function Library() {
                       <AppLogo slug={l.slug} name={g?.name ?? l.name} size={18} />
                       <span className="grid">
                         <span className="font-medium">{g?.name ?? l.name}</span>
-                        {g && <span className="text-xs text-zinc-500">{g.category}</span>}
+                        {g && <span className="text-xs text-zinc-500">{g.blurb ?? g.category}</span>}
                       </span>
                     </span>
                   </TableCell>

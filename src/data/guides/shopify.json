@@ -2,6 +2,7 @@
   "slug": "shopify",
   "name": "Shopify",
   "category": "E-commerce",
+  "blurb": "Products, orders and customers in stores",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: one store or Plus organization needs no review, but App Store apps and customer details need Shopify approval.",

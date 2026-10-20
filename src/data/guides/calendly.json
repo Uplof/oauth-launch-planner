@@ -2,6 +2,7 @@
   "slug": "calendly",
   "name": "Calendly",
   "category": "Scheduling",
+  "blurb": "See and book scheduled meetings",
   "sample": false,
   "difficulty": "easy",
   "headline": "Easy: self-serve with no documented review. Watch for single-use refresh tokens and webhooks that need a paid Calendly plan.",

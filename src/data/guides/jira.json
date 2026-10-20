@@ -2,6 +2,7 @@
   "slug": "jira",
   "name": "Jira",
   "category": "Project management",
+  "blurb": "Issues and projects on Atlassian sites",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: Atlassian documents no review for sharing, but users see an unreviewed-app warning and site admins can block user-installed apps.",

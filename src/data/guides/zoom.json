@@ -2,6 +2,7 @@
   "slug": "zoom",
   "name": "Zoom",
   "category": "Meetings",
+  "blurb": "Meetings and recordings",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: you can build in an afternoon, but outside users need a Zoom-approved beta share or a published app.",

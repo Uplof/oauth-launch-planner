@@ -2,6 +2,7 @@
   "slug": "canvas",
   "name": "Canvas LMS",
   "category": "Education",
+  "blurb": "Courses and assignments at schools",
   "sample": false,
   "difficulty": "gated",
   "headline": "Gated: no self-serve signup. Every school's admin must give you a key, and each approval can take weeks or months.",

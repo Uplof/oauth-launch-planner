@@ -2,6 +2,7 @@
   "slug": "github",
   "name": "GitHub",
   "category": "Developer tools",
+  "blurb": "Repos, issues and pull requests",
   "sample": false,
   "difficulty": "easy",
   "headline": "Easy: no review on either path. Waits depend on each customer's org owner installing or approving it.",

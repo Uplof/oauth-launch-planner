@@ -2,6 +2,7 @@
   "slug": "figma",
   "name": "Figma",
   "category": "Design",
+  "blurb": "Read design files and comments",
   "sample": false,
   "difficulty": "hard",
   "headline": "Hard: outside users cannot connect until Figma approves your public app, and 2026 forum posts report weeks of waiting.",

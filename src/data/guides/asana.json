@@ -2,6 +2,7 @@
   "slug": "asana",
   "name": "Asana",
   "category": "Project management",
+  "blurb": "Tasks and projects in users' workspaces",
   "sample": false,
   "difficulty": "easy",
   "headline": "Easy: share an app with any workspace the same day, no review; admins can require approval or block it.",

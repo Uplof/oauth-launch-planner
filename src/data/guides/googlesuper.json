@@ -2,6 +2,7 @@
   "slug": "googlesuper",
   "name": "Google Workspace (all apps)",
   "category": "Productivity suite",
+  "blurb": "Gmail, Calendar, Drive, Sheets and Docs in one app",
   "sample": false,
   "difficulty": "hard",
   "headline": "Hard: reading Gmail or full Drive triggers a yearly security assessment; stick to narrower scopes and review takes days.",

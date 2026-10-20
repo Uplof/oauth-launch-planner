@@ -2,6 +2,7 @@
   "slug": "salesforce",
   "name": "Salesforce",
   "category": "CRM",
+  "blurb": "CRM records in customers' orgs",
   "sample": false,
   "difficulty": "hard",
   "headline": "Hard: no approval to build, but you must use an External Client App and each customer's admin must approve it.",

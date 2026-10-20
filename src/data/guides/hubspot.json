@@ -2,6 +2,7 @@
   "slug": "hubspot",
   "name": "HubSpot",
   "category": "CRM",
+  "blurb": "CRM contacts, deals and tickets",
   "sample": false,
   "difficulty": "moderate",
   "headline": "Moderate: install needs no review, but an unlisted Marketplace app stops at 25 installs until HubSpot approves a listing.",

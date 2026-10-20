@@ -2,6 +2,7 @@
   "slug": "gmail",
   "name": "Gmail",
   "category": "Email",
+  "blurb": "Read, send and draft email for your users",
   "sample": false,
   "difficulty": "hard",
   "headline": "Start today. Going live depends on whether your agent reads email.",
